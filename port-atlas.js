@@ -423,6 +423,7 @@
 
     injectPopupStyle();
 
+    const markersByName = {};
     PORTS.forEach((port) => {
       const el = createMarkerEl(port);
       const popup = new mapboxgl.Popup({
@@ -432,10 +433,31 @@
         className: 'korea-port-popup',
       }).setHTML(buildPopupHtml(port));
 
-      new mapboxgl.Marker({ element: el, anchor: 'center' })
+      const marker = new mapboxgl.Marker({ element: el, anchor: 'center' })
         .setLngLat(port.coords)
         .setPopup(popup)
         .addTo(map);
+
+      markersByName[port.name] = marker;
+    });
+
+    window.addEventListener('port-atlas:focus-port', (e) => {
+      const portKey = e.detail.portKey;
+      const port = PORTS.find(p => p.name === portKey);
+      if (!port) {
+        console.warn('[port-atlas] Port not found:', portKey);
+        return;
+      }
+      map.flyTo({
+        center: port.coords,
+        zoom: 9,
+        duration: 1500,
+        essential: true,
+      });
+      const marker = markersByName[portKey];
+      if (marker) {
+        marker.togglePopup();
+      }
     });
   }
 
