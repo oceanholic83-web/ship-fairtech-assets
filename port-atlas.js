@@ -25,7 +25,7 @@
   // ============================================================
   const CONFIG = {
     mapboxToken: (window.PORT_ATLAS_CONFIG && window.PORT_ATLAS_CONFIG.mapboxToken) || '',
-    mapStyle: 'mapbox://styles/mapbox/standard',
+    mapStyle: 'mapbox://styles/mapbox/light-v11',
     center: [127.8, 36.0],
     zoom: 6,
     containerId: 'korea-port-map',
@@ -284,32 +284,32 @@
   // ============================================================
   function buildPopupHtml(port) {
     const guideBtn = port.guideUrl
-      ? `<a href="${port.guideUrl}" target="_blank" rel="noopener" style="display:block;padding:7px 8px;background:#1e293b;color:#cbd5e1;text-align:center;text-decoration:none;border-radius:5px;font-size:11px;font-weight:600;">📖 가이드</a>`
+      ? `<a href="${port.guideUrl}" target="_blank" rel="noopener" style="display:block;padding:7px 8px;background:#f1f5f9;color:#0f172a;text-align:center;text-decoration:none;border-radius:5px;font-size:11px;font-weight:600;">📖 가이드</a>`
       : '';
     const gridCols = port.guideUrl ? '1fr 1fr 1fr' : '1fr 1fr';
 
     return `
-      <div style="font-family:ui-sans-serif,system-ui,-apple-system,'Segoe UI','Apple SD Gothic Neo','Noto Sans KR',sans-serif;min-width:260px;max-width:300px;color:#f1f5f9;">
+      <div style="font-family:ui-sans-serif,system-ui,-apple-system,'Segoe UI','Apple SD Gothic Neo','Noto Sans KR',sans-serif;min-width:260px;max-width:300px;color:#0f172a;">
         <div style="border-bottom:2px solid ${port.color};padding-bottom:8px;margin-bottom:10px;">
           <div style="font-size:16px;font-weight:700;color:${port.color};">${port.name}</div>
-          <div style="font-size:10px;color:#94a3b8;margin-top:2px;">${port.nameEn} · ${port.locode}</div>
+          <div style="font-size:10px;color:#64748b;margin-top:2px;">${port.nameEn} · ${port.locode}</div>
         </div>
         <div style="display:flex;flex-direction:column;gap:6px;font-size:12px;line-height:1.5;">
-          <div><span style="color:#64748b;width:65px;display:inline-block;">관할청</span><span style="color:#cbd5e1;">${port.authority}</span></div>
-          <div><span style="color:#64748b;width:65px;display:inline-block;">항만공사</span><span style="color:#cbd5e1;">${port.pa}</span></div>
-          <div><span style="color:#64748b;width:65px;display:inline-block;">도선사회</span><span style="color:#cbd5e1;">${port.pilotage}</span></div>
-          <div><span style="color:#64748b;width:65px;display:inline-block;">VTS</span><span style="color:#cbd5e1;">${port.vts}</span></div>
+          <div><span style="color:#94a3b8;width:65px;display:inline-block;">관할청</span><span style="color:#0f172a;">${port.authority}</span></div>
+          <div><span style="color:#94a3b8;width:65px;display:inline-block;">항만공사</span><span style="color:#0f172a;">${port.pa}</span></div>
+          <div><span style="color:#94a3b8;width:65px;display:inline-block;">도선사회</span><span style="color:#0f172a;">${port.pilotage}</span></div>
+          <div><span style="color:#94a3b8;width:65px;display:inline-block;">VTS</span><span style="color:#0f172a;">${port.vts}</span></div>
         </div>
-        <div style="margin-top:10px;padding-top:8px;border-top:1px solid #1e293b;">
-          <div style="font-size:10px;color:#64748b;letter-spacing:0.8px;margin-bottom:4px;">주요 시설</div>
-          <div style="font-size:11px;color:#cbd5e1;line-height:1.5;">${port.facilities}</div>
+        <div style="margin-top:10px;padding-top:8px;border-top:1px solid #e2e8f0;">
+          <div style="font-size:10px;color:#94a3b8;letter-spacing:0.8px;margin-bottom:4px;">주요 시설</div>
+          <div style="font-size:11px;color:#475569;line-height:1.5;">${port.facilities}</div>
         </div>
-        <div style="margin-top:8px;padding:8px 10px;background:#0f172a;border-radius:6px;border-left:2px solid ${port.color};">
-          <div style="font-size:11px;color:#94a3b8;line-height:1.5;font-style:italic;">${port.note}</div>
+        <div style="margin-top:8px;padding:8px 10px;background:#f8fafc;border-radius:6px;border-left:2px solid ${port.color};">
+          <div style="font-size:11px;color:#64748b;line-height:1.5;font-style:italic;">${port.note}</div>
         </div>
         <div style="display:grid;grid-template-columns:${gridCols};gap:6px;margin-top:10px;">
-          <a href="${port.faircall}" target="_blank" rel="noopener" style="display:block;padding:7px 8px;background:${port.color};color:#020617;text-align:center;text-decoration:none;border-radius:5px;font-size:11px;font-weight:700;">🔴 실시간</a>
-          <a href="${port.authorityUrl}" target="_blank" rel="noopener" style="display:block;padding:7px 8px;background:#1e293b;color:#cbd5e1;text-align:center;text-decoration:none;border-radius:5px;font-size:11px;font-weight:600;">📋 관할청</a>
+          <a href="${port.faircall}" target="_blank" rel="noopener" style="display:block;padding:7px 8px;background:${port.color};color:#ffffff;text-align:center;text-decoration:none;border-radius:5px;font-size:11px;font-weight:700;">🔴 실시간</a>
+          <a href="${port.authorityUrl}" target="_blank" rel="noopener" style="display:block;padding:7px 8px;background:#f1f5f9;color:#0f172a;text-align:center;text-decoration:none;border-radius:5px;font-size:11px;font-weight:600;">📋 관할청</a>
           ${guideBtn}
         </div>
       </div>
@@ -333,7 +333,7 @@
       height:100%;
       border-radius:50%;
       background:${port.color};
-      border:2px solid #f1f5f9;
+      border:2px solid #ffffff;
       box-shadow:0 0 0 2px ${port.color}40, 0 2px 4px rgba(0,0,0,0.4);
       transition:transform 0.15s ease;
       transform-origin:center;
@@ -359,26 +359,26 @@
     const style = document.createElement('style');
     style.id = 'korea-port-popup-style';
     style.textContent = `
-      .korea-port-popup .mapboxgl-popup-content {
-        background: #020617 !important;
-        border: 1px solid #1e293b !important;
-        border-radius: 10px !important;
-        padding: 14px !important;
-        box-shadow: 0 10px 25px rgba(0,0,0,0.5) !important;
-      }
-      .korea-port-popup .mapboxgl-popup-tip {
-        border-top-color: #020617 !important;
-        border-bottom-color: #020617 !important;
-      }
-      .korea-port-popup .mapboxgl-popup-close-button {
-        color: #64748b !important;
-        font-size: 18px !important;
-        padding: 4px 8px !important;
-      }
-      .korea-port-popup .mapboxgl-popup-close-button:hover {
-        color: #f1f5f9 !important;
-        background: transparent !important;
-      }
+    .korea-port-popup .mapboxgl-popup-content {
+      background: #ffffff !important;
+      border: 1px solid #e2e8f0 !important;
+      border-radius: 10px !important;
+      padding: 14px !important;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.12) !important;
+    }
+    .korea-port-popup .mapboxgl-popup-tip {
+      border-top-color: #ffffff !important;
+      border-bottom-color: #ffffff !important;
+    }
+    .korea-port-popup .mapboxgl-popup-close-button {
+      color: #94a3b8 !important;
+      font-size: 18px !important;
+      padding: 4px 8px !important;
+    }
+    .korea-port-popup .mapboxgl-popup-close-button:hover {
+      color: #0f172a !important;
+      background: transparent !important;
+    }
     `;
     document.head.appendChild(style);
   }
