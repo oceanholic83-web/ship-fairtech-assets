@@ -25,7 +25,7 @@
   // ============================================================
   const CONFIG = {
     mapboxToken: (window.PORT_ATLAS_CONFIG && window.PORT_ATLAS_CONFIG.mapboxToken) || '',
-    mapStyle: 'mapbox://styles/mapbox/dark-v11',
+    mapStyle: 'mapbox://styles/mapbox/navigation-night-v1',
     center: [127.8, 36.0],
     zoom: 6,
     containerId: 'korea-port-map',
