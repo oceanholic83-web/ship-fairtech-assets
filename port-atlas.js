@@ -25,7 +25,7 @@
   // ============================================================
   const CONFIG = {
     mapboxToken: (window.PORT_ATLAS_CONFIG && window.PORT_ATLAS_CONFIG.mapboxToken) || '',
-    mapStyle: 'mapbox://styles/mapbox/navigation-night-v1',
+    mapStyle: 'mapbox://styles/mapbox/standard',
     center: [127.8, 36.0],
     zoom: 6,
     containerId: 'korea-port-map',
@@ -413,6 +413,13 @@
 
     map.addControl(new mapboxgl.NavigationControl(), 'top-right');
     map.addControl(new mapboxgl.AttributionControl({ compact: true }), 'bottom-right');
+
+    // Mapbox Standard 테마 + 조명 설정 (style 로드 후 적용)
+    map.on('style.load', () => {
+      map.setConfigProperty('basemap', 'lightPreset', 'night');
+      map.setConfigProperty('basemap', 'theme', 'monochrome');
+      map.setConfigProperty('basemap', 'show3dObjects', false);
+    });
 
     injectPopupStyle();
 
