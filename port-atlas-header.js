@@ -504,12 +504,12 @@
 
     const allItems = [];
     // Collect from all data sources
-    Object.values(OFFICES).forEach(g => g.items.forEach(o => allItems.push({ ...o, type: '지방청', typeColor: g.color })));
-    PORT_AUTHORITIES.forEach(p => allItems.push({ ...p, type: '항만공사', typeColor: '#14b8a6' }));
-    PILOTS.forEach(p => allItems.push({ ...p, type: '도선사회', typeColor: p.port ? '#f97316' : '#a78bfa' }));
-    MOF_AGENCIES.forEach(a => allItems.push({ ...a, type: '산하기관', typeColor: '#8b5cf6' }));
-    CUSTOMS_HQ.forEach(c => allItems.push({ ...c, type: '관세청 본청', typeColor: '#0ea5e9' }));
-    Object.values(CUSTOMS_PORTS).forEach(g => g.items.forEach(o => allItems.push({ ...o, type: '항만별 세관', typeColor: g.color })));
+    Object.values(OFFICES).forEach(g => g.items.forEach(o => allItems.push({ ...o, type: '해수부·지방청', typeColor: g.color })));
+    PORT_AUTHORITIES.forEach(p => allItems.push({ ...p, type: '해수부·항만공사', typeColor: '#14b8a6' }));
+    PILOTS.forEach(p => allItems.push({ ...p, type: '민간·도선사회', typeColor: p.port ? '#f97316' : '#a78bfa' }));
+    MOF_AGENCIES.forEach(a => allItems.push({ ...a, type: '해수부·산하기관', typeColor: '#8b5cf6' }));
+    CUSTOMS_HQ.forEach(c => allItems.push({ ...c, type: '관세청·본청', typeColor: '#0ea5e9' }));
+    Object.values(CUSTOMS_PORTS).forEach(g => g.items.forEach(o => allItems.push({ ...o, type: '관세청·항만세관', typeColor: g.color })));
     KCG_AGENCIES.forEach(a => allItems.push({ ...a, type: '해상치안', typeColor: '#ef4444' }));
     QUARANTINE_AGENCIES.forEach(a => allItems.push({ ...a, type: '검역·검사', typeColor: '#84cc16' }));
 
