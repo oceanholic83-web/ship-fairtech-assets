@@ -49,7 +49,7 @@
       color: '#f97316',
       label: '영남',
       items: [
-        { name: '부산지방해양수산청', port: '부산항', url: 'https://busan.mof.go.kr', portKey: '부산항' },
+        { name: '부산지방해양수산청', port: '부산항', url: 'https://busan.mof.go.kr', portKey: '부산항', address: '부산광역시 동구 충장대로 351 (좌천동)', postcode: '48755', tel: '051-609-6114', fax: '051-609-6219' },
         { name: '마산지방해양수산청', port: '마산항', url: 'https://masan.mof.go.kr', portKey: '마산항', address: '경상남도 창원시 마산합포구 제2부두로 10 (정부경남지방합동청사)', postcode: '51716', tel: '055-981-5000', fax: '055-245-0885' },
         { name: '울산지방해양수산청', port: '울산항', url: 'https://ulsan.mof.go.kr', portKey: '울산항', address: '울산광역시 남구 장생포고래로 288번길 6', postcode: '44780', tel: '052-228-5500', fax: '052-228-5549' },
         { name: '포항지방해양수산청', port: '포항항', url: 'https://pohang.mof.go.kr', portKey: '포항항', address: '경상북도 포항시 북구 해동로 376', postcode: '37716', tel: '054-242-1812', fax: '054-245-1649' },
@@ -66,7 +66,7 @@
       color: '#a78bfa',
       label: '제주',
       items: [
-        { name: '제주해양수산관리단', port: '제주항', url: 'https://www.mof.go.kr/im/userList.do?menuKey=628&searchOuCode=1192373', portKey: '제주항' },
+        { name: '제주해양수산관리단', port: '제주항', url: 'https://busan.mof.go.kr', portKey: '제주항', sub: '부산청 산하' },
       ],
     },
   };
