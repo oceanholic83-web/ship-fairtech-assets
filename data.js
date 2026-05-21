@@ -31,9 +31,9 @@
       color: '#14b8a6',
       label: '수도권·충청',
       items: [
-        { name: '인천지방해양수산청', port: '인천항', url: 'https://incheon.mof.go.kr', portKey: '인천항' },
-        { name: '평택지방해양수산청', port: '평택·당진항', url: 'https://pyeongtaek.mof.go.kr', portKey: '평택·당진항' },
-        { name: '대산지방해양수산청', port: '대산항', url: 'https://daesan.mof.go.kr', portKey: '대산항' },
+        { name: '인천지방해양수산청', port: '인천항', url: 'https://incheon.mof.go.kr', portKey: '인천항', address: '인천광역시 중구 서해대로 365-1', postcode: '22346', tel: '032-880-6114', fax: '032-882-4642' },
+        { name: '평택지방해양수산청', port: '평택·당진항', url: 'https://pyeongtaek.mof.go.kr', portKey: '평택·당진항', address: '경기도 평택시 포승읍 평택항만길 116 (만호리 566)', postcode: '17962', tel: '031-683-0313', fax: '031-680-7219' },
+        { name: '대산지방해양수산청', port: '대산항', url: 'https://daesan.mof.go.kr', portKey: '대산항', address: '충청남도 서산시 홍천로 42 (잠홍동)', postcode: '32002', tel: '041-660-7700', fax: '041-663-0356' },
       ],
     },
     호남: {
@@ -120,9 +120,7 @@
   // ============================================================
   // 6. 관세청
   // ============================================================
-  const CUSTOMS_HQ = [
-    { name: '관세청', abbr: 'KCS', url: 'https://www.customs.go.kr', role: '본청 (대전)' },
-  ];
+  const CUSTOMS_HQ = [];
 
   const CUSTOMS_PORTS = {
     수도권충청: {
@@ -226,8 +224,7 @@
   // 8. 검역·검사
   // ============================================================
   const QUARANTINE_AGENCIES = [
-    { name: '농림축산검역본부', abbr: 'QIA', url: 'https://www.qia.go.kr', role: '동식물 검역 (농림부 산하)' },
-    { name: '국립수산물품질관리원', abbr: 'NFQS', url: 'https://www.nfqs.go.kr', role: '수산물 검역·품질관리' },
+    { name: '국립수산물품질관리원', abbr: 'NFQS', url: 'https://www.nfqs.go.kr', role: '수산물 검역·품질관리 (해수부)' },
     { name: '한국선급', abbr: 'KR', url: 'https://www.krs.co.kr', role: '선급 검사·인증 (민간)' },
   ];
 
