@@ -94,6 +94,7 @@
 
     // 4) Header + Map 스크립트 로드 (순서 중요: header 먼저)
     try {
+      await loadScript(`${REPO_BASE}/data.js`);
       await loadScript(`${REPO_BASE}/port-atlas-header.js`);
       await loadScript(`${REPO_BASE}/port-atlas.js`);
     } catch (e) {
