@@ -84,9 +84,7 @@
     { name: '경기평택항만공사', abbr: 'GPPC', port: '평택·당진항', url: 'https://www.gppc.or.kr', portKey: '평택·당진항', sub: '지방공기업' },
   ];
 
-  // ============================================================
-  // 4. 도선사회 12개
-  // ============================================================
+  // 4. 도선사회 13개 (협회 + 12개 지회)
   const PILOTS = [
     { name: '한국도선사협회', abbr: 'KMPA', url: 'https://www.kmpilot.or.kr', sub: '총괄 협회' },
     { name: '부산항도선사회', port: '부산항', url: 'http://www.busanpilot.co.kr', tel: '051-465-1651', portKey: '부산항' },
@@ -103,25 +101,103 @@
     { name: '제주항도선사회', port: '제주항', portKey: '제주항' },
   ];
 
-  // ============================================================
-  // 5. 산하 기관 / 유관 단체
-  // ============================================================
-  const AGENCIES = [
-    { name: '한국해양교통안전공단', abbr: 'KOMSA', url: 'https://www.komsa.or.kr', role: '해양교통안전 종합관리, 선박검사' },
-    { name: '한국해양과학기술원', abbr: 'KIOST', url: 'https://www.kiost.ac.kr', role: '해양과학기술 연구개발' },
-    { name: '한국해양수산개발원', abbr: 'KMI', url: 'https://www.kmi.re.kr', role: '해양수산 정책 연구' },
-    { name: '국립해양조사원', abbr: 'KHOA', url: 'https://www.khoa.go.kr', role: '수로·해양조사' },
-    { name: '국립수산과학원', abbr: 'NIFS', url: 'https://www.nifs.go.kr', role: '수산 연구' },
-    { name: '해양환경공단', abbr: 'KOEM', url: 'https://www.koem.or.kr', role: '해양환경 보전·관리, 방제' },
-    { name: '한국해양수산연수원', abbr: 'KIMFT', url: 'https://www.seaman.or.kr', role: '선원 교육·훈련' },
-    { name: '국립해양박물관', abbr: 'NMM', url: 'https://www.nmm.go.kr', role: '해양문화·산업 유산' },
-    { name: '국립해양과학관', abbr: '', url: '', role: '해양과학 전시·교육' },
-    { name: '해양수산과학기술진흥원', abbr: 'KIMST', url: '', role: '해양과학기술 정책 지원' },
-    { name: '국립해양생물자원관', abbr: 'MABIK', url: '', role: '해양생물자원' },
-    { name: '한국수산자원공단', abbr: 'FIRA', url: '', role: '인공어초·바다숲·종묘방류' },
-    { name: '한국선급', abbr: 'KR', url: 'https://www.krs.co.kr', role: '선급·검사 (민간)' },
-    { name: '해양경찰청', abbr: 'KCG', url: 'https://www.kcg.go.kr', role: '해상경비·구조·방제 (행안부 산하)' },
-    { name: '한국항만물류협회', abbr: '', url: '', role: '항만물류 협회 (11개 지방협회)' },
+  // 5. 유관 기관 (그룹별)
+  const AGENCY_GROUPS = [
+    {
+      label: '통관 (관세청)',
+      color: '#0ea5e9',
+      items: [
+        { name: '관세청', abbr: 'KCS', url: 'https://www.customs.go.kr', role: '본청 (대전)' },
+        { name: '인천본부세관', url: 'https://www.customs.go.kr/incheon/main.do', role: '본부세관', portKey: '인천항' },
+        { name: '부산본부세관', url: 'https://www.customs.go.kr/busan/main.do', role: '본부세관', portKey: '부산항' },
+        { name: '광주본부세관', url: 'https://www.customs.go.kr/gwangju/main.do', role: '본부세관 (광양/목포/군산 관할)' },
+        { name: '대구본부세관', url: 'https://www.customs.go.kr/daegu/main.do', role: '본부세관 (내륙)' },
+        { name: '서울본부세관', url: 'https://www.customs.go.kr/seoul/main.do', role: '본부세관 (강원 항만 관할)' },
+        { name: '평택직할세관', url: 'https://www.customs.go.kr/pyeongtaek/main.do', role: '직할세관', portKey: '평택·당진항' },
+      ],
+    },
+    {
+      label: '항만별 세관',
+      color: '#0ea5e9',
+      items: [
+        { name: '부산세관', role: '부산본부 산하', portKey: '부산항' },
+        { name: '인천세관', role: '인천본부 산하', portKey: '인천항' },
+        { name: '평택세관', url: 'https://www.customs.go.kr/pyeongtaek/main.do', role: '직할', portKey: '평택·당진항' },
+        { name: '대전세관 대산지원', role: '서울본부 산하', portKey: '대산항' },
+        { name: '군산세관', role: '광주본부 산하', portKey: '군산항' },
+        { name: '목포세관', role: '광주본부 산하', portKey: '목포항' },
+        { name: '광양세관', role: '광주본부 산하', portKey: '광양항' },
+        { name: '여수세관', role: '광주본부 산하', portKey: '광양항' },
+        { name: '마산세관', role: '부산본부 산하', portKey: '마산항' },
+        { name: '울산세관', role: '부산본부 산하', portKey: '울산항' },
+        { name: '포항세관', role: '부산본부 산하', portKey: '포항항' },
+        { name: '동해세관', role: '서울본부 산하', portKey: '동해·묵호항' },
+        { name: '속초세관', role: '서울본부 산하 (속초항)' },
+        { name: '제주세관', role: '부산본부 산하', portKey: '제주항' },
+      ],
+    },
+    {
+      label: '해상치안',
+      color: '#ef4444',
+      items: [
+        { name: '해양경찰청', abbr: 'KCG', url: 'https://www.kcg.go.kr', role: '해상경비·구조·방제 (행안부 산하)' },
+      ],
+    },
+    {
+      label: '검역·검사',
+      color: '#84cc16',
+      items: [
+        { name: '농림축산검역본부', abbr: 'QIA', url: 'https://www.qia.go.kr', role: '동식물 검역' },
+        { name: '국립수산물품질관리원', abbr: 'NFQS', url: 'https://www.nfqs.go.kr', role: '수산물 검역·품질관리' },
+        { name: '한국선급', abbr: 'KR', url: 'https://www.krs.co.kr', role: '선급 검사·인증 (민간)' },
+        { name: '한국해양교통안전공단', abbr: 'KOMSA', url: 'https://www.komsa.or.kr', role: '선박검사·해상교통안전' },
+      ],
+    },
+    {
+      label: '환경·방제',
+      color: '#10b981',
+      items: [
+        { name: '해양환경공단', abbr: 'KOEM', url: 'https://www.koem.or.kr', role: '해양환경 보전·방제' },
+      ],
+    },
+    {
+      label: '연구·정책',
+      color: '#8b5cf6',
+      items: [
+        { name: '한국해양수산개발원', abbr: 'KMI', url: 'https://www.kmi.re.kr', role: '해양수산 정책 연구' },
+        { name: '한국해양과학기술원', abbr: 'KIOST', url: 'https://www.kiost.ac.kr', role: '해양과학기술 연구' },
+        { name: '국립해양조사원', abbr: 'KHOA', url: 'https://www.khoa.go.kr', role: '수로·해양조사' },
+        { name: '국립수산과학원', abbr: 'NIFS', url: 'https://www.nifs.go.kr', role: '수산 연구' },
+        { name: '선박해양플랜트연구소', abbr: 'KRISO', url: 'https://www.kriso.re.kr', role: '선박·해양플랜트 R&D' },
+      ],
+    },
+    {
+      label: '교육·문화',
+      color: '#f59e0b',
+      items: [
+        { name: '한국해양수산연수원', abbr: 'KIMFT', url: 'https://www.seaman.or.kr', role: '선원 교육·훈련' },
+        { name: '해양수산인재개발원', abbr: 'OFHI', url: 'https://www.ofhi.go.kr', role: '해양수산 공무원 교육' },
+        { name: '국립해양박물관', abbr: 'NMM', url: 'https://www.nmm.go.kr', role: '해양문화 유산 (부산)' },
+        { name: '국립해양과학관', role: '해양과학 전시·교육' },
+        { name: '국립해양생물자원관', abbr: 'MABIK', role: '해양생물자원 (서천)' },
+      ],
+    },
+    {
+      label: '자원·물류',
+      color: '#06b6d4',
+      items: [
+        { name: '한국수산자원공단', abbr: 'FIRA', role: '인공어초·바다숲·종묘방류' },
+        { name: '해양수산과학기술진흥원', abbr: 'KIMST', role: '해양과학기술 정책 지원' },
+        { name: '한국항만물류협회', role: '항만물류 협회 (11개 지방협회)' },
+      ],
+    },
+    {
+      label: '출입국',
+      color: '#64748b',
+      items: [
+        { name: '법무부 출입국·외국인정책본부', url: 'https://www.immigration.go.kr', role: '선원 입출국' },
+      ],
+    },
   ];
 
   // ============================================================
@@ -157,7 +233,8 @@
   // 트리거 버튼
   // ============================================================
   function buildTriggerHtml() {
-    const totalCount = 1 + 12 + PORT_AUTHORITIES.length + PILOTS.length + AGENCIES.length;
+    const agencyCount = AGENCY_GROUPS.reduce((sum, g) => sum + g.items.length, 0);
+    const totalCount = 1 + 12 + PORT_AUTHORITIES.length + PILOTS.length + agencyCount;
     return `
       <button id="port-directory-trigger" style="width:100%;display:flex;align-items:center;justify-content:space-between;padding:14px 18px;background:#ffffff;border:1px solid #e2e8f0;border-radius:10px;cursor:pointer;font-family:ui-sans-serif,system-ui,-apple-system,'Segoe UI','Apple SD Gothic Neo','Noto Sans KR',sans-serif;font-size:13px;color:#0f172a;font-weight:600;transition:all 0.15s ease;">
         <span style="display:flex;align-items:center;gap:10px;">
@@ -180,7 +257,7 @@
           <button class="dir-tab" data-tab="offices" style="flex:1;min-width:120px;padding:12px 14px;background:#ffffff;border:none;border-bottom:2px solid #14b8a6;cursor:pointer;font-family:inherit;font-size:12px;font-weight:600;color:#0f172a;">지방청 (12)</button>
           <button class="dir-tab" data-tab="pa" style="flex:1;min-width:120px;padding:12px 14px;background:transparent;border:none;border-bottom:2px solid transparent;cursor:pointer;font-family:inherit;font-size:12px;font-weight:500;color:#64748b;">항만공사 (${PORT_AUTHORITIES.length})</button>
           <button class="dir-tab" data-tab="pilots" style="flex:1;min-width:120px;padding:12px 14px;background:transparent;border:none;border-bottom:2px solid transparent;cursor:pointer;font-family:inherit;font-size:12px;font-weight:500;color:#64748b;">도선사회 (${PILOTS.length})</button>
-          <button class="dir-tab" data-tab="agencies" style="flex:1;min-width:120px;padding:12px 14px;background:transparent;border:none;border-bottom:2px solid transparent;cursor:pointer;font-family:inherit;font-size:12px;font-weight:500;color:#64748b;">산하기관 (${AGENCIES.length})</button>
+          <button class="dir-tab" data-tab="agencies" style="flex:1;min-width:120px;padding:12px 14px;background:transparent;border:none;border-bottom:2px solid transparent;cursor:pointer;font-family:inherit;font-size:12px;font-weight:500;color:#64748b;">유관기관 (${AGENCY_GROUPS.reduce((sum, g) => sum + g.items.length, 0)})</button>
         </div>
         <div id="dir-tab-content" style="padding:16px 18px;">${buildOfficesTabHtml()}</div>
       </div>
@@ -257,23 +334,35 @@
   }
 
   // ============================================================
-  // 탭 콘텐츠 — 산하기관
+  // 탭 콘텐츠 — 유관기관
   // ============================================================
   function buildAgenciesTabHtml() {
-    const cards = AGENCIES.map(a => {
-      const abbr = a.abbr ? `<div style="font-size:10px;color:#94a3b8;background:#f1f5f9;padding:2px 6px;border-radius:3px;font-weight:600;">${a.abbr}</div>` : '';
-      const url = a.url || '';
+    const groups = AGENCY_GROUPS.map(group => {
+      const cards = group.items.map(a => {
+        const abbr = a.abbr ? `<div style="font-size:10px;color:#94a3b8;background:#f1f5f9;padding:2px 6px;border-radius:3px;font-weight:600;">${a.abbr}</div>` : '';
+        const url = a.url || '';
+        const portKey = a.portKey || '';
+        return `
+          <button data-port-key="${portKey}" data-url="${url}" class="dir-card" style="display:flex;flex-direction:column;align-items:flex-start;gap:4px;padding:10px 12px;background:#ffffff;border:1px solid #e2e8f0;border-left:3px solid ${group.color};border-radius:6px;cursor:pointer;font-family:inherit;text-align:left;transition:all 0.15s ease;">
+            <div style="display:flex;align-items:center;gap:6px;flex-wrap:wrap;">
+              <div style="font-size:12px;color:#0f172a;font-weight:700;line-height:1.3;">${a.name}</div>
+              ${abbr}
+            </div>
+            <div style="font-size:10px;color:#64748b;line-height:1.4;">${a.role}</div>
+          </button>
+        `;
+      }).join('');
       return `
-        <button data-port-key="" data-url="${url}" class="dir-card" style="display:flex;flex-direction:column;align-items:flex-start;gap:4px;padding:12px 14px;background:#ffffff;border:1px solid #e2e8f0;border-left:3px solid #6366f1;border-radius:6px;cursor:pointer;font-family:inherit;text-align:left;transition:all 0.15s ease;">
-          <div style="display:flex;align-items:center;gap:6px;flex-wrap:wrap;">
-            <div style="font-size:12px;color:#0f172a;font-weight:700;line-height:1.3;">${a.name}</div>
-            ${abbr}
+        <div style="margin-bottom:14px;">
+          <div style="display:flex;align-items:center;gap:8px;margin-bottom:6px;border-left:3px solid ${group.color};padding-left:10px;">
+            <span style="font-size:11px;color:#475569;font-weight:700;letter-spacing:0.3px;">${group.label}</span>
+            <span style="font-size:10px;color:#94a3b8;">(${group.items.length})</span>
           </div>
-          <div style="font-size:10px;color:#64748b;line-height:1.4;">${a.role}</div>
-        </button>
+          <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:6px;">${cards}</div>
+        </div>
       `;
     }).join('');
-    return `<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:8px;">${cards}</div>`;
+    return groups;
   }
 
   // ============================================================
