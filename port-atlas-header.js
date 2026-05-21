@@ -98,7 +98,6 @@
         { id: 'agencies', label: `산하기관 (${MOF_AGENCIES.length})` },
       ],
       customs: [
-        { id: 'cs-hq', label: '본청 (1)' },
         { id: 'cs-ports', label: `무역항별 세관 (${Object.values(CUSTOMS_PORTS).reduce((s,g)=>s+g.items.length,0)})` },
       ],
       kcg: [
@@ -328,7 +327,6 @@
     else if (key === 'pa') area.innerHTML = buildPaContent();
     else if (key === 'pilots') area.innerHTML = buildPilotsContent();
     else if (key === 'agencies') area.innerHTML = buildAgenciesContent();
-    else if (key === 'cs-hq') area.innerHTML = buildCustomsHqContent();
     else if (key === 'cs-ports') area.innerHTML = buildCustomsPortsContent(state.region);
     else if (key === 'kcg-main') area.innerHTML = buildKcgContent();
     else if (key === 'q-all') area.innerHTML = buildQuarantineContent();
@@ -347,7 +345,7 @@
     state.l1 = l1;
     const defaults = {
       mof: 'offices',
-      customs: 'cs-hq',
+      customs: 'cs-ports',
       kcg: 'kcg-main',
       quarantine: 'q-all',
     };
