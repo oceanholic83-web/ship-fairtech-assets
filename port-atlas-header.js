@@ -28,7 +28,7 @@
           </div>
           <a href="${MOF.url}" target="_blank" rel="noopener" style="display:inline-block;padding:8px 14px;background:#14b8a6;color:#ffffff;text-decoration:none;border-radius:6px;font-size:12px;font-weight:700;white-space:nowrap;">공식 홈페이지 →</a>
         </div>
-        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:4px;margin-top:10px;padding-top:10px;border-top:1px solid #e2e8f0;">
+        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:4px;margin-top:10px;padding-top:10px;border-top:1px solid #e2e8f0;">
           <div>
             <div style="font-size:10px;color:#94a3b8;letter-spacing:0.8px;margin-bottom:4px;">본부 (2025년 부산 이전)</div>
             <div style="font-size:12px;color:#475569;line-height:1.5;">${MOF.headquarters}</div>
@@ -170,7 +170,7 @@
             <span style="font-size:11px;color:#475569;font-weight:700;">${g.label}</span>
             <span style="font-size:10px;color:#94a3b8;">(${g.items.length})</span>
           </div>
-          <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:4px;">${cards}</div>
+          <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:4px;">${cards}</div>
         </div>
       `;
     }).join('');
@@ -179,22 +179,22 @@
 
   function buildPaContent() {
     const cards = PORT_AUTHORITIES.map(pa => cardHtml(pa, '#14b8a6')).join('');
-    return `<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:4px;">${cards}</div>`;
+    return `<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:4px;">${cards}</div>`;
   }
 
   function buildPilotsContent() {
     const cards = PILOTS.map(p => cardHtml(p, p.port ? '#f97316' : '#a78bfa')).join('');
-    return `<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:4px;">${cards}</div>`;
+    return `<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:4px;">${cards}</div>`;
   }
 
   function buildAgenciesContent() {
     const cards = MOF_AGENCIES.map(a => cardHtml(a, '#8b5cf6')).join('');
-    return `<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:4px;">${cards}</div>`;
+    return `<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:4px;">${cards}</div>`;
   }
 
   function buildCustomsHqContent() {
     const cards = CUSTOMS_HQ.map(c => cardHtml(c, '#0ea5e9')).join('');
-    return `<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:4px;">${cards}</div>`;
+    return `<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:4px;">${cards}</div>`;
   }
 
   function buildCustomsPortsContent(activeRegion) {
@@ -213,7 +213,7 @@
             <span style="font-size:11px;color:#475569;font-weight:700;">${g.label}</span>
             <span style="font-size:10px;color:#94a3b8;">(${g.items.length})</span>
           </div>
-          <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:4px;">${cards}</div>
+          <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:4px;">${cards}</div>
         </div>
       `;
     }).join('');
@@ -222,12 +222,12 @@
 
   function buildKcgContent() {
     const cards = KCG_AGENCIES.map(a => cardHtml(a, '#ef4444')).join('');
-    return `<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:4px;">${cards}</div>`;
+    return `<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:4px;">${cards}</div>`;
   }
 
   function buildQuarantineContent() {
     const cards = QUARANTINE_AGENCIES.map(a => cardHtml(a, '#84cc16')).join('');
-    return `<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:4px;">${cards}</div>`;
+    return `<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:4px;">${cards}</div>`;
   }
 
   // ============================================================
@@ -448,7 +448,7 @@
 
     return `
       <div style="margin-bottom:10px;font-size:11px;color:#64748b;">검색 결과: <strong style="color:#0f172a;">${matches.length}건</strong> "${query}"</div>
-      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:4px;">${cards}</div>
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:4px;">${cards}</div>
     `;
   }
 
