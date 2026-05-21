@@ -221,14 +221,20 @@
     const customsCount = CUSTOMS_HQ.length + Object.values(CUSTOMS_PORTS).reduce((s, g) => s + g.items.length, 0);
     const total = 1 + officeCount + PORT_AUTHORITIES.length + PILOTS.length + MOF_AGENCIES.length + customsCount + KCG_AGENCIES.length + QUARANTINE_AGENCIES.length;
     return `
-      <button id="port-directory-trigger" style="width:100%;display:flex;align-items:center;justify-content:space-between;padding:14px 18px;background:#ffffff;border:1px solid #e2e8f0;border-radius:10px;cursor:pointer;font-family:ui-sans-serif,system-ui,-apple-system,'Segoe UI','Apple SD Gothic Neo','Noto Sans KR',sans-serif;font-size:13px;color:#0f172a;font-weight:600;transition:all 0.15s ease;">
-        <span style="display:flex;align-items:center;gap:10px;">
-          <span style="display:inline-block;width:6px;height:24px;background:#14b8a6;border-radius:3px;"></span>
-          <span>한국 해양 행정 디렉토리</span>
-          <span style="font-size:11px;color:#94a3b8;font-weight:400;">총 ${total}개 기관</span>
-        </span>
-        <span id="port-directory-arrow" style="font-size:14px;color:#64748b;transition:transform 0.2s ease;">▼</span>
-      </button>
+      <div style="display:flex;gap:8px;align-items:stretch;flex-wrap:wrap;font-family:ui-sans-serif,system-ui,-apple-system,'Segoe UI','Apple SD Gothic Neo','Noto Sans KR',sans-serif;">
+        <div style="flex:1;min-width:200px;position:relative;">
+          <input id="port-directory-search" type="text" placeholder="기관 검색 (예: 부산, 도선, BPA)" autocomplete="off" style="width:100%;height:100%;padding:12px 14px 12px 38px;background:#ffffff;border:1px solid #e2e8f0;border-radius:10px;font-family:inherit;font-size:12px;color:#0f172a;outline:none;box-sizing:border-box;" />
+          <span style="position:absolute;left:14px;top:50%;transform:translateY(-50%);font-size:14px;color:#94a3b8;pointer-events:none;">🔍</span>
+        </div>
+        <button id="port-directory-trigger" style="flex:2;min-width:240px;display:flex;align-items:center;justify-content:space-between;padding:12px 16px;background:#ffffff;border:1px solid #e2e8f0;border-radius:10px;cursor:pointer;font-family:inherit;font-size:13px;color:#0f172a;font-weight:600;transition:all 0.15s ease;">
+          <span style="display:flex;align-items:center;gap:10px;">
+            <span style="display:inline-block;width:6px;height:24px;background:#14b8a6;border-radius:3px;"></span>
+            <span>한국 해양 행정 디렉토리</span>
+            <span style="font-size:11px;color:#94a3b8;font-weight:400;">총 ${total}개 기관</span>
+          </span>
+          <span id="port-directory-arrow" style="font-size:14px;color:#64748b;transition:transform 0.2s ease;">▼</span>
+        </button>
+      </div>
     `;
   }
 
@@ -403,11 +409,21 @@
     l1: 'mof',
     l2: 'offices',
     region: '전체',
+    searchQuery: '',
   };
 
   function renderContent() {
     const area = document.getElementById('dir-content-area');
     if (!area) return;
+    // If search is active, override tab content
+    if (state.searchQuery && state.searchQuery.trim()) {
+      const html = buildSearchContent(state.searchQuery);
+      if (html !== null) {
+        area.innerHTML = html;
+        attachCardHandlers();
+        return;
+      }
+    }
     const key = state.l2;
     if (key === 'offices') area.innerHTML = buildOfficesContent(state.region);
     else if (key === 'pa') area.innerHTML = buildPaContent();
@@ -529,6 +545,80 @@
     trigger.addEventListener('mouseleave', () => { trigger.style.background = '#ffffff'; });
   }
 
+  function attachSearchHandler() {
+    const input = document.getElementById('port-directory-search');
+    const panel = document.getElementById('port-directory-panel');
+    const arrow = document.getElementById('port-directory-arrow');
+    if (!input) return;
+
+    let debounceTimer = null;
+    input.addEventListener('input', () => {
+      clearTimeout(debounceTimer);
+      debounceTimer = setTimeout(() => {
+        state.searchQuery = input.value;
+        // Auto-open panel when searching
+        if (input.value.trim() && panel && panel.style.display !== 'block') {
+          panel.style.display = 'block';
+          if (arrow) arrow.style.transform = 'rotate(180deg)';
+        }
+        renderContent();
+      }, 150);
+    });
+  }
+
+  function buildSearchContent(query) {
+    const q = query.trim().toLowerCase();
+    if (!q) return null; // empty -> use normal tab content
+
+    const allItems = [];
+    // Collect from all data sources
+    Object.values(OFFICES).forEach(g => g.items.forEach(o => allItems.push({ ...o, type: '지방청', typeColor: g.color })));
+    PORT_AUTHORITIES.forEach(p => allItems.push({ ...p, type: '항만공사', typeColor: '#14b8a6' }));
+    PILOTS.forEach(p => allItems.push({ ...p, type: '도선사회', typeColor: p.port ? '#f97316' : '#a78bfa' }));
+    MOF_AGENCIES.forEach(a => allItems.push({ ...a, type: '산하기관', typeColor: '#8b5cf6' }));
+    CUSTOMS_HQ.forEach(c => allItems.push({ ...c, type: '관세청 본청', typeColor: '#0ea5e9' }));
+    Object.values(CUSTOMS_PORTS).forEach(g => g.items.forEach(o => allItems.push({ ...o, type: '항만별 세관', typeColor: g.color })));
+    KCG_AGENCIES.forEach(a => allItems.push({ ...a, type: '해상치안', typeColor: '#ef4444' }));
+    QUARANTINE_AGENCIES.forEach(a => allItems.push({ ...a, type: '검역·검사', typeColor: '#84cc16' }));
+
+    // Filter by query (search name, abbr, port, role, sub)
+    const matches = allItems.filter(item => {
+      const haystack = [item.name, item.abbr, item.port, item.role, item.sub].filter(Boolean).join(' ').toLowerCase();
+      return haystack.includes(q);
+    });
+
+    if (matches.length === 0) {
+      return `<div style="padding:20px;text-align:center;color:#94a3b8;font-size:13px;">검색 결과 없음 (${query})</div>`;
+    }
+
+    const cards = matches.map(item => {
+      const typeBadge = `<div style="font-size:9px;color:#64748b;background:#f1f5f9;padding:2px 6px;border-radius:3px;font-weight:600;">${item.type}</div>`;
+      const sub = item.sub ? `<div style="font-size:9px;color:#94a3b8;margin-top:2px;">${item.sub}</div>` : '';
+      const abbr = item.abbr ? `<div style="font-size:10px;color:#94a3b8;background:#f1f5f9;padding:2px 6px;border-radius:3px;font-weight:600;">${item.abbr}</div>` : '';
+      const role = item.role ? `<div style="font-size:10px;color:#64748b;line-height:1.4;margin-top:2px;">${item.role}</div>` : '';
+      const port = item.port ? `<div style="font-size:10px;color:#64748b;">${item.port}</div>` : '';
+      const url = item.url || '';
+      const portKey = item.portKey || '';
+      return `
+        <button data-port-key="${portKey}" data-url="${url}" class="dir-card" style="display:flex;flex-direction:column;align-items:flex-start;gap:3px;padding:10px 12px;background:#ffffff;border:1px solid #e2e8f0;border-left:3px solid ${item.typeColor};border-radius:6px;cursor:pointer;font-family:inherit;text-align:left;transition:all 0.15s ease;">
+          <div style="display:flex;align-items:center;gap:6px;flex-wrap:wrap;">
+            <div style="font-size:12px;color:#0f172a;font-weight:600;line-height:1.3;">${item.name}</div>
+            ${abbr}
+            ${typeBadge}
+          </div>
+          ${port}
+          ${role}
+          ${sub}
+        </button>
+      `;
+    }).join('');
+
+    return `
+      <div style="margin-bottom:10px;font-size:11px;color:#64748b;">검색 결과: <strong style="color:#0f172a;">${matches.length}건</strong> "${query}"</div>
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:6px;">${cards}</div>
+    `;
+  }
+
   // ============================================================
   // 진입점
   // ============================================================
@@ -538,8 +628,9 @@
       console.error('[port-atlas-header] Container #korea-port-header not found');
       return;
     }
-    container.innerHTML = buildMofHtml() + buildTriggerHtml() + buildPanelHtml();
+    container.innerHTML = buildTriggerHtml() + buildPanelHtml();
     attachTriggerHandler();
+    attachSearchHandler();
     attachL1Handlers();
     renderL2();
     renderContent();
