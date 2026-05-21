@@ -414,13 +414,6 @@
     map.addControl(new mapboxgl.NavigationControl(), 'top-right');
     map.addControl(new mapboxgl.AttributionControl({ compact: true }), 'bottom-right');
 
-    // Mapbox Standard 테마 + 조명 설정 (style 로드 후 적용)
-    map.on('style.load', () => {
-      map.setConfigProperty('basemap', 'lightPreset', 'night');
-      map.setConfigProperty('basemap', 'theme', 'monochrome');
-      map.setConfigProperty('basemap', 'show3dObjects', false);
-    });
-
     injectPopupStyle();
 
     const markersByName = {};
