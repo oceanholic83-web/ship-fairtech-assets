@@ -1,226 +1,207 @@
-/**
- * ship.fairtech.kr - 한국 무역항 안내도 헤더 + 기관 디렉토리
- * MOF 카드 + 메가 메뉴 (5개 탭: 총괄/지방청/항만공사/도선사회/산하기관)
+﻿ * ship.fairtech.kr - ?쒓뎅 臾댁뿭???덈궡???ㅻ뜑 + 湲곌? ?붾젆?좊━ (v3)
+ * MOF 移대뱶 + 3?④퀎 以묒꺽 ??(遺泥?/ 移댄뀒怨좊━ / 沅뚯뿭)
  *
- * 사용처: ship.fairtech.kr/category/port-guide/
- * 작동:
- *   - #korea-port-header 컨테이너에 MOF 카드 + 트리거 버튼 렌더링
- *   - 트리거 클릭 시 메가 패널 펼침
- *   - 일부 카드는 클릭 시 지도와 연동 (CustomEvent 발송)
+ * ?ъ슜泥? ship.fairtech.kr/category/port-guide/
  */
 
 (function () {
   'use strict';
 
   // ============================================================
-  // 1. 해양수산부 (총괄)
+  // 1. ?댁뼇?섏궛遺 (珥앷큵 移대뱶)
   // ============================================================
   const MOF = {
-    name: '해양수산부',
+    name: '?댁뼇?섏궛遺',
     nameEn: 'Ministry of Oceans and Fisheries',
     abbr: 'MOF',
-    headquarters: '부산광역시 동구 중앙대로 361번길 14 (아이엠빌딩)',
-    note: '2025년 세종 → 부산 이전. 정부세종청사에 일부 부서 잔존.',
+    headquarters: '遺?곌킅??떆 ?숆뎄 以묒븰?濡?361踰덇만 14 (?꾩씠?좊퉴??',
+    note: '2025???몄쥌 ??遺???댁쟾. ?뺣??몄쥌泥?궗???쇰? 遺???붿〈.',
     url: 'https://www.mof.go.kr',
-    callCenter: '110 (정부민원안내콜센터)',
+    callCenter: '110 (?뺣?誘쇱썝?덈궡肄쒖꽱??',
   };
 
   // ============================================================
-  // 2. 지방해양수산청 (11) + 제주관리단 (1)
-  // ============================================================
+  // 2. 吏諛⑺빐?묒닔?곗껌 (12) ??沅뚯뿭蹂?  // ============================================================
   const OFFICES = {
-    수도권충청: {
+    ?섎룄沅뚯땐泥? {
       color: '#14b8a6',
-      label: '수도권·충청',
+      label: '?섎룄沅뙿룹땐泥?,
       items: [
-        { name: '인천지방해양수산청', port: '인천항', url: 'https://incheon.mof.go.kr', portKey: '인천항' },
-        { name: '평택지방해양수산청', port: '평택·당진항', url: 'https://pyeongtaek.mof.go.kr', portKey: '평택·당진항' },
-        { name: '대산지방해양수산청', port: '대산항', url: 'https://daesan.mof.go.kr', portKey: '대산항' },
+        { name: '?몄쿇吏諛⑺빐?묒닔?곗껌', port: '?몄쿇??, url: 'https://incheon.mof.go.kr', portKey: '?몄쿇?? },
+        { name: '?됲깮吏諛⑺빐?묒닔?곗껌', port: '?됲깮쨌?뱀쭊??, url: 'https://pyeongtaek.mof.go.kr', portKey: '?됲깮쨌?뱀쭊?? },
+        { name: '??곗?諛⑺빐?묒닔?곗껌', port: '??고빆', url: 'https://daesan.mof.go.kr', portKey: '??고빆' },
       ],
     },
-    호남: {
+    ?몃궓: {
       color: '#fbbf24',
-      label: '호남',
+      label: '?몃궓',
       items: [
-        { name: '군산지방해양수산청', port: '군산항', url: 'https://gunsan.mof.go.kr', portKey: '군산항' },
-        { name: '목포지방해양수산청', port: '목포항', url: 'https://mokpo.mof.go.kr', portKey: '목포항' },
-        { name: '여수지방해양수산청', port: '광양·여수항', url: 'https://yeosu.mof.go.kr', portKey: '광양항' },
+        { name: '援곗궛吏諛⑺빐?묒닔?곗껌', port: '援곗궛??, url: 'https://gunsan.mof.go.kr', portKey: '援곗궛?? },
+        { name: '紐⑺룷吏諛⑺빐?묒닔?곗껌', port: '紐⑺룷??, url: 'https://mokpo.mof.go.kr', portKey: '紐⑺룷?? },
+        { name: '?ъ닔吏諛⑺빐?묒닔?곗껌', port: '愿묒뼇쨌?ъ닔??, url: 'https://yeosu.mof.go.kr', portKey: '愿묒뼇?? },
       ],
     },
-    영남: {
+    ?곷궓: {
       color: '#f97316',
-      label: '영남',
+      label: '?곷궓',
       items: [
-        { name: '부산지방해양수산청', port: '부산항', url: 'https://busan.mof.go.kr', portKey: '부산항' },
-        { name: '마산지방해양수산청', port: '마산항', url: 'https://masan.mof.go.kr', portKey: '마산항' },
-        { name: '울산지방해양수산청', port: '울산항', url: 'https://ulsan.mof.go.kr', portKey: '울산항' },
-        { name: '포항지방해양수산청', port: '포항항', url: 'https://pohang.mof.go.kr', portKey: '포항항' },
+        { name: '遺?곗?諛⑺빐?묒닔?곗껌', port: '遺?고빆', url: 'https://busan.mof.go.kr', portKey: '遺?고빆' },
+        { name: '留덉궛吏諛⑺빐?묒닔?곗껌', port: '留덉궛??, url: 'https://masan.mof.go.kr', portKey: '留덉궛?? },
+        { name: '?몄궛吏諛⑺빐?묒닔?곗껌', port: '?몄궛??, url: 'https://ulsan.mof.go.kr', portKey: '?몄궛?? },
+        { name: '?ы빆吏諛⑺빐?묒닔?곗껌', port: '?ы빆??, url: 'https://pohang.mof.go.kr', portKey: '?ы빆?? },
       ],
     },
-    동해안: {
+    ?숉빐?? {
       color: '#ef4444',
-      label: '동해안',
+      label: '?숉빐??,
       items: [
-        { name: '동해지방해양수산청', port: '동해·묵호항', url: 'https://donghae.mof.go.kr', portKey: '동해·묵호항' },
+        { name: '?숉빐吏諛⑺빐?묒닔?곗껌', port: '?숉빐쨌臾듯샇??, url: 'https://donghae.mof.go.kr', portKey: '?숉빐쨌臾듯샇?? },
       ],
     },
-    제주: {
+    ?쒖＜: {
       color: '#a78bfa',
-      label: '제주',
+      label: '?쒖＜',
       items: [
-        { name: '제주해양수산관리단', port: '제주항', url: 'https://yeosu.mof.go.kr', portKey: '제주항', sub: '여수청 산하' },
+        { name: '?쒖＜?댁뼇?섏궛愿由щ떒', port: '?쒖＜??, url: 'https://yeosu.mof.go.kr', portKey: '?쒖＜??, sub: '?ъ닔泥??고븯' },
       ],
     },
   };
 
   // ============================================================
-  // 3. 항만공사 5개
+  // 3. ??쭔怨듭궗 (5)
   // ============================================================
   const PORT_AUTHORITIES = [
-    { name: '부산항만공사', abbr: 'BPA', port: '부산항', url: 'https://www.busanpa.com', portKey: '부산항' },
-    { name: '인천항만공사', abbr: 'IPA', port: '인천항', url: 'https://www.icpa.or.kr', portKey: '인천항' },
-    { name: '여수광양항만공사', abbr: 'YGPA', port: '광양·여수항', url: 'https://www.ygpa.or.kr', portKey: '광양항' },
-    { name: '울산항만공사', abbr: 'UPA', port: '울산항', url: 'https://www.upa.or.kr', portKey: '울산항' },
-    { name: '경기평택항만공사', abbr: 'GPPC', port: '평택·당진항', url: 'https://www.gppc.or.kr', portKey: '평택·당진항', sub: '지방공기업' },
-  ];
-
-  // 4. 도선사회 13개 (협회 + 12개 지회)
-  const PILOTS = [
-    { name: '한국도선사협회', abbr: 'KMPA', url: 'https://www.kmpilot.or.kr', sub: '총괄 협회' },
-    { name: '부산항도선사회', port: '부산항', url: 'http://www.busanpilot.co.kr', tel: '051-465-1651', portKey: '부산항' },
-    { name: '인천항도선사회', port: '인천항', url: 'http://www.incheonpilot.com', tel: '032-883-8111', portKey: '인천항' },
-    { name: '여수항도선사회', port: '광양·여수항', url: 'http://www.yspilot.co.kr', tel: '061-660-1383', portKey: '광양항' },
-    { name: '울산항도선사회', port: '울산항', tel: '052-261-7703', portKey: '울산항' },
-    { name: '평택당진항도선사회', port: '평택·당진항', portKey: '평택·당진항' },
-    { name: '대산항도선사회', port: '대산항', portKey: '대산항' },
-    { name: '마산항도선사회', port: '마산항', portKey: '마산항' },
-    { name: '포항항도선사회', port: '포항항', portKey: '포항항' },
-    { name: '군산항도선사회', port: '군산항', portKey: '군산항' },
-    { name: '목포항도선사회', port: '목포항', url: 'http://www.mppilot.co.kr', portKey: '목포항' },
-    { name: '동해항도선사회', port: '동해·묵호항', portKey: '동해·묵호항' },
-    { name: '제주항도선사회', port: '제주항', portKey: '제주항' },
-  ];
-
-  // 5. 유관 기관 (그룹별)
-  const AGENCY_GROUPS = [
-    {
-      label: '통관 (관세청)',
-      color: '#0ea5e9',
-      items: [
-        { name: '관세청', abbr: 'KCS', url: 'https://www.customs.go.kr', role: '본청 (대전)' },
-        { name: '인천본부세관', url: 'https://www.customs.go.kr/incheon/main.do', role: '본부세관', portKey: '인천항' },
-        { name: '부산본부세관', url: 'https://www.customs.go.kr/busan/main.do', role: '본부세관', portKey: '부산항' },
-        { name: '광주본부세관', url: 'https://www.customs.go.kr/gwangju/main.do', role: '본부세관 (광양/목포/군산 관할)' },
-        { name: '대구본부세관', url: 'https://www.customs.go.kr/daegu/main.do', role: '본부세관 (내륙)' },
-        { name: '서울본부세관', url: 'https://www.customs.go.kr/seoul/main.do', role: '본부세관 (강원 항만 관할)' },
-        { name: '평택직할세관', url: 'https://www.customs.go.kr/pyeongtaek/main.do', role: '직할세관', portKey: '평택·당진항' },
-      ],
-    },
-    {
-      label: '항만별 세관',
-      color: '#0ea5e9',
-      items: [
-        { name: '부산세관', role: '부산본부 산하', portKey: '부산항' },
-        { name: '인천세관', role: '인천본부 산하', portKey: '인천항' },
-        { name: '평택세관', url: 'https://www.customs.go.kr/pyeongtaek/main.do', role: '직할', portKey: '평택·당진항' },
-        { name: '대전세관 대산지원', role: '서울본부 산하', portKey: '대산항' },
-        { name: '군산세관', role: '광주본부 산하', portKey: '군산항' },
-        { name: '목포세관', role: '광주본부 산하', portKey: '목포항' },
-        { name: '광양세관', role: '광주본부 산하', portKey: '광양항' },
-        { name: '여수세관', role: '광주본부 산하', portKey: '광양항' },
-        { name: '마산세관', role: '부산본부 산하', portKey: '마산항' },
-        { name: '울산세관', role: '부산본부 산하', portKey: '울산항' },
-        { name: '포항세관', role: '부산본부 산하', portKey: '포항항' },
-        { name: '동해세관', role: '서울본부 산하', portKey: '동해·묵호항' },
-        { name: '속초세관', role: '서울본부 산하 (속초항)' },
-        { name: '제주세관', role: '부산본부 산하', portKey: '제주항' },
-      ],
-    },
-    {
-      label: '해상치안',
-      color: '#ef4444',
-      items: [
-        { name: '해양경찰청', abbr: 'KCG', url: 'https://www.kcg.go.kr', role: '해상경비·구조·방제 (행안부 산하)' },
-      ],
-    },
-    {
-      label: '검역·검사',
-      color: '#84cc16',
-      items: [
-        { name: '농림축산검역본부', abbr: 'QIA', url: 'https://www.qia.go.kr', role: '동식물 검역' },
-        { name: '국립수산물품질관리원', abbr: 'NFQS', url: 'https://www.nfqs.go.kr', role: '수산물 검역·품질관리' },
-        { name: '한국선급', abbr: 'KR', url: 'https://www.krs.co.kr', role: '선급 검사·인증 (민간)' },
-        { name: '한국해양교통안전공단', abbr: 'KOMSA', url: 'https://www.komsa.or.kr', role: '선박검사·해상교통안전' },
-      ],
-    },
-    {
-      label: '환경·방제',
-      color: '#10b981',
-      items: [
-        { name: '해양환경공단', abbr: 'KOEM', url: 'https://www.koem.or.kr', role: '해양환경 보전·방제' },
-      ],
-    },
-    {
-      label: '연구·정책',
-      color: '#8b5cf6',
-      items: [
-        { name: '한국해양수산개발원', abbr: 'KMI', url: 'https://www.kmi.re.kr', role: '해양수산 정책 연구' },
-        { name: '한국해양과학기술원', abbr: 'KIOST', url: 'https://www.kiost.ac.kr', role: '해양과학기술 연구' },
-        { name: '국립해양조사원', abbr: 'KHOA', url: 'https://www.khoa.go.kr', role: '수로·해양조사' },
-        { name: '국립수산과학원', abbr: 'NIFS', url: 'https://www.nifs.go.kr', role: '수산 연구' },
-        { name: '선박해양플랜트연구소', abbr: 'KRISO', url: 'https://www.kriso.re.kr', role: '선박·해양플랜트 R&D' },
-      ],
-    },
-    {
-      label: '교육·문화',
-      color: '#f59e0b',
-      items: [
-        { name: '한국해양수산연수원', abbr: 'KIMFT', url: 'https://www.seaman.or.kr', role: '선원 교육·훈련' },
-        { name: '해양수산인재개발원', abbr: 'OFHI', url: 'https://www.ofhi.go.kr', role: '해양수산 공무원 교육' },
-        { name: '국립해양박물관', abbr: 'NMM', url: 'https://www.nmm.go.kr', role: '해양문화 유산 (부산)' },
-        { name: '국립해양과학관', role: '해양과학 전시·교육' },
-        { name: '국립해양생물자원관', abbr: 'MABIK', role: '해양생물자원 (서천)' },
-      ],
-    },
-    {
-      label: '자원·물류',
-      color: '#06b6d4',
-      items: [
-        { name: '한국수산자원공단', abbr: 'FIRA', role: '인공어초·바다숲·종묘방류' },
-        { name: '해양수산과학기술진흥원', abbr: 'KIMST', role: '해양과학기술 정책 지원' },
-        { name: '한국항만물류협회', role: '항만물류 협회 (11개 지방협회)' },
-      ],
-    },
-    {
-      label: '출입국',
-      color: '#64748b',
-      items: [
-        { name: '법무부 출입국·외국인정책본부', url: 'https://www.immigration.go.kr', role: '선원 입출국' },
-      ],
-    },
+    { name: '遺?고빆留뚭났??, abbr: 'BPA', port: '遺?고빆', url: 'https://www.busanpa.com', portKey: '遺?고빆' },
+    { name: '?몄쿇??쭔怨듭궗', abbr: 'IPA', port: '?몄쿇??, url: 'https://www.icpa.or.kr', portKey: '?몄쿇?? },
+    { name: '?ъ닔愿묒뼇??쭔怨듭궗', abbr: 'YGPA', port: '愿묒뼇쨌?ъ닔??, url: 'https://www.ygpa.or.kr', portKey: '愿묒뼇?? },
+    { name: '?몄궛??쭔怨듭궗', abbr: 'UPA', port: '?몄궛??, url: 'https://www.upa.or.kr', portKey: '?몄궛?? },
+    { name: '寃쎄린?됲깮??쭔怨듭궗', abbr: 'GPPC', port: '?됲깮쨌?뱀쭊??, url: 'https://www.gppc.or.kr', portKey: '?됲깮쨌?뱀쭊??, sub: '吏諛⑷났湲곗뾽' },
   ];
 
   // ============================================================
-  // MOF 카드 (상단 고정)
+  // 4. ?꾩꽑?ы쉶 (13)
+  // ============================================================
+  const PILOTS = [
+    { name: '?쒓뎅?꾩꽑?ы삊??, abbr: 'KMPA', url: 'https://www.kmpilot.or.kr', sub: '珥앷큵 ?묓쉶' },
+    { name: '遺?고빆?꾩꽑?ы쉶', port: '遺?고빆', url: 'http://www.busanpilot.co.kr', portKey: '遺?고빆' },
+    { name: '?몄쿇??룄?좎궗??, port: '?몄쿇??, url: 'http://www.incheonpilot.com', portKey: '?몄쿇?? },
+    { name: '?ъ닔??룄?좎궗??, port: '愿묒뼇쨌?ъ닔??, url: 'http://www.yspilot.co.kr', portKey: '愿묒뼇?? },
+    { name: '?몄궛??룄?좎궗??, port: '?몄궛??, portKey: '?몄궛?? },
+    { name: '?됲깮?뱀쭊??룄?좎궗??, port: '?됲깮쨌?뱀쭊??, portKey: '?됲깮쨌?뱀쭊?? },
+    { name: '??고빆?꾩꽑?ы쉶', port: '??고빆', portKey: '??고빆' },
+    { name: '留덉궛??룄?좎궗??, port: '留덉궛??, portKey: '留덉궛?? },
+    { name: '?ы빆??룄?좎궗??, port: '?ы빆??, portKey: '?ы빆?? },
+    { name: '援곗궛??룄?좎궗??, port: '援곗궛??, portKey: '援곗궛?? },
+    { name: '紐⑺룷??룄?좎궗??, port: '紐⑺룷??, url: 'http://www.mppilot.co.kr', portKey: '紐⑺룷?? },
+    { name: '?숉빐??룄?좎궗??, port: '?숉빐쨌臾듯샇??, portKey: '?숉빐쨌臾듯샇?? },
+    { name: '?쒖＜??룄?좎궗??, port: '?쒖＜??, portKey: '?쒖＜?? },
+  ];
+
+  // ============================================================
+  // 5. ?댁닔遺 ?고븯湲곌? (?댁뼇 吏곸냽留?
+  // ============================================================
+  const MOF_AGENCIES = [
+    { name: '?쒓뎅?댁뼇援먰넻?덉쟾怨듬떒', abbr: 'KOMSA', url: 'https://www.komsa.or.kr', role: '?좊컯寃??룻빐?곴탳?듭븞?? },
+    { name: '?쒓뎅?댁뼇?섏궛媛쒕컻??, abbr: 'KMI', url: 'https://www.kmi.re.kr', role: '?댁뼇?섏궛 ?뺤콉 ?곌뎄' },
+    { name: '?쒓뎅?댁뼇怨쇳븰湲곗닠??, abbr: 'KIOST', url: 'https://www.kiost.ac.kr', role: '?댁뼇怨쇳븰湲곗닠 ?곌뎄' },
+    { name: '援?┰?댁뼇議곗궗??, abbr: 'KHOA', url: 'https://www.khoa.go.kr', role: '?섎줈쨌?댁뼇議곗궗' },
+    { name: '援?┰?섏궛怨쇳븰??, abbr: 'NIFS', url: 'https://www.nifs.go.kr', role: '?섏궛 ?곌뎄' },
+    { name: '?댁뼇?섍꼍怨듬떒', abbr: 'KOEM', url: 'https://www.koem.or.kr', role: '?댁뼇?섍꼍 蹂댁쟾쨌諛⑹젣' },
+    { name: '?쒓뎅?댁뼇?섏궛?곗닔??, abbr: 'KIMFT', url: 'https://www.seaman.or.kr', role: '?좎썝 援먯쑁쨌?덈젴' },
+    { name: '援?┰?댁뼇諛뺣Ъ愿', abbr: 'NMM', url: 'https://www.nmm.go.kr', role: '?댁뼇臾명솕 ?좎궛 (遺??' },
+    { name: '援?┰?댁뼇?앸Ъ?먯썝愿', abbr: 'MABIK', role: '?댁뼇?앸Ъ?먯썝 (?쒖쿇)' },
+    { name: '?쒓뎅?섏궛?먯썝怨듬떒', abbr: 'FIRA', role: '?멸났?댁큹쨌諛붾떎?꼲룹쥌臾섎갑瑜? },
+  ];
+
+  // ============================================================
+  // 6. 愿?몄껌 (蹂몄껌 + 臾댁뿭??퀎 ?멸?)
+  // ============================================================
+  const CUSTOMS_HQ = [
+    { name: '愿?몄껌', abbr: 'KCS', url: 'https://www.customs.go.kr', role: '蹂몄껌 (???' },
+  ];
+
+  const CUSTOMS_PORTS = {
+    ?섎룄沅뚯땐泥? {
+      color: '#14b8a6',
+      label: '?섎룄沅뙿룹땐泥?,
+      items: [
+        { name: '?몄쿇?멸?', role: '?몄쿇蹂몃?', url: 'https://www.customs.go.kr/incheon/main.do', portKey: '?몄쿇?? },
+        { name: '?됲깮?멸?', role: '吏곹븷', url: 'https://www.customs.go.kr/pyeongtaek/main.do', portKey: '?됲깮쨌?뱀쭊?? },
+        { name: '??꾩꽭愿 ??곗???, role: '?쒖슱蹂몃? ?고븯', portKey: '??고빆' },
+      ],
+    },
+    ?몃궓: {
+      color: '#fbbf24',
+      label: '?몃궓',
+      items: [
+        { name: '援곗궛?멸?', role: '愿묒＜蹂몃? ?고븯', portKey: '援곗궛?? },
+        { name: '紐⑺룷?멸?', role: '愿묒＜蹂몃? ?고븯', portKey: '紐⑺룷?? },
+        { name: '愿묒뼇?멸?', role: '愿묒＜蹂몃? ?고븯', portKey: '愿묒뼇?? },
+        { name: '?ъ닔?멸?', role: '愿묒＜蹂몃? ?고븯', portKey: '愿묒뼇?? },
+      ],
+    },
+    ?곷궓: {
+      color: '#f97316',
+      label: '?곷궓',
+      items: [
+        { name: '遺?곗꽭愿', role: '遺?곕낯遺', url: 'https://www.customs.go.kr/busan/main.do', portKey: '遺?고빆' },
+        { name: '留덉궛?멸?', role: '遺?곕낯遺 ?고븯', portKey: '留덉궛?? },
+        { name: '?몄궛?멸?', role: '遺?곕낯遺 ?고븯', portKey: '?몄궛?? },
+        { name: '?ы빆?멸?', role: '遺?곕낯遺 ?고븯', portKey: '?ы빆?? },
+      ],
+    },
+    ?숉빐?? {
+      color: '#ef4444',
+      label: '?숉빐??,
+      items: [
+        { name: '?숉빐?멸?', role: '?쒖슱蹂몃? ?고븯', portKey: '?숉빐쨌臾듯샇?? },
+      ],
+    },
+    ?쒖＜: {
+      color: '#a78bfa',
+      label: '?쒖＜',
+      items: [
+        { name: '?쒖＜?멸?', role: '遺?곕낯遺 ?고븯', portKey: '?쒖＜?? },
+      ],
+    },
+  };
+
+  // ============================================================
+  // 7. ?댁긽移섏븞
+  // ============================================================
+  const KCG_AGENCIES = [
+    { name: '?댁뼇寃쎌같泥?, abbr: 'KCG', url: 'https://www.kcg.go.kr', role: '?댁긽寃쎈퉬쨌援ъ“쨌諛⑹젣 (?됱븞遺 ?고븯)' },
+  ];
+
+  // ============================================================
+  // 8. 寃??룰???  // ============================================================
+  const QUARANTINE_AGENCIES = [
+    { name: '?띾┝異뺤궛寃??낯遺', abbr: 'QIA', url: 'https://www.qia.go.kr', role: '?숈떇臾?寃??(?띾┝遺 ?고븯)' },
+    { name: '援?┰?섏궛臾쇳뭹吏덇?由ъ썝', abbr: 'NFQS', url: 'https://www.nfqs.go.kr', role: '?섏궛臾?寃??룻뭹吏덇?由? },
+    { name: '?쒓뎅?좉툒', abbr: 'KR', url: 'https://www.krs.co.kr', role: '?좉툒 寃??룹씤利?(誘쇨컙)' },
+  ];
+
+  // ============================================================
+  // MOF 移대뱶 (?곷떒 怨좎젙)
   // ============================================================
   function buildMofHtml() {
     return `
       <div style="margin-bottom:12px;background:#f8fafc;border:1px solid #e2e8f0;border-radius:10px;padding:16px 18px;font-family:ui-sans-serif,system-ui,-apple-system,'Segoe UI','Apple SD Gothic Neo','Noto Sans KR',sans-serif;color:#0f172a;">
         <div style="display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:10px;flex-wrap:wrap;">
           <div>
-            <div style="font-size:10px;letter-spacing:1.5px;color:#94a3b8;text-transform:uppercase;margin-bottom:4px;font-weight:500;">총괄 부처</div>
+            <div style="font-size:10px;letter-spacing:1.5px;color:#94a3b8;text-transform:uppercase;margin-bottom:4px;font-weight:500;">珥앷큵 遺泥?/div>
             <div style="font-size:18px;color:#0f172a;font-weight:700;">${MOF.name}</div>
-            <div style="font-size:11px;color:#64748b;margin-top:2px;">${MOF.nameEn} · ${MOF.abbr}</div>
+            <div style="font-size:11px;color:#64748b;margin-top:2px;">${MOF.nameEn} 쨌 ${MOF.abbr}</div>
           </div>
-          <a href="${MOF.url}" target="_blank" rel="noopener" style="display:inline-block;padding:8px 14px;background:#14b8a6;color:#ffffff;text-decoration:none;border-radius:6px;font-size:12px;font-weight:700;white-space:nowrap;">공식 홈페이지 →</a>
+          <a href="${MOF.url}" target="_blank" rel="noopener" style="display:inline-block;padding:8px 14px;background:#14b8a6;color:#ffffff;text-decoration:none;border-radius:6px;font-size:12px;font-weight:700;white-space:nowrap;">怨듭떇 ?덊럹?댁? ??/a>
         </div>
         <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:8px;margin-top:10px;padding-top:10px;border-top:1px solid #e2e8f0;">
           <div>
-            <div style="font-size:10px;color:#94a3b8;letter-spacing:0.8px;margin-bottom:4px;">본부 (2025년 부산 이전)</div>
+            <div style="font-size:10px;color:#94a3b8;letter-spacing:0.8px;margin-bottom:4px;">蹂몃? (2025??遺???댁쟾)</div>
             <div style="font-size:12px;color:#475569;line-height:1.5;">${MOF.headquarters}</div>
           </div>
           <div>
-            <div style="font-size:10px;color:#94a3b8;letter-spacing:0.8px;margin-bottom:4px;">민원 연락처</div>
+            <div style="font-size:10px;color:#94a3b8;letter-spacing:0.8px;margin-bottom:4px;">誘쇱썝 ?곕씫泥?/div>
             <div style="font-size:12px;color:#475569;line-height:1.5;">${MOF.callCenter}</div>
           </div>
         </div>
@@ -230,196 +211,279 @@
   }
 
   // ============================================================
-  // 트리거 버튼
+  // ?몃━嫄?踰꾪듉
   // ============================================================
   function buildTriggerHtml() {
-    const agencyCount = AGENCY_GROUPS.reduce((sum, g) => sum + g.items.length, 0);
-    const totalCount = 1 + 12 + PORT_AUTHORITIES.length + PILOTS.length + agencyCount;
+    const officeCount = Object.values(OFFICES).reduce((s, g) => s + g.items.length, 0);
+    const customsCount = CUSTOMS_HQ.length + Object.values(CUSTOMS_PORTS).reduce((s, g) => s + g.items.length, 0);
+    const total = 1 + officeCount + PORT_AUTHORITIES.length + PILOTS.length + MOF_AGENCIES.length + customsCount + KCG_AGENCIES.length + QUARANTINE_AGENCIES.length;
     return `
       <button id="port-directory-trigger" style="width:100%;display:flex;align-items:center;justify-content:space-between;padding:14px 18px;background:#ffffff;border:1px solid #e2e8f0;border-radius:10px;cursor:pointer;font-family:ui-sans-serif,system-ui,-apple-system,'Segoe UI','Apple SD Gothic Neo','Noto Sans KR',sans-serif;font-size:13px;color:#0f172a;font-weight:600;transition:all 0.15s ease;">
         <span style="display:flex;align-items:center;gap:10px;">
           <span style="display:inline-block;width:6px;height:24px;background:#14b8a6;border-radius:3px;"></span>
-          <span>한국 해양 행정 디렉토리</span>
-          <span style="font-size:11px;color:#94a3b8;font-weight:400;">총 ${totalCount}개 기관</span>
+          <span>?쒓뎅 ?댁뼇 ?됱젙 ?붾젆?좊━</span>
+          <span style="font-size:11px;color:#94a3b8;font-weight:400;">珥?${total}媛?湲곌?</span>
         </span>
-        <span id="port-directory-arrow" style="font-size:14px;color:#64748b;transition:transform 0.2s ease;">▼</span>
+        <span id="port-directory-arrow" style="font-size:14px;color:#64748b;transition:transform 0.2s ease;">??/span>
       </button>
     `;
   }
 
   // ============================================================
-  // 메가 패널 (탭 + 콘텐츠)
+  // 硫붽? ?⑤꼸 (3?④퀎 ??
   // ============================================================
   function buildPanelHtml() {
     return `
       <div id="port-directory-panel" style="display:none;margin-top:8px;background:#ffffff;border:1px solid #e2e8f0;border-radius:10px;overflow:hidden;font-family:ui-sans-serif,system-ui,-apple-system,'Segoe UI','Apple SD Gothic Neo','Noto Sans KR',sans-serif;">
-        <div style="display:flex;border-bottom:1px solid #e2e8f0;background:#f8fafc;flex-wrap:wrap;">
-          <button class="dir-tab" data-tab="offices" style="flex:1;min-width:120px;padding:12px 14px;background:#ffffff;border:none;border-bottom:2px solid #14b8a6;cursor:pointer;font-family:inherit;font-size:12px;font-weight:600;color:#0f172a;">지방청 (12)</button>
-          <button class="dir-tab" data-tab="pa" style="flex:1;min-width:120px;padding:12px 14px;background:transparent;border:none;border-bottom:2px solid transparent;cursor:pointer;font-family:inherit;font-size:12px;font-weight:500;color:#64748b;">항만공사 (${PORT_AUTHORITIES.length})</button>
-          <button class="dir-tab" data-tab="pilots" style="flex:1;min-width:120px;padding:12px 14px;background:transparent;border:none;border-bottom:2px solid transparent;cursor:pointer;font-family:inherit;font-size:12px;font-weight:500;color:#64748b;">도선사회 (${PILOTS.length})</button>
-          <button class="dir-tab" data-tab="agencies" style="flex:1;min-width:120px;padding:12px 14px;background:transparent;border:none;border-bottom:2px solid transparent;cursor:pointer;font-family:inherit;font-size:12px;font-weight:500;color:#64748b;">유관기관 (${AGENCY_GROUPS.reduce((sum, g) => sum + g.items.length, 0)})</button>
+        <div id="dir-l1-tabs" style="display:flex;border-bottom:1px solid #e2e8f0;background:#f8fafc;flex-wrap:wrap;">
+          <button class="dir-l1-tab" data-l1="mof" style="flex:1;min-width:120px;padding:12px 14px;background:#ffffff;border:none;border-bottom:2px solid #14b8a6;cursor:pointer;font-family:inherit;font-size:12px;font-weight:600;color:#0f172a;">?댁뼇?섏궛遺</button>
+          <button class="dir-l1-tab" data-l1="customs" style="flex:1;min-width:120px;padding:12px 14px;background:transparent;border:none;border-bottom:2px solid transparent;cursor:pointer;font-family:inherit;font-size:12px;font-weight:500;color:#64748b;">愿?몄껌</button>
+          <button class="dir-l1-tab" data-l1="kcg" style="flex:1;min-width:120px;padding:12px 14px;background:transparent;border:none;border-bottom:2px solid transparent;cursor:pointer;font-family:inherit;font-size:12px;font-weight:500;color:#64748b;">?댁긽移섏븞</button>
+          <button class="dir-l1-tab" data-l1="quarantine" style="flex:1;min-width:120px;padding:12px 14px;background:transparent;border:none;border-bottom:2px solid transparent;cursor:pointer;font-family:inherit;font-size:12px;font-weight:500;color:#64748b;">寃??룰???/button>
         </div>
-        <div id="dir-tab-content" style="padding:16px 18px;">${buildOfficesTabHtml()}</div>
+        <div id="dir-l2-area"></div>
+        <div id="dir-content-area" style="padding:16px 18px;"></div>
       </div>
     `;
   }
 
   // ============================================================
-  // 탭 콘텐츠 — 지방청
+  // L2 ??HTML ?앹꽦
   // ============================================================
-  function buildOfficesTabHtml() {
-    const groups = Object.entries(OFFICES).map(([key, group]) => {
-      const cards = group.items.map(o => {
-        const sub = o.sub ? `<div style="font-size:9px;color:#94a3b8;margin-top:2px;">${o.sub}</div>` : '';
-        return `
-          <button data-port-key="${o.portKey}" data-url="${o.url}" class="dir-card" style="display:flex;flex-direction:column;align-items:flex-start;gap:3px;padding:10px 12px;background:#ffffff;border:1px solid #e2e8f0;border-left:3px solid ${group.color};border-radius:6px;cursor:pointer;font-family:inherit;text-align:left;transition:all 0.15s ease;">
-            <div style="font-size:12px;color:#0f172a;font-weight:600;line-height:1.3;">${o.name}</div>
-            <div style="font-size:10px;color:#64748b;">${o.port}</div>
-            ${sub}
-          </button>
-        `;
-      }).join('');
+  function buildL2Tabs(l1) {
+    const map = {
+      mof: [
+        { id: 'offices', label: '吏諛⑹껌 (12)' },
+        { id: 'pa', label: `??쭔怨듭궗 (${PORT_AUTHORITIES.length})` },
+        { id: 'pilots', label: `?꾩꽑?ы쉶 (${PILOTS.length})` },
+        { id: 'agencies', label: `?고븯湲곌? (${MOF_AGENCIES.length})` },
+      ],
+      customs: [
+        { id: 'cs-hq', label: '蹂몄껌 (1)' },
+        { id: 'cs-ports', label: `臾댁뿭??퀎 ?멸? (${Object.values(CUSTOMS_PORTS).reduce((s,g)=>s+g.items.length,0)})` },
+      ],
+      kcg: [
+        { id: 'kcg-main', label: `?댁뼇寃쎌같泥?(${KCG_AGENCIES.length})` },
+      ],
+      quarantine: [
+        { id: 'q-all', label: `寃??룰???(${QUARANTINE_AGENCIES.length})` },
+      ],
+    };
+    const tabs = map[l1] || [];
+    const buttons = tabs.map((t, i) => `
+      <button class="dir-l2-tab" data-l2="${t.id}" style="padding:10px 14px;background:${i===0?'#ffffff':'transparent'};border:none;border-bottom:2px solid ${i===0?'#0ea5e9':'transparent'};cursor:pointer;font-family:inherit;font-size:11px;font-weight:${i===0?'600':'500'};color:${i===0?'#0f172a':'#64748b'};">${t.label}</button>
+    `).join('');
+    return `<div id="dir-l2-tabs" style="display:flex;background:#fafbfc;border-bottom:1px solid #e2e8f0;flex-wrap:wrap;">${buttons}</div>`;
+  }
+
+  // ============================================================
+  // L3 沅뚯뿭 ?꾪꽣 HTML (吏諛⑹껌, 臾댁뿭??퀎 ?멸??먮쭔 ?ъ슜)
+  // ============================================================
+  function buildRegionFilter(activeRegion) {
+    const regions = ['?꾩껜', '?섎룄沅뚯땐泥?, '?몃궓', '?곷궓', '?숉빐??, '?쒖＜'];
+    const labels = { ?꾩껜: '?꾩껜', ?섎룄沅뚯땐泥? '?섎룄沅뙿룹땐泥?, ?몃궓: '?몃궓', ?곷궓: '?곷궓', ?숉빐?? '?숉빐??, ?쒖＜: '?쒖＜' };
+    const buttons = regions.map(r => {
+      const isActive = r === activeRegion;
+      return `
+        <button class="dir-region-btn" data-region="${r}" style="padding:6px 12px;background:${isActive?'#0f172a':'#ffffff'};border:1px solid ${isActive?'#0f172a':'#e2e8f0'};border-radius:6px;cursor:pointer;font-family:inherit;font-size:11px;font-weight:${isActive?'600':'500'};color:${isActive?'#ffffff':'#475569'};">${labels[r]}</button>
+      `;
+    }).join('');
+    return `<div style="display:flex;flex-wrap:wrap;gap:6px;margin-bottom:12px;">${buttons}</div>`;
+  }
+
+  // ============================================================
+  // 移대뱶 HTML
+  // ============================================================
+  function cardHtml(item, color, extraStyle = '') {
+    const sub = item.sub ? `<div style="font-size:9px;color:#94a3b8;margin-top:2px;">${item.sub}</div>` : '';
+    const abbr = item.abbr ? `<div style="font-size:10px;color:#94a3b8;background:#f1f5f9;padding:2px 6px;border-radius:3px;font-weight:600;">${item.abbr}</div>` : '';
+    const role = item.role ? `<div style="font-size:10px;color:#64748b;line-height:1.4;margin-top:2px;">${item.role}</div>` : '';
+    const port = item.port ? `<div style="font-size:10px;color:#64748b;">${item.port}</div>` : '';
+    const url = item.url || '';
+    const portKey = item.portKey || '';
+    return `
+      <button data-port-key="${portKey}" data-url="${url}" class="dir-card" style="display:flex;flex-direction:column;align-items:flex-start;gap:3px;padding:10px 12px;background:#ffffff;border:1px solid #e2e8f0;border-left:3px solid ${color};border-radius:6px;cursor:pointer;font-family:inherit;text-align:left;transition:all 0.15s ease;${extraStyle}">
+        <div style="display:flex;align-items:center;gap:6px;flex-wrap:wrap;">
+          <div style="font-size:12px;color:#0f172a;font-weight:600;line-height:1.3;">${item.name}</div>
+          ${abbr}
+        </div>
+        ${port}
+        ${role}
+        ${sub}
+      </button>
+    `;
+  }
+
+  // ============================================================
+  // 肄섑뀗痢?鍮뚮뜑 ??移댄뀒怨좊━蹂?  // ============================================================
+  function buildOfficesContent(activeRegion) {
+    const regionFilter = buildRegionFilter(activeRegion);
+    let groups;
+    if (activeRegion === '?꾩껜') {
+      groups = Object.entries(OFFICES);
+    } else {
+      groups = OFFICES[activeRegion] ? [[activeRegion, OFFICES[activeRegion]]] : [];
+    }
+    const groupsHtml = groups.map(([key, g]) => {
+      const cards = g.items.map(o => cardHtml(o, g.color)).join('');
       return `
         <div style="margin-bottom:14px;">
-          <div style="display:flex;align-items:center;gap:6px;margin-bottom:6px;">
-            <span style="display:inline-block;width:8px;height:8px;border-radius:50%;background:${group.color};"></span>
-            <span style="font-size:11px;color:#475569;font-weight:600;">${group.label} (${group.items.length})</span>
+          <div style="display:flex;align-items:center;gap:6px;margin-bottom:6px;padding-left:10px;border-left:3px solid ${g.color};">
+            <span style="font-size:11px;color:#475569;font-weight:700;">${g.label}</span>
+            <span style="font-size:10px;color:#94a3b8;">(${g.items.length})</span>
           </div>
           <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:6px;">${cards}</div>
         </div>
       `;
     }).join('');
-    return groups;
+    return regionFilter + groupsHtml;
   }
 
-  // ============================================================
-  // 탭 콘텐츠 — 항만공사
-  // ============================================================
-  function buildPaTabHtml() {
-    const cards = PORT_AUTHORITIES.map(pa => {
-      const sub = pa.sub ? `<div style="font-size:9px;color:#94a3b8;margin-top:2px;">${pa.sub}</div>` : '';
-      return `
-        <button data-port-key="${pa.portKey}" data-url="${pa.url}" class="dir-card" style="display:flex;flex-direction:column;align-items:flex-start;gap:3px;padding:12px 14px;background:#ffffff;border:1px solid #e2e8f0;border-left:3px solid #14b8a6;border-radius:6px;cursor:pointer;font-family:inherit;text-align:left;transition:all 0.15s ease;">
-          <div style="display:flex;align-items:center;gap:6px;">
-            <div style="font-size:13px;color:#0f172a;font-weight:700;">${pa.name}</div>
-            <div style="font-size:10px;color:#94a3b8;background:#f1f5f9;padding:2px 6px;border-radius:3px;font-weight:600;">${pa.abbr}</div>
-          </div>
-          <div style="font-size:11px;color:#64748b;">${pa.port}</div>
-          ${sub}
-        </button>
-      `;
-    }).join('');
+  function buildPaContent() {
+    const cards = PORT_AUTHORITIES.map(pa => cardHtml(pa, '#14b8a6')).join('');
     return `<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:8px;">${cards}</div>`;
   }
 
-  // ============================================================
-  // 탭 콘텐츠 — 도선사회
-  // ============================================================
-  function buildPilotsTabHtml() {
-    const cards = PILOTS.map(p => {
-      const isAssoc = !p.port;
-      const borderColor = isAssoc ? '#a78bfa' : '#f97316';
-      const portText = p.port ? p.port : (p.sub || '');
-      const tel = p.tel ? `<div style="font-size:10px;color:#94a3b8;margin-top:2px;">${p.tel}</div>` : '';
-      const url = p.url || '';
-      return `
-        <button data-port-key="${p.portKey || ''}" data-url="${url}" class="dir-card" style="display:flex;flex-direction:column;align-items:flex-start;gap:3px;padding:10px 12px;background:#ffffff;border:1px solid #e2e8f0;border-left:3px solid ${borderColor};border-radius:6px;cursor:pointer;font-family:inherit;text-align:left;transition:all 0.15s ease;">
-          <div style="font-size:12px;color:#0f172a;font-weight:600;line-height:1.3;">${p.name}</div>
-          <div style="font-size:10px;color:#64748b;">${portText}</div>
-          ${tel}
-        </button>
-      `;
-    }).join('');
+  function buildPilotsContent() {
+    const cards = PILOTS.map(p => cardHtml(p, p.port ? '#f97316' : '#a78bfa')).join('');
     return `<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:6px;">${cards}</div>`;
   }
 
-  // ============================================================
-  // 탭 콘텐츠 — 유관기관
-  // ============================================================
-  function buildAgenciesTabHtml() {
-    const groups = AGENCY_GROUPS.map(group => {
-      const cards = group.items.map(a => {
-        const abbr = a.abbr ? `<div style="font-size:10px;color:#94a3b8;background:#f1f5f9;padding:2px 6px;border-radius:3px;font-weight:600;">${a.abbr}</div>` : '';
-        const url = a.url || '';
-        const portKey = a.portKey || '';
-        return `
-          <button data-port-key="${portKey}" data-url="${url}" class="dir-card" style="display:flex;flex-direction:column;align-items:flex-start;gap:4px;padding:10px 12px;background:#ffffff;border:1px solid #e2e8f0;border-left:3px solid ${group.color};border-radius:6px;cursor:pointer;font-family:inherit;text-align:left;transition:all 0.15s ease;">
-            <div style="display:flex;align-items:center;gap:6px;flex-wrap:wrap;">
-              <div style="font-size:12px;color:#0f172a;font-weight:700;line-height:1.3;">${a.name}</div>
-              ${abbr}
-            </div>
-            <div style="font-size:10px;color:#64748b;line-height:1.4;">${a.role}</div>
-          </button>
-        `;
-      }).join('');
+  function buildAgenciesContent() {
+    const cards = MOF_AGENCIES.map(a => cardHtml(a, '#8b5cf6')).join('');
+    return `<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:8px;">${cards}</div>`;
+  }
+
+  function buildCustomsHqContent() {
+    const cards = CUSTOMS_HQ.map(c => cardHtml(c, '#0ea5e9')).join('');
+    return `<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:8px;">${cards}</div>`;
+  }
+
+  function buildCustomsPortsContent(activeRegion) {
+    const regionFilter = buildRegionFilter(activeRegion);
+    let groups;
+    if (activeRegion === '?꾩껜') {
+      groups = Object.entries(CUSTOMS_PORTS);
+    } else {
+      groups = CUSTOMS_PORTS[activeRegion] ? [[activeRegion, CUSTOMS_PORTS[activeRegion]]] : [];
+    }
+    const groupsHtml = groups.map(([key, g]) => {
+      const cards = g.items.map(o => cardHtml(o, g.color)).join('');
       return `
         <div style="margin-bottom:14px;">
-          <div style="display:flex;align-items:center;gap:8px;margin-bottom:6px;border-left:3px solid ${group.color};padding-left:10px;">
-            <span style="font-size:11px;color:#475569;font-weight:700;letter-spacing:0.3px;">${group.label}</span>
-            <span style="font-size:10px;color:#94a3b8;">(${group.items.length})</span>
+          <div style="display:flex;align-items:center;gap:6px;margin-bottom:6px;padding-left:10px;border-left:3px solid ${g.color};">
+            <span style="font-size:11px;color:#475569;font-weight:700;">${g.label}</span>
+            <span style="font-size:10px;color:#94a3b8;">(${g.items.length})</span>
           </div>
-          <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:6px;">${cards}</div>
+          <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:6px;">${cards}</div>
         </div>
       `;
     }).join('');
-    return groups;
+    return regionFilter + groupsHtml;
+  }
+
+  function buildKcgContent() {
+    const cards = KCG_AGENCIES.map(a => cardHtml(a, '#ef4444')).join('');
+    return `<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:8px;">${cards}</div>`;
+  }
+
+  function buildQuarantineContent() {
+    const cards = QUARANTINE_AGENCIES.map(a => cardHtml(a, '#84cc16')).join('');
+    return `<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:8px;">${cards}</div>`;
   }
 
   // ============================================================
-  // 이벤트 핸들러
-  // ============================================================
-  function attachHandlers() {
-    const trigger = document.getElementById('port-directory-trigger');
-    const panel = document.getElementById('port-directory-panel');
-    const arrow = document.getElementById('port-directory-arrow');
+  // ?곹깭 愿由?+ ?뚮뜑留?  // ============================================================
+  let state = {
+    l1: 'mof',
+    l2: 'offices',
+    region: '?꾩껜',
+  };
 
-    if (trigger && panel && arrow) {
-      trigger.addEventListener('click', () => {
-        const isOpen = panel.style.display === 'block';
-        panel.style.display = isOpen ? 'none' : 'block';
-        arrow.style.transform = isOpen ? 'rotate(0deg)' : 'rotate(180deg)';
-      });
-      trigger.addEventListener('mouseenter', () => { trigger.style.background = '#f8fafc'; });
-      trigger.addEventListener('mouseleave', () => { trigger.style.background = '#ffffff'; });
-    }
-
-    attachTabHandlers();
-  }
-
-  function attachTabHandlers() {
-    const tabs = document.querySelectorAll('.dir-tab');
-    const content = document.getElementById('dir-tab-content');
-    if (!content) return;
-
-    tabs.forEach(tab => {
-      tab.addEventListener('click', () => {
-        tabs.forEach(t => {
-          t.style.background = 'transparent';
-          t.style.borderBottomColor = 'transparent';
-          t.style.color = '#64748b';
-          t.style.fontWeight = '500';
-        });
-        tab.style.background = '#ffffff';
-        tab.style.borderBottomColor = '#14b8a6';
-        tab.style.color = '#0f172a';
-        tab.style.fontWeight = '600';
-
-        const tabName = tab.getAttribute('data-tab');
-        if (tabName === 'offices') content.innerHTML = buildOfficesTabHtml();
-        else if (tabName === 'pa') content.innerHTML = buildPaTabHtml();
-        else if (tabName === 'pilots') content.innerHTML = buildPilotsTabHtml();
-        else if (tabName === 'agencies') content.innerHTML = buildAgenciesTabHtml();
-
-        attachCardHandlers();
-      });
-    });
-
+  function renderContent() {
+    const area = document.getElementById('dir-content-area');
+    if (!area) return;
+    const key = state.l2;
+    if (key === 'offices') area.innerHTML = buildOfficesContent(state.region);
+    else if (key === 'pa') area.innerHTML = buildPaContent();
+    else if (key === 'pilots') area.innerHTML = buildPilotsContent();
+    else if (key === 'agencies') area.innerHTML = buildAgenciesContent();
+    else if (key === 'cs-hq') area.innerHTML = buildCustomsHqContent();
+    else if (key === 'cs-ports') area.innerHTML = buildCustomsPortsContent(state.region);
+    else if (key === 'kcg-main') area.innerHTML = buildKcgContent();
+    else if (key === 'q-all') area.innerHTML = buildQuarantineContent();
     attachCardHandlers();
+    attachRegionHandlers();
+  }
+
+  function renderL2() {
+    const area = document.getElementById('dir-l2-area');
+    if (!area) return;
+    area.innerHTML = buildL2Tabs(state.l1);
+    attachL2Handlers();
+  }
+
+  function setL1(l1) {
+    state.l1 = l1;
+    const defaults = {
+      mof: 'offices',
+      customs: 'cs-hq',
+      kcg: 'kcg-main',
+      quarantine: 'q-all',
+    };
+    state.l2 = defaults[l1];
+    state.region = '?꾩껜';
+    document.querySelectorAll('.dir-l1-tab').forEach(t => {
+      const isActive = t.getAttribute('data-l1') === l1;
+      t.style.background = isActive ? '#ffffff' : 'transparent';
+      t.style.borderBottomColor = isActive ? '#14b8a6' : 'transparent';
+      t.style.color = isActive ? '#0f172a' : '#64748b';
+      t.style.fontWeight = isActive ? '600' : '500';
+    });
+    renderL2();
+    renderContent();
+  }
+
+  function setL2(l2) {
+    state.l2 = l2;
+    state.region = '?꾩껜';
+    document.querySelectorAll('.dir-l2-tab').forEach(t => {
+      const isActive = t.getAttribute('data-l2') === l2;
+      t.style.background = isActive ? '#ffffff' : 'transparent';
+      t.style.borderBottomColor = isActive ? '#0ea5e9' : 'transparent';
+      t.style.color = isActive ? '#0f172a' : '#64748b';
+      t.style.fontWeight = isActive ? '600' : '500';
+    });
+    renderContent();
+  }
+
+  function setRegion(region) {
+    state.region = region;
+    renderContent();
+  }
+
+  // ============================================================
+  // ?대깽???몃뱾??  // ============================================================
+  function attachL1Handlers() {
+    document.querySelectorAll('.dir-l1-tab').forEach(tab => {
+      tab.addEventListener('click', () => setL1(tab.getAttribute('data-l1')));
+    });
+  }
+
+  function attachL2Handlers() {
+    document.querySelectorAll('.dir-l2-tab').forEach(tab => {
+      tab.addEventListener('click', () => setL2(tab.getAttribute('data-l2')));
+    });
+  }
+
+  function attachRegionHandlers() {
+    document.querySelectorAll('.dir-region-btn').forEach(btn => {
+      btn.addEventListener('click', () => setRegion(btn.getAttribute('data-region')));
+    });
   }
 
   function attachCardHandlers() {
-    const cards = document.querySelectorAll('.dir-card');
-    cards.forEach(card => {
+    document.querySelectorAll('.dir-card').forEach(card => {
       card.addEventListener('mouseenter', () => {
         card.style.background = '#f8fafc';
         card.style.transform = 'translateY(-1px)';
@@ -431,12 +495,10 @@
       card.addEventListener('click', (e) => {
         const portKey = card.getAttribute('data-port-key');
         const url = card.getAttribute('data-url');
-        // Shift-click 또는 우클릭 = URL 새 탭
         if (e.shiftKey || e.metaKey || e.ctrlKey) {
           if (url) window.open(url, '_blank', 'noopener');
           return;
         }
-        // 일반 클릭 = 지도 연동 (있으면) + URL 열기
         if (portKey) {
           window.dispatchEvent(new CustomEvent('port-atlas:focus-port', { detail: { portKey } }));
         }
@@ -447,9 +509,22 @@
     });
   }
 
+  function attachTriggerHandler() {
+    const trigger = document.getElementById('port-directory-trigger');
+    const panel = document.getElementById('port-directory-panel');
+    const arrow = document.getElementById('port-directory-arrow');
+    if (!trigger || !panel || !arrow) return;
+    trigger.addEventListener('click', () => {
+      const isOpen = panel.style.display === 'block';
+      panel.style.display = isOpen ? 'none' : 'block';
+      arrow.style.transform = isOpen ? 'rotate(0deg)' : 'rotate(180deg)';
+    });
+    trigger.addEventListener('mouseenter', () => { trigger.style.background = '#f8fafc'; });
+    trigger.addEventListener('mouseleave', () => { trigger.style.background = '#ffffff'; });
+  }
+
   // ============================================================
-  // 진입점
-  // ============================================================
+  // 吏꾩엯??  // ============================================================
   function renderHeader() {
     const container = document.getElementById('korea-port-header');
     if (!container) {
@@ -457,7 +532,10 @@
       return;
     }
     container.innerHTML = buildMofHtml() + buildTriggerHtml() + buildPanelHtml();
-    attachHandlers();
+    attachTriggerHandler();
+    attachL1Handlers();
+    renderL2();
+    renderContent();
   }
 
   if (document.readyState === 'loading') {
@@ -466,3 +544,9 @@
     renderHeader();
   }
 })();
+
+Then commit and push to main with the message:
+    refactor: 3-tier nested tabs for directory (ministry > category > region)
+
+Verify with:
+    grep -n "dir-l1-tab\|dir-l2-tab\|dir-region-btn\|setL1\|setL2\|setRegion" port-atlas-header.js | head -20
