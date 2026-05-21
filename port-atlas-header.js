@@ -198,7 +198,7 @@
           </div>
           <a href="${MOF.url}" target="_blank" rel="noopener" style="display:inline-block;padding:8px 14px;background:#14b8a6;color:#ffffff;text-decoration:none;border-radius:6px;font-size:12px;font-weight:700;white-space:nowrap;">공식 홈페이지 →</a>
         </div>
-        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:8px;margin-top:10px;padding-top:10px;border-top:1px solid #e2e8f0;">
+        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:4px;margin-top:10px;padding-top:10px;border-top:1px solid #e2e8f0;">
           <div>
             <div style="font-size:10px;color:#94a3b8;letter-spacing:0.8px;margin-bottom:4px;">본부 (2025년 부산 이전)</div>
             <div style="font-size:12px;color:#475569;line-height:1.5;">${MOF.headquarters}</div>
@@ -304,21 +304,19 @@
   // 카드 HTML
   // ============================================================
   function cardHtml(item, color, extraStyle = '') {
-    const sub = item.sub ? `<div style="font-size:9px;color:#94a3b8;margin-top:2px;">${item.sub}</div>` : '';
-    const abbr = item.abbr ? `<div style="font-size:10px;color:#94a3b8;background:#f1f5f9;padding:2px 6px;border-radius:3px;font-weight:600;">${item.abbr}</div>` : '';
-    const role = item.role ? `<div style="font-size:10px;color:#64748b;line-height:1.4;margin-top:2px;">${item.role}</div>` : '';
-    const port = item.port ? `<div style="font-size:10px;color:#64748b;">${item.port}</div>` : '';
+    const sub = item.sub ? `<span style="font-size:10px;color:#94a3b8;margin-left:6px;">· ${item.sub}</span>` : '';
+    const abbr = item.abbr ? `<span style="font-size:9px;color:#94a3b8;background:#f1f5f9;padding:1px 5px;border-radius:3px;font-weight:600;margin-left:6px;">${item.abbr}</span>` : '';
+    const meta = item.role || item.port || '';
     const url = item.url || '';
     const portKey = item.portKey || '';
     return `
-      <button data-port-key="${portKey}" data-url="${url}" class="dir-card" style="display:flex;flex-direction:column;align-items:flex-start;gap:3px;padding:10px 12px;background:#ffffff;border:1px solid #e2e8f0;border-left:3px solid ${color};border-radius:6px;cursor:pointer;font-family:inherit;text-align:left;transition:all 0.15s ease;${extraStyle}">
-        <div style="display:flex;align-items:center;gap:6px;flex-wrap:wrap;">
-          <div style="font-size:12px;color:#0f172a;font-weight:600;line-height:1.3;">${item.name}</div>
+      <button data-port-key="${portKey}" data-url="${url}" class="dir-card" style="display:flex;align-items:center;justify-content:space-between;gap:10px;padding:7px 10px 7px 12px;background:#ffffff;border:1px solid #e2e8f0;border-left:3px solid ${color};border-radius:5px;cursor:pointer;font-family:inherit;text-align:left;transition:all 0.12s ease;${extraStyle}">
+        <div style="display:flex;align-items:center;gap:0;flex-wrap:wrap;min-width:0;">
+          <span style="font-size:12px;color:#0f172a;font-weight:600;line-height:1.3;">${item.name}</span>
           ${abbr}
+          ${sub}
         </div>
-        ${port}
-        ${role}
-        ${sub}
+        <span style="font-size:10px;color:#64748b;line-height:1.3;text-align:right;white-space:nowrap;flex-shrink:0;">${meta}</span>
       </button>
     `;
   }
@@ -342,7 +340,7 @@
             <span style="font-size:11px;color:#475569;font-weight:700;">${g.label}</span>
             <span style="font-size:10px;color:#94a3b8;">(${g.items.length})</span>
           </div>
-          <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:6px;">${cards}</div>
+          <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:4px;">${cards}</div>
         </div>
       `;
     }).join('');
@@ -351,22 +349,22 @@
 
   function buildPaContent() {
     const cards = PORT_AUTHORITIES.map(pa => cardHtml(pa, '#14b8a6')).join('');
-    return `<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:8px;">${cards}</div>`;
+    return `<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:4px;">${cards}</div>`;
   }
 
   function buildPilotsContent() {
     const cards = PILOTS.map(p => cardHtml(p, p.port ? '#f97316' : '#a78bfa')).join('');
-    return `<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:6px;">${cards}</div>`;
+    return `<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:4px;">${cards}</div>`;
   }
 
   function buildAgenciesContent() {
     const cards = MOF_AGENCIES.map(a => cardHtml(a, '#8b5cf6')).join('');
-    return `<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:8px;">${cards}</div>`;
+    return `<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:4px;">${cards}</div>`;
   }
 
   function buildCustomsHqContent() {
     const cards = CUSTOMS_HQ.map(c => cardHtml(c, '#0ea5e9')).join('');
-    return `<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:8px;">${cards}</div>`;
+    return `<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:4px;">${cards}</div>`;
   }
 
   function buildCustomsPortsContent(activeRegion) {
@@ -385,7 +383,7 @@
             <span style="font-size:11px;color:#475569;font-weight:700;">${g.label}</span>
             <span style="font-size:10px;color:#94a3b8;">(${g.items.length})</span>
           </div>
-          <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:6px;">${cards}</div>
+          <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:4px;">${cards}</div>
         </div>
       `;
     }).join('');
@@ -394,12 +392,12 @@
 
   function buildKcgContent() {
     const cards = KCG_AGENCIES.map(a => cardHtml(a, '#ef4444')).join('');
-    return `<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:8px;">${cards}</div>`;
+    return `<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:4px;">${cards}</div>`;
   }
 
   function buildQuarantineContent() {
     const cards = QUARANTINE_AGENCIES.map(a => cardHtml(a, '#84cc16')).join('');
-    return `<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:8px;">${cards}</div>`;
+    return `<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:4px;">${cards}</div>`;
   }
 
   // ============================================================
@@ -615,7 +613,7 @@
 
     return `
       <div style="margin-bottom:10px;font-size:11px;color:#64748b;">검색 결과: <strong style="color:#0f172a;">${matches.length}건</strong> "${query}"</div>
-      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:6px;">${cards}</div>
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:4px;">${cards}</div>
     `;
   }
 
