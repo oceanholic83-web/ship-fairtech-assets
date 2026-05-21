@@ -590,23 +590,28 @@
     }
 
     const cards = matches.map(item => {
-      const typeBadge = `<div style="font-size:9px;color:#64748b;background:#f1f5f9;padding:2px 6px;border-radius:3px;font-weight:600;">${item.type}</div>`;
-      const sub = item.sub ? `<div style="font-size:9px;color:#94a3b8;margin-top:2px;">${item.sub}</div>` : '';
-      const abbr = item.abbr ? `<div style="font-size:10px;color:#94a3b8;background:#f1f5f9;padding:2px 6px;border-radius:3px;font-weight:600;">${item.abbr}</div>` : '';
-      const role = item.role ? `<div style="font-size:10px;color:#64748b;line-height:1.4;margin-top:2px;">${item.role}</div>` : '';
-      const port = item.port ? `<div style="font-size:10px;color:#64748b;">${item.port}</div>` : '';
+      // Inject a type tag into the meta column so users can see which category this match came from
+      const itemWithTypeMeta = {
+        ...item,
+        role: item.role || item.port || '',
+        // Append type to whatever already exists in the meta column
+      };
+      // We use cardHtml directly, but augment the right-side meta to include the type
+      const sub = item.sub ? `<span style="font-size:10px;color:#94a3b8;margin-left:6px;">· ${item.sub}</span>` : '';
+      const abbr = item.abbr ? `<span style="font-size:9px;color:#94a3b8;background:#f1f5f9;padding:1px 5px;border-radius:3px;font-weight:600;margin-left:6px;">${item.abbr}</span>` : '';
+      const typeBadge = `<span style="font-size:9px;color:#0f172a;background:#e0f2fe;padding:1px 5px;border-radius:3px;font-weight:600;margin-left:6px;">${item.type}</span>`;
+      const meta = item.role || item.port || '';
       const url = item.url || '';
       const portKey = item.portKey || '';
       return `
-        <button data-port-key="${portKey}" data-url="${url}" class="dir-card" style="display:flex;flex-direction:column;align-items:flex-start;gap:3px;padding:10px 12px;background:#ffffff;border:1px solid #e2e8f0;border-left:3px solid ${item.typeColor};border-radius:6px;cursor:pointer;font-family:inherit;text-align:left;transition:all 0.15s ease;">
-          <div style="display:flex;align-items:center;gap:6px;flex-wrap:wrap;">
-            <div style="font-size:12px;color:#0f172a;font-weight:600;line-height:1.3;">${item.name}</div>
+        <button data-port-key="${portKey}" data-url="${url}" class="dir-card" style="display:flex;align-items:center;justify-content:space-between;gap:10px;padding:7px 10px 7px 12px;background:#ffffff;border:1px solid #e2e8f0;border-left:3px solid ${item.typeColor};border-radius:5px;cursor:pointer;font-family:inherit;text-align:left;transition:all 0.12s ease;">
+          <div style="display:flex;align-items:center;gap:0;flex-wrap:wrap;min-width:0;">
+            <span style="font-size:12px;color:#0f172a;font-weight:600;line-height:1.3;">${item.name}</span>
             ${abbr}
             ${typeBadge}
+            ${sub}
           </div>
-          ${port}
-          ${role}
-          ${sub}
+          <span style="font-size:10px;color:#64748b;line-height:1.3;text-align:right;white-space:nowrap;flex-shrink:0;">${meta}</span>
         </button>
       `;
     }).join('');
