@@ -41,8 +41,8 @@
       label: '호남',
       items: [
         { name: '군산지방해양수산청', port: '군산항', url: 'https://gunsan.mof.go.kr', portKey: '군산항', address: '전북 군산시 설림길 11 (소룡동)', postcode: '54014', tel: '063-441-2223', telNight: '063-441-2208', telCivil: '063-441-2204', fax: '063-441-2352' },
-        { name: '목포지방해양수산청', port: '목포항', url: 'https://mokpo.mof.go.kr', portKey: '목포항' },
-        { name: '여수지방해양수산청', port: '광양·여수항', url: 'https://yeosu.mof.go.kr', portKey: '광양항' },
+        { name: '목포지방해양수산청', port: '목포항', url: 'https://mokpo.mof.go.kr', portKey: '목포항', address: '전라남도 목포시 통일대로 130 (옥암동)', postcode: '58746', tel: '061-280-1700', fax: '061-280-1703' },
+        { name: '여수지방해양수산청', port: '광양·여수항', url: 'https://yeosu.mof.go.kr', portKey: '광양항', address: '전라남도 여수시 여서1로 107', postcode: '59713', tel: '061-650-6000', fax: '061-654-2353' },
       ],
     },
     영남: {
@@ -50,23 +50,23 @@
       label: '영남',
       items: [
         { name: '부산지방해양수산청', port: '부산항', url: 'https://busan.mof.go.kr', portKey: '부산항' },
-        { name: '마산지방해양수산청', port: '마산항', url: 'https://masan.mof.go.kr', portKey: '마산항' },
+        { name: '마산지방해양수산청', port: '마산항', url: 'https://masan.mof.go.kr', portKey: '마산항', address: '경상남도 창원시 마산합포구 제2부두로 10 (정부경남지방합동청사)', postcode: '51716', tel: '055-981-5000', fax: '055-245-0885' },
         { name: '울산지방해양수산청', port: '울산항', url: 'https://ulsan.mof.go.kr', portKey: '울산항', address: '울산광역시 남구 장생포고래로 288번길 6', postcode: '44780', tel: '052-228-5500', fax: '052-228-5549' },
-        { name: '포항지방해양수산청', port: '포항항', url: 'https://pohang.mof.go.kr', portKey: '포항항' },
+        { name: '포항지방해양수산청', port: '포항항', url: 'https://pohang.mof.go.kr', portKey: '포항항', address: '경상북도 포항시 북구 해동로 376', postcode: '37716', tel: '054-242-1812', fax: '054-245-1649' },
       ],
     },
     동해안: {
       color: '#ef4444',
       label: '동해안',
       items: [
-        { name: '동해지방해양수산청', port: '동해·묵호항', url: 'https://donghae.mof.go.kr', portKey: '동해·묵호항' },
+        { name: '동해지방해양수산청', port: '동해·묵호항', url: 'https://donghae.mof.go.kr', portKey: '동해·묵호항', address: '강원도 동해시 평원로 46', postcode: '25752', tel: '033-520-6000', telNight: '033-520-6200' },
       ],
     },
     제주: {
       color: '#a78bfa',
       label: '제주',
       items: [
-        { name: '제주해양수산관리단', port: '제주항', url: 'https://yeosu.mof.go.kr', portKey: '제주항', sub: '여수청 산하' },
+        { name: '제주해양수산관리단', port: '제주항', url: 'https://www.mof.go.kr/im/userList.do?menuKey=628&searchOuCode=1192373', portKey: '제주항' },
       ],
     },
   };
