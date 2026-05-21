@@ -139,15 +139,86 @@
     const meta = item.role || item.port || '';
     const url = item.url || '';
     const portKey = item.portKey || '';
-    return `
-      <button data-port-key="${portKey}" data-url="${url}" class="dir-card" style="display:flex;align-items:center;justify-content:space-between;gap:10px;padding:7px 10px 7px 12px;background:#ffffff;border:1px solid #e2e8f0;border-left:3px solid ${color};border-radius:5px;cursor:pointer;font-family:inherit;text-align:left;transition:all 0.12s ease;${extraStyle}">
-        <div style="display:flex;align-items:center;gap:0;flex-wrap:wrap;min-width:0;">
-          <span style="font-size:12px;color:#0f172a;font-weight:600;line-height:1.3;">${item.name}</span>
-          ${abbr}
-          ${sub}
+    const address = item.address || '';
+    const tel = item.tel || '';
+    const children = Array.isArray(item.children) ? item.children : [];
+
+    // 펼침 영역이 필요한지 판단 (주소/전화/산하 중 하나라도 있을 때만 펼침 버튼 표시)
+    const hasDetails = address || tel || children.length > 0 || portKey || url;
+    const expandArrow = hasDetails ? `<span class="dir-card-arrow" style="font-size:10px;color:#94a3b8;margin-left:6px;transition:transform 0.2s ease;">▼</span>` : '';
+
+    // 펼침 영역 HTML
+    let detailsHtml = '';
+    if (hasDetails) {
+      const addressBlock = address ? `
+        <div style="margin-top:6px;font-size:11px;color:#475569;line-height:1.5;">
+          <span style="color:#94a3b8;">📍</span> ${address}
         </div>
-        <span style="font-size:10px;color:#64748b;line-height:1.3;text-align:right;white-space:nowrap;flex-shrink:0;">${meta}</span>
-      </button>
+      ` : '';
+
+      const telBlock = tel ? `
+        <div style="margin-top:4px;font-size:11px;color:#475569;line-height:1.5;">
+          <span style="color:#94a3b8;">☎</span> <a href="tel:${tel}" style="color:#475569;text-decoration:none;">${tel}</a>
+        </div>
+      ` : '';
+
+      // 네비 버튼 (주소 있을 때만)
+      const navButtons = address ? `
+        <div style="margin-top:8px;display:flex;gap:6px;flex-wrap:wrap;">
+          <a href="https://map.kakao.com/link/search/${encodeURIComponent(address)}" target="_blank" rel="noopener" style="padding:5px 10px;background:#fee500;color:#0f172a;text-decoration:none;border-radius:4px;font-size:10px;font-weight:600;">카카오맵</a>
+          <a href="https://map.naver.com/p/search/${encodeURIComponent(address)}" target="_blank" rel="noopener" style="padding:5px 10px;background:#03c75a;color:#ffffff;text-decoration:none;border-radius:4px;font-size:10px;font-weight:600;">네이버 지도</a>
+          <a href="tmap://search?name=${encodeURIComponent(address)}" style="padding:5px 10px;background:#0f172a;color:#ffffff;text-decoration:none;border-radius:4px;font-size:10px;font-weight:600;">T맵</a>
+        </div>
+      ` : '';
+
+      // 외부 사이트 + 지도에서 보기 버튼
+      const actionButtons = `
+        <div style="margin-top:8px;display:flex;gap:6px;flex-wrap:wrap;">
+          ${url ? `<a href="${url}" target="_blank" rel="noopener" style="padding:5px 10px;background:#f1f5f9;color:#0f172a;text-decoration:none;border-radius:4px;font-size:10px;font-weight:600;">🌐 공식 사이트</a>` : ''}
+          ${portKey ? `<button data-action="focus-port" data-port-key="${portKey}" class="dir-action-btn" style="padding:5px 10px;background:${color};color:#ffffff;border:none;border-radius:4px;font-size:10px;font-weight:600;cursor:pointer;font-family:inherit;">📍 지도에서 보기</button>` : ''}
+        </div>
+      `;
+
+      // 산하 사무소 리스트
+      const childrenBlock = children.length > 0 ? `
+        <div style="margin-top:10px;padding-top:8px;border-top:1px dashed #e2e8f0;">
+          <div style="font-size:10px;color:#94a3b8;font-weight:600;margin-bottom:4px;">산하 (${children.length})</div>
+          <div style="display:flex;flex-direction:column;gap:3px;">
+            ${children.map(c => `
+              <div style="font-size:11px;color:#475569;line-height:1.4;padding:4px 6px;background:#f8fafc;border-radius:3px;">
+                <div style="font-weight:600;color:#0f172a;">${c.name}</div>
+                ${c.address ? `<div style="margin-top:2px;color:#64748b;">📍 ${c.address}</div>` : ''}
+                ${c.tel ? `<div style="margin-top:2px;color:#64748b;">☎ ${c.tel}</div>` : ''}
+              </div>
+            `).join('')}
+          </div>
+        </div>
+      ` : '';
+
+      detailsHtml = `
+        <div class="dir-card-details" style="display:none;margin-top:8px;padding-top:8px;border-top:1px solid #e2e8f0;">
+          ${addressBlock}
+          ${telBlock}
+          ${navButtons}
+          ${actionButtons}
+          ${childrenBlock}
+        </div>
+      `;
+    }
+
+    return `
+      <div data-port-key="${portKey}" data-url="${url}" class="dir-card" style="background:#ffffff;border:1px solid #e2e8f0;border-left:3px solid ${color};border-radius:5px;font-family:inherit;text-align:left;transition:all 0.12s ease;${extraStyle}">
+        <button class="dir-card-toggle" style="width:100%;display:flex;align-items:center;justify-content:space-between;gap:10px;padding:7px 10px 7px 12px;background:transparent;border:none;cursor:pointer;font-family:inherit;text-align:left;">
+          <div style="display:flex;align-items:center;gap:0;flex-wrap:wrap;min-width:0;">
+            <span style="font-size:12px;color:#0f172a;font-weight:600;line-height:1.3;">${item.name}</span>
+            ${abbr}
+            ${sub}
+            ${expandArrow}
+          </div>
+          <span style="font-size:10px;color:#64748b;line-height:1.3;text-align:right;white-space:nowrap;flex-shrink:0;">${meta}</span>
+        </button>
+        <div style="padding:0 12px 0 12px;">${detailsHtml}</div>
+      </div>
     `;
   }
 
@@ -334,27 +405,60 @@
 
   function attachCardHandlers() {
     document.querySelectorAll('.dir-card').forEach(card => {
-      card.addEventListener('mouseenter', () => {
-        card.style.background = '#f8fafc';
-        card.style.transform = 'translateY(-1px)';
-      });
-      card.addEventListener('mouseleave', () => {
-        card.style.background = '#ffffff';
-        card.style.transform = 'translateY(0)';
-      });
-      card.addEventListener('click', (e) => {
-        const portKey = card.getAttribute('data-port-key');
-        const url = card.getAttribute('data-url');
-        if (e.shiftKey || e.metaKey || e.ctrlKey) {
-          if (url) window.open(url, '_blank', 'noopener');
-          return;
-        }
-        if (portKey) {
-          window.dispatchEvent(new CustomEvent('port-atlas:focus-port', { detail: { portKey } }));
-        }
-        if (url) {
-          window.open(url, '_blank', 'noopener');
-        }
+      const toggle = card.querySelector('.dir-card-toggle');
+      const details = card.querySelector('.dir-card-details');
+      const arrow = card.querySelector('.dir-card-arrow');
+
+      if (toggle) {
+        toggle.addEventListener('mouseenter', () => {
+          if (details && details.style.display !== 'block') {
+            card.style.background = '#f8fafc';
+          }
+        });
+        toggle.addEventListener('mouseleave', () => {
+          if (details && details.style.display !== 'block') {
+            card.style.background = '#ffffff';
+          }
+        });
+        toggle.addEventListener('click', (e) => {
+          if (!details) {
+            // 펼침 영역 없으면 옛 동작 (URL + 지도 줌)
+            const portKey = card.getAttribute('data-port-key');
+            const url = card.getAttribute('data-url');
+            if (portKey) {
+              window.dispatchEvent(new CustomEvent('port-atlas:focus-port', { detail: { portKey } }));
+            }
+            if (url) {
+              window.open(url, '_blank', 'noopener');
+            }
+            return;
+          }
+          // accordion: 다른 카드 모두 접기
+          document.querySelectorAll('.dir-card-details').forEach(d => {
+            if (d !== details) {
+              d.style.display = 'none';
+              const otherArrow = d.closest('.dir-card').querySelector('.dir-card-arrow');
+              if (otherArrow) otherArrow.style.transform = 'rotate(0deg)';
+              d.closest('.dir-card').style.background = '#ffffff';
+            }
+          });
+          // 현재 카드 토글
+          const isOpen = details.style.display === 'block';
+          details.style.display = isOpen ? 'none' : 'block';
+          if (arrow) arrow.style.transform = isOpen ? 'rotate(0deg)' : 'rotate(180deg)';
+          card.style.background = isOpen ? '#ffffff' : '#f8fafc';
+        });
+      }
+
+      // 펼침 영역 안의 "지도에서 보기" 버튼
+      card.querySelectorAll('.dir-action-btn[data-action="focus-port"]').forEach(btn => {
+        btn.addEventListener('click', (e) => {
+          e.stopPropagation();
+          const portKey = btn.getAttribute('data-port-key');
+          if (portKey) {
+            window.dispatchEvent(new CustomEvent('port-atlas:focus-port', { detail: { portKey } }));
+          }
+        });
       });
     });
   }
@@ -419,32 +523,12 @@
       return `<div style="padding:20px;text-align:center;color:#94a3b8;font-size:13px;">검색 결과 없음 (${query})</div>`;
     }
 
-    const cards = matches.map(item => {
-      // Inject a type tag into the meta column so users can see which category this match came from
-      const itemWithTypeMeta = {
-        ...item,
-        role: item.role || item.port || '',
-        // Append type to whatever already exists in the meta column
-      };
-      // We use cardHtml directly, but augment the right-side meta to include the type
-      const sub = item.sub ? `<span style="font-size:10px;color:#94a3b8;margin-left:6px;">· ${item.sub}</span>` : '';
-      const abbr = item.abbr ? `<span style="font-size:9px;color:#94a3b8;background:#f1f5f9;padding:1px 5px;border-radius:3px;font-weight:600;margin-left:6px;">${item.abbr}</span>` : '';
-      const typeBadge = `<span style="font-size:9px;color:#0f172a;background:#e0f2fe;padding:1px 5px;border-radius:3px;font-weight:600;margin-left:6px;">${item.type}</span>`;
-      const meta = item.role || item.port || '';
-      const url = item.url || '';
-      const portKey = item.portKey || '';
-      return `
-        <button data-port-key="${portKey}" data-url="${url}" class="dir-card" style="display:flex;align-items:center;justify-content:space-between;gap:10px;padding:7px 10px 7px 12px;background:#ffffff;border:1px solid #e2e8f0;border-left:3px solid ${item.typeColor};border-radius:5px;cursor:pointer;font-family:inherit;text-align:left;transition:all 0.12s ease;">
-          <div style="display:flex;align-items:center;gap:0;flex-wrap:wrap;min-width:0;">
-            <span style="font-size:12px;color:#0f172a;font-weight:600;line-height:1.3;">${item.name}</span>
-            ${abbr}
-            ${typeBadge}
-            ${sub}
-          </div>
-          <span style="font-size:10px;color:#64748b;line-height:1.3;text-align:right;white-space:nowrap;flex-shrink:0;">${meta}</span>
-        </button>
-      `;
-    }).join('');
+    const cards = matches.map(item =>
+      cardHtml(
+        { ...item, sub: [item.sub, item.type].filter(Boolean).join(' · ') },
+        item.typeColor
+      )
+    ).join('');
 
     return `
       <div style="margin-bottom:10px;font-size:11px;color:#64748b;">검색 결과: <strong style="color:#0f172a;">${matches.length}건</strong> "${query}"</div>
