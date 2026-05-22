@@ -12,7 +12,7 @@
     console.error('[port-atlas-header] PORT_ATLAS_DATA not loaded — ensure data.js is loaded before this file');
     return;
   }
-  const { MOF, OFFICES, PORT_AUTHORITIES, PILOTS, MOF_AGENCIES, CUSTOMS_HQ, CUSTOMS_PORTS, KCG_AGENCIES, QUARANTINE_AGENCIES } = window.PORT_ATLAS_DATA;
+  const { MOF, OFFICES, PORT_AUTHORITIES, PILOTS, MOF_AGENCIES, CUSTOMS_HQ, CUSTOMS_PORTS, KCG_AGENCIES, QUARANTINE_AGENCIES, PORT_SECURITY } = window.PORT_ATLAS_DATA;
 
   // ============================================================
   // MOF 카드 (상단 고정)
@@ -49,7 +49,7 @@
   function buildTriggerHtml() {
     const officeCount = Object.values(OFFICES).reduce((s, g) => s + g.items.length, 0);
     const customsCount = CUSTOMS_HQ.length + Object.values(CUSTOMS_PORTS).reduce((s, g) => s + g.items.length, 0);
-    const total = 1 + officeCount + PORT_AUTHORITIES.length + PILOTS.length + MOF_AGENCIES.length + customsCount + KCG_AGENCIES.length + QUARANTINE_AGENCIES.length;
+    const total = 1 + officeCount + PORT_AUTHORITIES.length + PILOTS.length + MOF_AGENCIES.length + customsCount + KCG_AGENCIES.length + QUARANTINE_AGENCIES.length + PORT_SECURITY.length;
     return `
       <div style="display:flex;gap:8px;align-items:stretch;flex-wrap:wrap;font-family:ui-sans-serif,system-ui,-apple-system,'Segoe UI','Apple SD Gothic Neo','Noto Sans KR',sans-serif;">
         <div style="flex:1;min-width:200px;position:relative;">
@@ -77,8 +77,9 @@
         <div id="dir-l1-tabs" style="display:flex;border-bottom:1px solid #e2e8f0;background:#f8fafc;flex-wrap:wrap;">
           <button class="dir-l1-tab" data-l1="mof" style="flex:1;min-width:120px;padding:12px 14px;background:#ffffff;border:none;border-bottom:2px solid #14b8a6;cursor:pointer;font-family:inherit;font-size:12px;font-weight:600;color:#0f172a;">해양수산부</button>
           <button class="dir-l1-tab" data-l1="customs" style="flex:1;min-width:120px;padding:12px 14px;background:transparent;border:none;border-bottom:2px solid transparent;cursor:pointer;font-family:inherit;font-size:12px;font-weight:500;color:#64748b;">관세청</button>
-          <button class="dir-l1-tab" data-l1="kcg" style="flex:1;min-width:120px;padding:12px 14px;background:transparent;border:none;border-bottom:2px solid transparent;cursor:pointer;font-family:inherit;font-size:12px;font-weight:500;color:#64748b;">해상치안</button>
-          <button class="dir-l1-tab" data-l1="quarantine" style="flex:1;min-width:120px;padding:12px 14px;background:transparent;border:none;border-bottom:2px solid transparent;cursor:pointer;font-family:inherit;font-size:12px;font-weight:500;color:#64748b;">검역·검사</button>
+          <button class="dir-l1-tab" data-l1="security" style="flex:1;min-width:110px;padding:12px 14px;background:transparent;border:none;border-bottom:2px solid transparent;cursor:pointer;font-family:inherit;font-size:12px;font-weight:500;color:#64748b;">항만보안</button>
+          <button class="dir-l1-tab" data-l1="kcg" style="flex:1;min-width:110px;padding:12px 14px;background:transparent;border:none;border-bottom:2px solid transparent;cursor:pointer;font-family:inherit;font-size:12px;font-weight:500;color:#64748b;">해상치안</button>
+          <button class="dir-l1-tab" data-l1="quarantine" style="flex:1;min-width:110px;padding:12px 14px;background:transparent;border:none;border-bottom:2px solid transparent;cursor:pointer;font-family:inherit;font-size:12px;font-weight:500;color:#64748b;">검역·검사</button>
         </div>
         <div id="dir-l2-area"></div>
         <div id="dir-content-area" style="padding:16px 18px;"></div>
@@ -99,6 +100,9 @@
       ],
       customs: [
         { id: 'cs-ports', label: `무역항별 세관 (${Object.values(CUSTOMS_PORTS).reduce((s,g)=>s+g.items.length,0)})` },
+      ],
+      security: [
+        { id: 'security', label: `항만보안공사 (${PORT_SECURITY.length})` },
       ],
       kcg: [
         { id: 'kcg-main', label: `해양경찰청 (${KCG_AGENCIES.length})` },
@@ -300,6 +304,11 @@
     return `<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:4px;">${cards}</div>`;
   }
 
+  function buildSecurityContent() {
+    const cards = PORT_SECURITY.map(s => cardHtml(s, '#6366f1')).join('');
+    return `<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:4px;">${cards}</div>`;
+  }
+
   // ============================================================
   // 상태 관리 + 렌더링
   // ============================================================
@@ -328,6 +337,7 @@
     else if (key === 'pilots') area.innerHTML = buildPilotsContent();
     else if (key === 'agencies') area.innerHTML = buildAgenciesContent();
     else if (key === 'cs-ports') area.innerHTML = buildCustomsPortsContent(state.region);
+    else if (key === 'security') area.innerHTML = buildSecurityContent();
     else if (key === 'kcg-main') area.innerHTML = buildKcgContent();
     else if (key === 'q-all') area.innerHTML = buildQuarantineContent();
     attachCardHandlers();
@@ -346,6 +356,7 @@
     const defaults = {
       mof: 'offices',
       customs: 'cs-ports',
+      security: 'security',
       kcg: 'kcg-main',
       quarantine: 'q-all',
     };
@@ -510,6 +521,7 @@
     Object.values(CUSTOMS_PORTS).forEach(g => g.items.forEach(o => allItems.push({ ...o, type: '관세청·항만세관', typeColor: g.color })));
     KCG_AGENCIES.forEach(a => allItems.push({ ...a, type: '해상치안', typeColor: '#ef4444' }));
     QUARANTINE_AGENCIES.forEach(a => allItems.push({ ...a, type: '검역·검사', typeColor: '#84cc16' }));
+    PORT_SECURITY.forEach(s => allItems.push({ ...s, type: '민간·항만보안', typeColor: '#6366f1' }));
 
     // Filter by query (search name, abbr, port, role, sub)
     const matches = allItems.filter(item => {
