@@ -218,7 +218,7 @@
             ${sub}
             ${expandArrow}
           </div>
-          <span style="font-size:10px;color:#64748b;line-height:1.3;text-align:right;white-space:nowrap;flex-shrink:0;">${meta}</span>
+          <span style="font-size:10px;color:#64748b;line-height:1.4;text-align:right;white-space:normal;max-width:55%;word-break:keep-all;">${meta}</span>
         </button>
         <div style="padding:0 12px 0 12px;">${detailsHtml}</div>
       </div>
