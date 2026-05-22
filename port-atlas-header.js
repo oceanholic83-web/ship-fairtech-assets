@@ -28,7 +28,7 @@
           </div>
           <a href="${MOF.url}" target="_blank" rel="noopener" style="display:inline-block;padding:8px 14px;background:#14b8a6;color:#ffffff;text-decoration:none;border-radius:6px;font-size:12px;font-weight:700;white-space:nowrap;">공식 홈페이지 →</a>
         </div>
-        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:4px;margin-top:10px;padding-top:10px;border-top:1px solid #e2e8f0;">
+        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:4px;margin-top:10px;padding-top:10px;border-top:1px solid #e2e8f0;">
           <div>
             <div style="font-size:10px;color:#94a3b8;letter-spacing:0.8px;margin-bottom:4px;">본부 (2025년 부산 이전)</div>
             <div style="font-size:12px;color:#475569;line-height:1.5;">${MOF.headquarters}</div>
@@ -213,7 +213,7 @@
       <div data-port-key="${portKey}" data-url="${url}" class="dir-card" style="background:#ffffff;border:1px solid #e2e8f0;border-left:3px solid ${color};border-radius:5px;font-family:inherit;text-align:left;transition:all 0.12s ease;${extraStyle}">
         <button class="dir-card-toggle" style="width:100%;display:flex;align-items:center;justify-content:space-between;gap:10px;padding:7px 10px 7px 12px;background:transparent;border:none;cursor:pointer;font-family:inherit;text-align:left;">
           <div style="display:flex;align-items:center;gap:0;flex-wrap:wrap;min-width:0;">
-            <span style="font-size:12px;color:#0f172a;font-weight:600;line-height:1.3;">${item.name}</span>
+            <span style="font-size:12px;color:#0f172a;font-weight:600;line-height:1.3;word-break:keep-all;overflow-wrap:break-word;">${item.name}</span>
             ${abbr}
             ${sub}
             ${expandArrow}
@@ -244,7 +244,7 @@
             <span style="font-size:11px;color:#475569;font-weight:700;">${g.label}</span>
             <span style="font-size:10px;color:#94a3b8;">(${g.items.length})</span>
           </div>
-          <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:4px;">${cards}</div>
+          <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:4px;">${cards}</div>
         </div>
       `;
     }).join('');
@@ -253,22 +253,22 @@
 
   function buildPaContent() {
     const cards = PORT_AUTHORITIES.map(pa => cardHtml(pa, '#14b8a6')).join('');
-    return `<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:4px;">${cards}</div>`;
+    return `<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:4px;">${cards}</div>`;
   }
 
   function buildPilotsContent() {
     const cards = PILOTS.map(p => cardHtml(p, p.port ? '#f97316' : '#a78bfa')).join('');
-    return `<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:4px;">${cards}</div>`;
+    return `<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:4px;">${cards}</div>`;
   }
 
   function buildAgenciesContent() {
     const cards = MOF_AGENCIES.map(a => cardHtml(a, '#8b5cf6')).join('');
-    return `<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:4px;">${cards}</div>`;
+    return `<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:4px;">${cards}</div>`;
   }
 
   function buildCustomsHqContent() {
     const cards = CUSTOMS_HQ.map(c => cardHtml(c, '#0ea5e9')).join('');
-    return `<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:4px;">${cards}</div>`;
+    return `<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:4px;">${cards}</div>`;
   }
 
   function buildCustomsPortsContent(activeRegion) {
@@ -287,7 +287,7 @@
             <span style="font-size:11px;color:#475569;font-weight:700;">${g.label}</span>
             <span style="font-size:10px;color:#94a3b8;">(${g.items.length})</span>
           </div>
-          <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:4px;">${cards}</div>
+          <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:4px;">${cards}</div>
         </div>
       `;
     }).join('');
@@ -296,17 +296,17 @@
 
   function buildKcgContent() {
     const cards = KCG_AGENCIES.map(a => cardHtml(a, '#ef4444')).join('');
-    return `<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:4px;">${cards}</div>`;
+    return `<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:4px;">${cards}</div>`;
   }
 
   function buildQuarantineContent() {
     const cards = QUARANTINE_AGENCIES.map(a => cardHtml(a, '#84cc16')).join('');
-    return `<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:4px;">${cards}</div>`;
+    return `<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:4px;">${cards}</div>`;
   }
 
   function buildSecurityContent() {
     const cards = PORT_SECURITY.map(s => cardHtml(s, '#6366f1')).join('');
-    return `<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:4px;">${cards}</div>`;
+    return `<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:4px;">${cards}</div>`;
   }
 
   // ============================================================
@@ -413,62 +413,78 @@
   }
 
   function attachCardHandlers() {
-    document.querySelectorAll('.dir-card').forEach(card => {
-      const toggle = card.querySelector('.dir-card-toggle');
+    const area = document.getElementById('dir-content-area');
+    if (!area) return;
+    if (area._cardHandlersAttached) return;
+    area._cardHandlersAttached = true;
+
+    area.addEventListener('mouseover', (e) => {
+      const toggle = e.target.closest('.dir-card-toggle');
+      if (!toggle) return;
+      const card = toggle.closest('.dir-card');
+      const details = card && card.querySelector('.dir-card-details');
+      if (details && details.style.display !== 'block') {
+        card.style.background = '#f8fafc';
+      }
+    });
+
+    area.addEventListener('mouseout', (e) => {
+      const toggle = e.target.closest('.dir-card-toggle');
+      if (!toggle) return;
+      const card = toggle.closest('.dir-card');
+      if (!card) return;
+      const related = e.relatedTarget;
+      if (related && card.contains(related)) return;
+      const details = card.querySelector('.dir-card-details');
+      if (details && details.style.display !== 'block') {
+        card.style.background = '#ffffff';
+      }
+    });
+
+    area.addEventListener('click', (e) => {
+      const actionBtn = e.target.closest('.dir-action-btn[data-action="focus-port"]');
+      if (actionBtn) {
+        e.stopPropagation();
+        const portKey = actionBtn.getAttribute('data-port-key');
+        if (portKey) {
+          window.dispatchEvent(new CustomEvent('port-atlas:focus-port', { detail: { portKey } }));
+        }
+        return;
+      }
+
+      const toggle = e.target.closest('.dir-card-toggle');
+      if (!toggle) return;
+      const card = toggle.closest('.dir-card');
+      if (!card) return;
       const details = card.querySelector('.dir-card-details');
       const arrow = card.querySelector('.dir-card-arrow');
 
-      if (toggle) {
-        toggle.addEventListener('mouseenter', () => {
-          if (details && details.style.display !== 'block') {
-            card.style.background = '#f8fafc';
-          }
-        });
-        toggle.addEventListener('mouseleave', () => {
-          if (details && details.style.display !== 'block') {
-            card.style.background = '#ffffff';
-          }
-        });
-        toggle.addEventListener('click', (e) => {
-          if (!details) {
-            // 펼침 영역 없으면 옛 동작 (URL + 지도 줌)
-            const portKey = card.getAttribute('data-port-key');
-            const url = card.getAttribute('data-url');
-            if (portKey) {
-              window.dispatchEvent(new CustomEvent('port-atlas:focus-port', { detail: { portKey } }));
-            }
-            if (url) {
-              window.open(url, '_blank', 'noopener');
-            }
-            return;
-          }
-          // accordion: 다른 카드 모두 접기
-          document.querySelectorAll('.dir-card-details').forEach(d => {
-            if (d !== details) {
-              d.style.display = 'none';
-              const otherArrow = d.closest('.dir-card').querySelector('.dir-card-arrow');
-              if (otherArrow) otherArrow.style.transform = 'rotate(0deg)';
-              d.closest('.dir-card').style.background = '#ffffff';
-            }
-          });
-          // 현재 카드 토글
-          const isOpen = details.style.display === 'block';
-          details.style.display = isOpen ? 'none' : 'block';
-          if (arrow) arrow.style.transform = isOpen ? 'rotate(0deg)' : 'rotate(180deg)';
-          card.style.background = isOpen ? '#ffffff' : '#f8fafc';
-        });
+      if (!details) {
+        const portKey = card.getAttribute('data-port-key');
+        const url = card.getAttribute('data-url');
+        if (portKey) {
+          window.dispatchEvent(new CustomEvent('port-atlas:focus-port', { detail: { portKey } }));
+        }
+        if (url) {
+          window.open(url, '_blank', 'noopener');
+        }
+        return;
       }
 
-      // 펼침 영역 안의 "지도에서 보기" 버튼
-      card.querySelectorAll('.dir-action-btn[data-action="focus-port"]').forEach(btn => {
-        btn.addEventListener('click', (e) => {
-          e.stopPropagation();
-          const portKey = btn.getAttribute('data-port-key');
-          if (portKey) {
-            window.dispatchEvent(new CustomEvent('port-atlas:focus-port', { detail: { portKey } }));
-          }
-        });
+      area.querySelectorAll('.dir-card-details').forEach(d => {
+        if (d !== details) {
+          d.style.display = 'none';
+          const otherCard = d.closest('.dir-card');
+          const otherArrow = otherCard && otherCard.querySelector('.dir-card-arrow');
+          if (otherArrow) otherArrow.style.transform = 'rotate(0deg)';
+          if (otherCard) otherCard.style.background = '#ffffff';
+        }
       });
+
+      const isOpen = details.style.display === 'block';
+      details.style.display = isOpen ? 'none' : 'block';
+      if (arrow) arrow.style.transform = isOpen ? 'rotate(0deg)' : 'rotate(180deg)';
+      card.style.background = isOpen ? '#ffffff' : '#f8fafc';
     });
   }
 
@@ -542,7 +558,7 @@
 
     return `
       <div style="margin-bottom:10px;font-size:11px;color:#64748b;">검색 결과: <strong style="color:#0f172a;">${matches.length}건</strong> "${query}"</div>
-      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:4px;">${cards}</div>
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:4px;">${cards}</div>
     `;
   }
 
