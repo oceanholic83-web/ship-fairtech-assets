@@ -356,15 +356,93 @@
   // 7. 해상치안
   // ============================================================
   const KCG_AGENCIES = [
-    { name: '해양경찰청', abbr: 'KCG', url: 'https://www.kcg.go.kr', role: '해상경비·구조·방제 (행안부 산하)' },
+    {
+      name: '해양경찰청',
+      abbr: 'KCG',
+      url: 'https://www.kcg.go.kr',
+      role: '본청 — 해상경비·구조·방제·항만보안 (해양수산부 외청)',
+      address: '인천광역시 연수구 (송도, 캠퍼스타운역 일대)',
+    },
+    {
+      name: '중부지방해양경찰청',
+      abbr: 'KCG 중부',
+      url: 'https://www.kcg.go.kr/jbcgh/main.do',
+      portKey: '인천항',
+      role: '인천·경기·충남 해역 — 인천항 일대',
+      address: '인천광역시 연수구 송도 IBS타워 12~13층 (2025년 시흥 배곧 이전 예정)',
+    },
+    {
+      name: '남해지방해양경찰청',
+      abbr: 'KCG 남해',
+      url: 'https://www.kcg.go.kr/namhaecgh/main.do',
+      portKey: '부산항',
+      role: '부산·울산·경남 해역 — 부산항·울산항·마산항·진해항·통영',
+      address: '부산광역시 동구 충장대로 325 (좌천동)',
+    },
+    {
+      name: '서해지방해양경찰청',
+      abbr: 'KCG 서해',
+      url: 'https://www.kcg.go.kr/shcgh/main.do',
+      portKey: '목포항',
+      role: '전북·전남 서해 — 군산항·목포항·완도',
+      address: '전남 목포시 부주동',
+    },
+    {
+      name: '동해지방해양경찰청',
+      abbr: 'KCG 동해',
+      url: 'https://www.kcg.go.kr/dhcgh/main.do',
+      portKey: '동해·묵호항',
+      role: '강원·경북 해역 — 동해항·묵호항·포항·울산 일부',
+      address: '강원특별자치도 동해시 이원길 156 (지가동)',
+    },
+    {
+      name: '제주지방해양경찰청',
+      abbr: 'KCG 제주',
+      url: 'https://www.kcg.go.kr/jejucgh/main.do',
+      portKey: '제주항',
+      role: '제주 해역 전체',
+      address: '제주특별자치도 제주시',
+    },
   ];
 
   // ============================================================
   // 8. 검역·검사
   // ============================================================
   const QUARANTINE_AGENCIES = [
-    { name: '국립수산물품질관리원', abbr: 'NFQS', url: 'https://www.nfqs.go.kr', role: '수산물 검역·품질관리 (해수부)' },
-    { name: '한국선급', abbr: 'KR', url: 'https://www.krs.co.kr', role: '선급 검사·인증 (민간)' },
+    {
+      name: '농림축산검역본부',
+      abbr: 'QIA',
+      url: 'https://www.qia.go.kr',
+      role: '동·식물 검역, 외국선박 평형수·선원 검역 (농식품부)',
+      address: '경북 김천시 혁신8로 177 (율곡동)',
+      postcode: '39660',
+      tel: '054-912-1000',
+      telNight: '054-912-1001',
+    },
+    {
+      name: '농림축산검역본부 영남지역본부',
+      abbr: 'QIA 영남',
+      url: 'https://www.qia.go.kr/yeongnam/',
+      portKey: '부산항',
+      role: '부산항 외국선박 검역, 부산신항·국제여객터미널 사무소 운영',
+      address: '부산광역시 중구 중앙대로 30번길 8',
+      postcode: '48943',
+      telAnimal: '051-600-0400',
+      telPlant: '051-600-5804',
+      note: '부산항 사무소: 국제여객터미널 3층 / 충장대로 6 한진R&D센터 2층 / 김해공항 국제선 1층',
+    },
+    {
+      name: '국립수산물품질관리원',
+      abbr: 'NFQS',
+      url: 'https://www.nfqs.go.kr',
+      role: '수산물 검역·품질관리 (해수부)',
+    },
+    {
+      name: '한국선급',
+      abbr: 'KR',
+      url: 'https://www.krs.co.kr',
+      role: '선급 검사·인증 (민간)',
+    },
   ];
 
   // ============================================================
