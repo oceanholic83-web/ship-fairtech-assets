@@ -209,7 +209,28 @@
   // ============================================================
   // 6. 관세청
   // ============================================================
-  const CUSTOMS_HQ = [];
+  const CUSTOMS_HQ = [
+    {
+      name: '광주본부세관',
+      fullName: '광주본부세관',
+      role: '호남권 본부',
+      url: 'https://www.customs.go.kr/gwangju/main.do',
+      address: '광주광역시 광산구 어등대로 668',
+      postcode: '62274',
+      tel: '062-975-8114',
+      sub: '호남권 군산·목포·광양·여수 세관 관할',
+    },
+    {
+      name: '서울본부세관',
+      fullName: '서울본부세관',
+      role: '수도권 동부 본부',
+      url: 'https://www.customs.go.kr/seoul/main.do',
+      address: '서울특별시 강남구 언주로 721',
+      postcode: '06050',
+      tel: '02-510-1114',
+      sub: '서울·경기 동부·강원 세관 관할',
+    },
+  ];
 
   const CUSTOMS_PORTS = {
     수도권충청: {
