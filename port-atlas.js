@@ -59,7 +59,7 @@
       facilities: '북항(재래/일반), 신항(컨테이너), 감천항, 다대포항',
       note: '세계 7위 컨테이너 항만, 세계 최상위권 환적 허브, 한국 최대 무역항',
       faircall: 'https://faircall.kr/regions/yeongnam/busan',
-      guideUrl: 'https://ship.fairtech.kr/busan-port-transshipment-hub-30-year-strategy/',
+      guideUrl: 'https://faircast.kr/busan-port-transshipment-hub-30-year-strategy/',
     },
     {
       name: '인천항',
@@ -77,7 +77,7 @@
       facilities: '내항(1~8부두), 남항, 북항, 신항(컨테이너), 연안여객',
       note: '수도권 관문, 컨테이너 + 자동차 + 카페리',
       faircall: 'https://faircall.kr/regions/capital/incheon',
-      guideUrl: 'https://ship.fairtech.kr/incheon-port-tidal-lock-gate-explained/',
+      guideUrl: 'https://faircast.kr/incheon-port-tidal-lock-gate-explained/',
     },
     {
       name: '평택·당진항',
@@ -167,7 +167,7 @@
       facilities: '컨테이너, 일반, 원료(POSCO), 석유화학(GS칼텍스/여천NCC)',
       note: '광양만권 거점 항만, POSCO 원료 + 컨테이너 + 석유화학, VLCC 접안 가능',
       faircall: 'https://faircall.kr/regions/gwangyang-bay/gwangyang',
-      guideUrl: 'https://ship.fairtech.kr/gwangyang-yeosu-port-division-korea-guide/',
+      guideUrl: 'https://faircast.kr/gwangyang-yeosu-port-division-korea-guide/',
     },
     {
       name: '여수항',
@@ -185,7 +185,7 @@
       facilities: '여수국가산업단지(LG화학/GS칼텍스 외), 컨테이너 + 일반',
       note: '여수 석유화학 단지 연결',
       faircall: 'https://faircall.kr/regions/gwangyang-bay/yeosu',
-      guideUrl: 'https://ship.fairtech.kr/gwangyang-yeosu-port-division-korea-guide/',
+      guideUrl: 'https://faircast.kr/gwangyang-yeosu-port-division-korea-guide/',
     },
     {
       name: '마산항',
