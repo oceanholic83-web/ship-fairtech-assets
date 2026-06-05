@@ -33,10 +33,9 @@ if (!Array.isArray(entries)) {
   process.exit(1);
 }
 
-function geocode(address) {
+function geocodeRaw(query) {
   return new Promise((resolve, reject) => {
-    // Nominatim: structured query with country=KR for South Korea
-    const url = `https://nominatim.openstreetmap.org/search?q=${encodeURIComponent(address)}&countrycodes=kr&format=json&limit=1&accept-language=ko`;
+    const url = `https://nominatim.openstreetmap.org/search?q=${encodeURIComponent(query)}&countrycodes=kr&format=json&limit=1&accept-language=ko`;
     const req = https.get(url, {
       headers: {
         'User-Agent': 'FaircastPortAtlas/1.0 (hello@fairtech.kr)',
@@ -66,6 +65,39 @@ function geocode(address) {
   });
 }
 
+function cleanAddress(addr) {
+  // Generate progressively cleaner variants of an address
+  const variants = [addr];
+  // Variant 2: strip everything after first comma (removes building name + floor)
+  if (addr.includes(',')) {
+    variants.push(addr.split(',')[0].trim());
+  }
+  // Variant 3: also strip parenthetical content
+  const noParens = (variants[variants.length - 1]).replace(/\s*\([^)]*\)/g, '').trim();
+  if (noParens !== variants[variants.length - 1]) {
+    variants.push(noParens);
+  }
+  return Array.from(new Set(variants));
+}
+
+async function geocode(address) {
+  const variants = cleanAddress(address);
+  for (let i = 0; i < variants.length; i++) {
+    const v = variants[i];
+    const result = await geocodeRaw(v);
+    if (result) {
+      result.usedVariant = v;
+      result.fallbackLevel = i;
+      return result;
+    }
+    if (i < variants.length - 1) {
+      // Rate limit between fallback attempts
+      await new Promise(r => setTimeout(r, 1100));
+    }
+  }
+  return null;
+}
+
 function escapeRegex(s) {
   return s.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
 }
@@ -88,7 +120,8 @@ function escapeRegex(s) {
       const coord = await geocode(e.address);
       if (coord) {
         results.push({ name: e.name, address: e.address, ...coord, status: 'OK' });
-        console.log(`  [OK]   ${e.name} → ${coord.lat.toFixed(5)}, ${coord.lng.toFixed(5)}`);
+        const fb = coord.fallbackLevel > 0 ? ` (fallback L${coord.fallbackLevel}: "${coord.usedVariant}")` : '';
+        console.log(`  [OK]   ${e.name} → ${coord.lat.toFixed(5)}, ${coord.lng.toFixed(5)}${fb}`);
       } else {
         results.push({ name: e.name, address: e.address, status: 'NO_RESULT' });
         console.log(`  [FAIL] ${e.name} (no result for: ${e.address})`);
