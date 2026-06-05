@@ -583,7 +583,8 @@
       const portCards = portMatches.map(p => portCardHtml(p)).join('');
       html += `
         <div style="margin-bottom:6px;font-size:10px;color:#0f766e;font-weight:700;letter-spacing:0.8px;">항만</div>
-        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:4px;margin-bottom:${agencyMatches.length > 0 ? '12px' : '0'};">${portCards}</div>
+        <!-- PORTS cards: single column so each spans full width -->
+        <div style="display:flex;flex-direction:column;gap:8px;margin-bottom:${agencyMatches.length > 0 ? '12px' : '0'};">${portCards}</div>
       `;
     }
 
