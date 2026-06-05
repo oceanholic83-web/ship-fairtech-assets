@@ -27,9 +27,27 @@ if (!dataObj || !dataObj[CATEGORY]) {
   process.exit(1);
 }
 
-const entries = dataObj[CATEGORY];
-if (!Array.isArray(entries)) {
-  console.error(`ERROR: ${CATEGORY} is not an array`);
+// Flatten nested categories (CUSTOMS_PORTS is grouped by region)
+let entries;
+const raw = dataObj[CATEGORY];
+if (Array.isArray(raw)) {
+  entries = raw;
+} else if (raw && typeof raw === 'object') {
+  // Object grouped by region — flatten items[] from each group
+  entries = [];
+  for (const groupKey of Object.keys(raw)) {
+    const group = raw[groupKey];
+    if (group && Array.isArray(group.items)) {
+      entries.push(...group.items);
+    }
+  }
+  if (entries.length === 0) {
+    console.error(`ERROR: ${CATEGORY} object had no items[] arrays to flatten`);
+    process.exit(1);
+  }
+  console.log(`(Flattened ${CATEGORY} from object: ${entries.length} entries total)`);
+} else {
+  console.error(`ERROR: ${CATEGORY} is neither array nor object`);
   process.exit(1);
 }
 
