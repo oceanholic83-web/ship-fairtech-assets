@@ -12,7 +12,7 @@
     console.error('[port-atlas-header] PORT_ATLAS_DATA not loaded — ensure data.js is loaded before this file');
     return;
   }
-  const { MOF, OFFICES, PORT_AUTHORITIES, PILOTS, MOF_AGENCIES, CUSTOMS_HQ, CUSTOMS_PORTS, KCG_AGENCIES, QUARANTINE_AGENCIES, PORT_SECURITY } = window.PORT_ATLAS_DATA;
+  const { MOF, OFFICES, PORT_AUTHORITIES, PILOTS, MOF_AGENCIES, CUSTOMS_HQ, CUSTOMS_PORTS, KCG_AGENCIES, QUARANTINE_AGENCIES, PORT_SECURITY, PORTS } = window.PORT_ATLAS_DATA;
 
   // ============================================================
   // MOF 카드 (상단 고정)
@@ -221,6 +221,27 @@
           <span style="font-size:10px;color:#64748b;line-height:1.4;text-align:right;white-space:normal;max-width:55%;word-break:keep-all;">${meta}</span>
         </button>
         <div style="padding:0 12px 0 12px;">${detailsHtml}</div>
+      </div>
+    `;
+  }
+
+  // ============================================================
+  // 무역항 검색 결과 카드 (teal 스타일)
+  // ============================================================
+  function portCardHtml(port) {
+    const guideIndicator = port.guideUrl
+      ? `<div style="margin-top:6px;font-size:11px;color:#0f766e;">📖 가이드 글 있음</div>`
+      : '';
+    return `
+      <div data-port-key="${port.name}" data-url="" class="dir-card" style="background:#f0fdfa;border:1px solid #99f6e4;border-left:3px solid #14b8a6;border-radius:5px;font-family:inherit;text-align:left;cursor:pointer;">
+        <button class="dir-card-toggle" style="width:100%;display:flex;align-items:flex-start;justify-content:space-between;gap:10px;padding:8px 10px 8px 12px;background:transparent;border:none;cursor:pointer;font-family:inherit;text-align:left;">
+          <div style="flex:1;min-width:0;">
+            <div style="font-size:15px;color:#0f172a;font-weight:700;line-height:1.3;word-break:keep-all;">${port.name}</div>
+            <div style="font-size:12px;color:#475569;margin-top:2px;">${port.nameEn} · ${port.region}</div>
+            ${guideIndicator}
+          </div>
+          <span style="font-size:10px;background:#14b8a6;color:#ffffff;padding:2px 7px;border-radius:3px;font-weight:600;letter-spacing:0.3px;white-space:nowrap;flex-shrink:0;">항만</span>
+        </button>
       </div>
     `;
   }
@@ -527,8 +548,14 @@
     const q = query.trim().toLowerCase();
     if (!q) return null; // empty -> use normal tab content
 
+    // PORTS results (spine entities) — matched first, rendered first
+    const portMatches = PORTS.filter(port => {
+      const haystack = [port.name, port.nameEn, port.region, port.authority].filter(Boolean).join(' ').toLowerCase();
+      return haystack.includes(q);
+    });
+
     const allItems = [];
-    // Collect from all data sources
+    // Collect from all agency data sources
     Object.values(OFFICES).forEach(g => g.items.forEach(o => allItems.push({ ...o, type: '해수부·지방청', typeColor: g.color })));
     PORT_AUTHORITIES.forEach(p => allItems.push({ ...p, type: '해수부·항만공사', typeColor: '#14b8a6' }));
     PILOTS.forEach(p => allItems.push({ ...p, type: '민간·도선사회', typeColor: p.port ? '#f97316' : '#a78bfa' }));
@@ -539,27 +566,41 @@
     QUARANTINE_AGENCIES.forEach(a => allItems.push({ ...a, type: '검역·검사', typeColor: '#84cc16' }));
     PORT_SECURITY.forEach(s => allItems.push({ ...s, type: '민간·항만보안', typeColor: '#6366f1' }));
 
-    // Filter by query (search name, abbr, port, role, sub)
-    const matches = allItems.filter(item => {
+    // Filter agencies by query (search name, abbr, port, role, sub)
+    const agencyMatches = allItems.filter(item => {
       const haystack = [item.name, item.abbr, item.port, item.role, item.sub].filter(Boolean).join(' ').toLowerCase();
       return haystack.includes(q);
     });
 
-    if (matches.length === 0) {
+    const totalCount = portMatches.length + agencyMatches.length;
+    if (totalCount === 0) {
       return `<div style="padding:20px;text-align:center;color:#94a3b8;font-size:13px;">검색 결과 없음 (${query})</div>`;
     }
 
-    const cards = matches.map(item =>
-      cardHtml(
-        { ...item, sub: [item.sub, item.type].filter(Boolean).join(' · ') },
-        item.typeColor
-      )
-    ).join('');
+    let html = `<div style="margin-bottom:10px;font-size:11px;color:#64748b;">검색 결과: <strong style="color:#0f172a;">${totalCount}건</strong> "${query}"</div>`;
 
-    return `
-      <div style="margin-bottom:10px;font-size:11px;color:#64748b;">검색 결과: <strong style="color:#0f172a;">${matches.length}건</strong> "${query}"</div>
-      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:4px;">${cards}</div>
-    `;
+    if (portMatches.length > 0) {
+      const portCards = portMatches.map(p => portCardHtml(p)).join('');
+      html += `
+        <div style="margin-bottom:6px;font-size:10px;color:#0f766e;font-weight:700;letter-spacing:0.8px;">항만</div>
+        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:4px;margin-bottom:${agencyMatches.length > 0 ? '12px' : '0'};">${portCards}</div>
+      `;
+    }
+
+    if (agencyMatches.length > 0) {
+      if (portMatches.length > 0) {
+        html += `<div style="margin-bottom:6px;font-size:10px;color:#64748b;font-weight:700;letter-spacing:0.8px;">관련 기관</div>`;
+      }
+      const agencyCards = agencyMatches.map(item =>
+        cardHtml(
+          { ...item, sub: [item.sub, item.type].filter(Boolean).join(' · ') },
+          item.typeColor
+        )
+      ).join('');
+      html += `<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:4px;">${agencyCards}</div>`;
+    }
+
+    return html;
   }
 
   // ============================================================
