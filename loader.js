@@ -13,7 +13,16 @@
   'use strict';
 
   const MAPBOX_TOKEN = (window.PORT_ATLAS_CONFIG && window.PORT_ATLAS_CONFIG.mapboxToken) || '';
-  const REPO_BASE = 'https://cdn.jsdelivr.net/gh/oceanholic83-web/ship-fairtech-assets@main';
+  const REPO_BASE = (() => {
+    // Try to extract base (including @version anchor) from this script's own src
+    const scripts = document.querySelectorAll('script[src]');
+    for (const s of scripts) {
+      const m = s.src.match(/^(https:\/\/cdn\.jsdelivr\.net\/gh\/oceanholic83-web\/ship-fairtech-assets@[^/]+)\/loader\.js/);
+      if (m) return m[1];
+    }
+    // Fallback to @main if not found
+    return 'https://cdn.jsdelivr.net/gh/oceanholic83-web/ship-fairtech-assets@main';
+  })();
   const MAPBOX_VERSION = 'v3.7.0';
 
   // 페이지 구조 HTML
