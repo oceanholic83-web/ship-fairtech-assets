@@ -188,7 +188,6 @@
         offset: 15,
         maxWidth: '300px',
         closeButton: true,
-        anchor: 'bottom',
         className: 'korea-port-popup',
       }).setHTML(buildPopupHtml(port));
 
@@ -196,6 +195,16 @@
         .setLngLat(port.coords)
         .setPopup(popup)
         .addTo(map);
+
+      el.addEventListener('click', (ev) => {
+        ev.stopPropagation();
+        // Recenter map on marker with vertical offset so popup has room on both sides
+        map.flyTo({
+          center: port.coords,
+          zoom: Math.max(map.getZoom(), 8),
+          duration: 600,
+        });
+      });
 
       markersByName[port.name] = marker;
     });
