@@ -75,11 +75,11 @@
   // 3. 항만공사 (5)
   // ============================================================
   const PORT_AUTHORITIES = [
-    { name: '부산항만공사', abbr: 'BPA', port: '부산항', url: 'https://www.busanpa.com', portKey: '부산항', address: '부산광역시 중구 대교로 122 (중앙동6가)', postcode: '48943', tel: '051-999-3000', fax: '051-999-3295' },
-    { name: '인천항만공사', abbr: 'IPA', port: '인천항', url: 'https://www.icpa.or.kr', portKey: '인천항', address: '인천광역시 연수구 센트럴로 263, IBS 타워 (31~35F)', postcode: '22006', tel: '032-890-8000', fax: '032-726-0311' },
-    { name: '여수광양항만공사', abbr: 'YGPA', port: '광양·여수항', url: 'https://www.ygpa.or.kr', portKey: '광양항', address: '전라남도 광양시 항만대로 465', postcode: '57771', tel: '061-797-4300', fax: '061-797-4502' },
-    { name: '울산항만공사', abbr: 'UPA', port: '울산항', url: 'https://www.upa.or.kr', portKey: '울산항', address: '울산광역시 남구 장생포고래로 271', postcode: '44780', tel: '052-228-5300', fax: '052-228-5369' },
-    { name: '경기평택항만공사', abbr: 'GPPC', port: '평택·당진항', url: 'https://www.gppc.or.kr', portKey: '평택·당진항', sub: '지방공기업', address: '경기도 평택시 포승읍 평택항만길 73, 10층 (평택항마린센터)', tel: '031-686-0600', fax: '031-686-0641' },
+    { name: '부산항만공사', abbr: 'BPA', port: '부산항', url: 'https://www.busanpa.com', portKey: '부산항', address: '부산광역시 중구 대교로 122 (중앙동6가)', lat: 35.10367, lng: 129.03757, postcode: '48943', tel: '051-999-3000', fax: '051-999-3295' },
+    { name: '인천항만공사', abbr: 'IPA', port: '인천항', url: 'https://www.icpa.or.kr', portKey: '인천항', address: '인천광역시 연수구 센트럴로 263, IBS 타워 (31~35F)', lat: 37.39792, lng: 126.63396, postcode: '22006', tel: '032-890-8000', fax: '032-726-0311' },
+    { name: '여수광양항만공사', abbr: 'YGPA', port: '광양·여수항', url: 'https://www.ygpa.or.kr', portKey: '광양항', address: '전라남도 광양시 항만대로 465', lat: 34.91833, lng: 127.68060, postcode: '57771', tel: '061-797-4300', fax: '061-797-4502' },
+    { name: '울산항만공사', abbr: 'UPA', port: '울산항', url: 'https://www.upa.or.kr', portKey: '울산항', address: '울산광역시 남구 장생포고래로 271', lat: 35.50135, lng: 129.37248, postcode: '44780', tel: '052-228-5300', fax: '052-228-5369' },
+    { name: '경기평택항만공사', abbr: 'GPPC', port: '평택·당진항', url: 'https://www.gppc.or.kr', portKey: '평택·당진항', sub: '지방공기업', address: '경기도 평택시 포승읍 평택항만길 73, 10층 (평택항마린센터)', lat: 36.95757, lng: 126.84834, tel: '031-686-0600', fax: '031-686-0641' },
   ];
 
   // ============================================================
@@ -683,6 +683,8 @@
       postcode: '39660',
       tel: '054-912-1000',
       telNight: '054-912-1001',
+      lat: 36.1269175,
+      lng: 128.1823773,
     },
     {
       name: '농림축산검역본부 영남지역본부',
@@ -737,6 +739,8 @@
       telGamcheon: '051-719-6173',
       telSinhang: '051-719-6175',
       note: '출입증: 북항 051-719-6171 / 감천 051-719-6173 / 신항 051-719-6175~6',
+      lat: 35.1030799,
+      lng: 129.0411199,
     },
     {
       name: '인천항보안공사',
@@ -748,6 +752,8 @@
       address: '인천광역시 중구 서해대로 365 (항동7가)',
       postcode: '22346',
       tel: '032-890-8300',
+      lat: 37.4602931,
+      lng: 126.6297553,
     },
   ];
 
