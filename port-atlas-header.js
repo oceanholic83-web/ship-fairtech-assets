@@ -229,21 +229,24 @@
   // 무역항 검색 결과 카드 (teal 스타일)
   // ============================================================
   function portCardHtml(port) {
-    const subtitle = port.nameEn || port.region;
-    const guideInline = port.guideUrl
-      ? `<span style="color:#cbd5e1;margin:0 6px;"> · </span><span style="font-size:11px;color:#0f766e;font-weight:600;">📖 가이드</span>`
+    const nameEnBlock = port.nameEn
+      ? `<span style="color:#cbd5e1;">·</span><span style="font-size:12px;color:#64748b;">${port.nameEn}</span>`
+      : '';
+    const regionBlock = port.region
+      ? `<span style="color:#cbd5e1;">·</span><span style="font-size:12px;color:#64748b;">${port.region}</span>`
+      : '';
+    const guideBlock = port.guideUrl
+      ? `<span style="color:#cbd5e1;">·</span><span style="font-size:11px;color:#0f766e;font-weight:600;">📖 가이드</span>`
       : '';
     return `
-      <div data-port-key="${port.name}" data-url="" class="dir-card dir-port-card" style="background:#f0fdfa;border:1px solid #99f6e4;border-left:3px solid #14b8a6;border-radius:6px;padding:10px 14px;font-family:inherit;display:flex;align-items:center;justify-content:space-between;gap:12px;cursor:pointer;text-align:left;transition:background 0.12s ease;">
-        <button class="dir-card-toggle" style="flex:1;min-width:0;display:flex;align-items:center;justify-content:space-between;gap:12px;padding:0;background:transparent;border:none;cursor:pointer;font-family:inherit;text-align:left;">
-          <div style="flex:1;min-width:0;display:flex;align-items:center;flex-wrap:nowrap;overflow:hidden;">
-            <span style="font-size:14px;font-weight:700;color:#0f172a;white-space:nowrap;">${port.name}</span>
-            <span style="color:#cbd5e1;margin:0 6px;"> · </span>
-            <span style="font-size:12px;color:#64748b;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">${subtitle}</span>
-            ${guideInline}
-          </div>
-          <span style="font-size:10px;background:#14b8a6;color:#ffffff;padding:2px 7px;border-radius:3px;font-weight:600;letter-spacing:0.3px;white-space:nowrap;flex-shrink:0;">항만</span>
-        </button>
+      <div class="ports-result-card" data-port-key="${port.name}" style="display:flex;align-items:center;justify-content:space-between;gap:12px;background:#f0fdfa;border-left:3px solid #14b8a6;border-radius:6px;padding:8px 14px;margin-bottom:8px;cursor:pointer;line-height:1.4;">
+        <div style="display:flex;align-items:baseline;gap:8px;flex:1;min-width:0;overflow:hidden;white-space:nowrap;text-overflow:ellipsis;">
+          <span style="font-size:14px;font-weight:700;color:#0f172a;">${port.name}</span>
+          ${nameEnBlock}
+          ${regionBlock}
+          ${guideBlock}
+        </div>
+        <span style="font-size:10px;background:#14b8a6;color:#fff;padding:2px 7px;border-radius:3px;font-weight:600;letter-spacing:0.3px;flex-shrink:0;">항만</span>
       </div>
     `;
   }
@@ -442,6 +445,12 @@
     area._cardHandlersAttached = true;
 
     area.addEventListener('mouseover', (e) => {
+      const portCard = e.target.closest('.ports-result-card');
+      if (portCard) {
+        portCard.style.background = '#ccfbf1';
+        return;
+      }
+
       const toggle = e.target.closest('.dir-card-toggle');
       if (!toggle) return;
       const card = toggle.closest('.dir-card');
@@ -452,6 +461,14 @@
     });
 
     area.addEventListener('mouseout', (e) => {
+      const portCard = e.target.closest('.ports-result-card');
+      if (portCard) {
+        const related = e.relatedTarget;
+        if (related && portCard.contains(related)) return;
+        portCard.style.background = '#f0fdfa';
+        return;
+      }
+
       const toggle = e.target.closest('.dir-card-toggle');
       if (!toggle) return;
       const card = toggle.closest('.dir-card');
@@ -465,6 +482,15 @@
     });
 
     area.addEventListener('click', (e) => {
+      const portCard = e.target.closest('.ports-result-card');
+      if (portCard) {
+        const portKey = portCard.getAttribute('data-port-key');
+        if (portKey) {
+          window.dispatchEvent(new CustomEvent('port-atlas:focus-port', { detail: { portKey } }));
+        }
+        return;
+      }
+
       const actionBtn = e.target.closest('.dir-action-btn[data-action="focus-port"]');
       if (actionBtn) {
         e.stopPropagation();
