@@ -221,7 +221,7 @@
       facilities: '본항, 미포항, 온산항, 신항, SBM (SK에너지/S-Oil)',
       note: '한국 최대 액체화물 항만, VLCC 접안',
       faircall: 'https://faircall.kr/regions/yeongnam/ulsan',
-      guideUrl: null,
+      guideUrl: 'https://faircast.kr/ulsan-port-petroleum-hub-future-clean-fuel-korea-guide/',
     },
     {
       name: '포항항',
