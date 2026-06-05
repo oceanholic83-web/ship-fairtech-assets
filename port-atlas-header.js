@@ -229,16 +229,18 @@
   // 무역항 검색 결과 카드 (teal 스타일)
   // ============================================================
   function portCardHtml(port) {
-    const guideIndicator = port.guideUrl
-      ? `<div style="margin-top:6px;font-size:11px;color:#0f766e;">📖 가이드 글 있음</div>`
+    const subtitle = port.nameEn || port.region;
+    const guideInline = port.guideUrl
+      ? `<span style="color:#cbd5e1;margin:0 6px;"> · </span><span style="font-size:11px;color:#0f766e;font-weight:600;">📖 가이드</span>`
       : '';
     return `
-      <div data-port-key="${port.name}" data-url="" class="dir-card" style="background:#f0fdfa;border:1px solid #99f6e4;border-left:3px solid #14b8a6;border-radius:5px;font-family:inherit;text-align:left;cursor:pointer;">
-        <button class="dir-card-toggle" style="width:100%;display:flex;align-items:flex-start;justify-content:space-between;gap:10px;padding:8px 10px 8px 12px;background:transparent;border:none;cursor:pointer;font-family:inherit;text-align:left;">
-          <div style="flex:1;min-width:0;">
-            <div style="font-size:15px;color:#0f172a;font-weight:700;line-height:1.3;word-break:keep-all;">${port.name}</div>
-            <div style="font-size:12px;color:#475569;margin-top:2px;">${port.nameEn} · ${port.region}</div>
-            ${guideIndicator}
+      <div data-port-key="${port.name}" data-url="" class="dir-card dir-port-card" style="background:#f0fdfa;border:1px solid #99f6e4;border-left:3px solid #14b8a6;border-radius:6px;padding:10px 14px;font-family:inherit;display:flex;align-items:center;justify-content:space-between;gap:12px;cursor:pointer;text-align:left;transition:background 0.12s ease;">
+        <button class="dir-card-toggle" style="flex:1;min-width:0;display:flex;align-items:center;justify-content:space-between;gap:12px;padding:0;background:transparent;border:none;cursor:pointer;font-family:inherit;text-align:left;">
+          <div style="flex:1;min-width:0;display:flex;align-items:center;flex-wrap:nowrap;overflow:hidden;">
+            <span style="font-size:14px;font-weight:700;color:#0f172a;white-space:nowrap;">${port.name}</span>
+            <span style="color:#cbd5e1;margin:0 6px;"> · </span>
+            <span style="font-size:12px;color:#64748b;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">${subtitle}</span>
+            ${guideInline}
           </div>
           <span style="font-size:10px;background:#14b8a6;color:#ffffff;padding:2px 7px;border-radius:3px;font-weight:600;letter-spacing:0.3px;white-space:nowrap;flex-shrink:0;">항만</span>
         </button>
@@ -444,8 +446,8 @@
       if (!toggle) return;
       const card = toggle.closest('.dir-card');
       const details = card && card.querySelector('.dir-card-details');
-      if (details && details.style.display !== 'block') {
-        card.style.background = '#f8fafc';
+      if (!details || details.style.display !== 'block') {
+        card.style.background = card.classList.contains('dir-port-card') ? '#ccfbf1' : '#f8fafc';
       }
     });
 
@@ -457,8 +459,8 @@
       const related = e.relatedTarget;
       if (related && card.contains(related)) return;
       const details = card.querySelector('.dir-card-details');
-      if (details && details.style.display !== 'block') {
-        card.style.background = '#ffffff';
+      if (!details || details.style.display !== 'block') {
+        card.style.background = card.classList.contains('dir-port-card') ? '#f0fdfa' : '#ffffff';
       }
     });
 
