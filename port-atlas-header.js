@@ -12,7 +12,7 @@
     console.error('[port-atlas-header] PORT_ATLAS_DATA not loaded — ensure data.js is loaded before this file');
     return;
   }
-  const { MOF, OFFICES, PORT_AUTHORITIES, PILOTS, MOF_AGENCIES, CUSTOMS_HQ, CUSTOMS_PORTS, KCG_AGENCIES, QUARANTINE_AGENCIES, PORT_SECURITY, PORTS } = window.PORT_ATLAS_DATA;
+  const { MOF, OFFICES, PORT_AUTHORITIES, PILOTS, MOF_AGENCIES, CUSTOMS_HQ, CUSTOMS_PORTS, KCG_AGENCIES, QUARANTINE_AGENCIES, PORT_SECURITY, PORTS, VTS_CENTERS } = window.PORT_ATLAS_DATA;
 
   // ============================================================
   // MOF 카드 (상단 고정)
@@ -49,7 +49,7 @@
   function buildTriggerHtml() {
     const officeCount = Object.values(OFFICES).reduce((s, g) => s + g.items.length, 0);
     const customsCount = CUSTOMS_HQ.length + Object.values(CUSTOMS_PORTS).reduce((s, g) => s + g.items.length, 0);
-    const total = 1 + officeCount + PORT_AUTHORITIES.length + PILOTS.length + MOF_AGENCIES.length + customsCount + KCG_AGENCIES.length + QUARANTINE_AGENCIES.length + PORT_SECURITY.length;
+    const total = 1 + officeCount + PORT_AUTHORITIES.length + PILOTS.length + MOF_AGENCIES.length + customsCount + KCG_AGENCIES.length + QUARANTINE_AGENCIES.length + PORT_SECURITY.length + VTS_CENTERS.length;
     return `
       <div style="display:flex;gap:8px;align-items:stretch;flex-wrap:wrap;font-family:ui-sans-serif,system-ui,-apple-system,'Segoe UI','Apple SD Gothic Neo','Noto Sans KR',sans-serif;">
         <div style="flex:1;min-width:200px;position:relative;">
@@ -80,6 +80,7 @@
           <button class="dir-l1-tab" data-l1="security" style="flex:1;min-width:110px;padding:12px 14px;background:transparent;border:none;border-bottom:2px solid transparent;cursor:pointer;font-family:inherit;font-size:12px;font-weight:500;color:#64748b;">항만보안</button>
           <button class="dir-l1-tab" data-l1="kcg" style="flex:1;min-width:110px;padding:12px 14px;background:transparent;border:none;border-bottom:2px solid transparent;cursor:pointer;font-family:inherit;font-size:12px;font-weight:500;color:#64748b;">해상치안</button>
           <button class="dir-l1-tab" data-l1="quarantine" style="flex:1;min-width:110px;padding:12px 14px;background:transparent;border:none;border-bottom:2px solid transparent;cursor:pointer;font-family:inherit;font-size:12px;font-weight:500;color:#64748b;">검역·검사</button>
+          <button class="dir-l1-tab" data-l1="vts" style="flex:1;min-width:110px;padding:12px 14px;background:transparent;border:none;border-bottom:2px solid transparent;cursor:pointer;font-family:inherit;font-size:12px;font-weight:500;color:#64748b;">해상교통관제</button>
         </div>
         <div id="dir-l2-area"></div>
         <div id="dir-content-area" style="padding:16px 18px;"></div>
@@ -109,6 +110,9 @@
       ],
       quarantine: [
         { id: 'q-all', label: `검역·검사 (${QUARANTINE_AGENCIES.length})` },
+      ],
+      vts: [
+        { id: 'vts-all', label: `해상교통관제 (${VTS_CENTERS.length})` },
       ],
     };
     const tabs = map[l1] || [];
@@ -335,6 +339,11 @@
     return `<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:4px;">${cards}</div>`;
   }
 
+  function buildVtsContent() {
+    const cards = VTS_CENTERS.map(v => cardHtml(v, '#06b6d4')).join('');
+    return `<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:4px;">${cards}</div>`;
+  }
+
   // ============================================================
   // 상태 관리 + 렌더링
   // ============================================================
@@ -366,6 +375,7 @@
     else if (key === 'security') area.innerHTML = buildSecurityContent();
     else if (key === 'kcg-main') area.innerHTML = buildKcgContent();
     else if (key === 'q-all') area.innerHTML = buildQuarantineContent();
+    else if (key === 'vts-all') area.innerHTML = buildVtsContent();
     attachCardHandlers();
     attachRegionHandlers();
   }
@@ -385,6 +395,7 @@
       security: 'security',
       kcg: 'kcg-main',
       quarantine: 'q-all',
+      vts: 'vts-all',
     };
     state.l2 = defaults[l1];
     state.region = '전체';
@@ -593,6 +604,7 @@
     KCG_AGENCIES.forEach(a => allItems.push({ ...a, type: '해상치안', typeColor: '#ef4444' }));
     QUARANTINE_AGENCIES.forEach(a => allItems.push({ ...a, type: '검역·검사', typeColor: '#84cc16' }));
     PORT_SECURITY.forEach(s => allItems.push({ ...s, type: '민간·항만보안', typeColor: '#6366f1' }));
+    VTS_CENTERS.forEach(v => allItems.push({ ...v, type: '해상교통관제', typeColor: '#06b6d4' }));
 
     // Filter agencies by query (search name, abbr, port, role, sub)
     const agencyMatches = allItems.filter(item => {
