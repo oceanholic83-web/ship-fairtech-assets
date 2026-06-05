@@ -128,6 +128,8 @@
       border-radius: 10px !important;
       padding: 14px !important;
       box-shadow: 0 10px 25px rgba(0,0,0,0.12) !important;
+      max-height: 480px !important;
+      overflow-y: auto !important;
     }
     .korea-port-popup .mapboxgl-popup-tip {
       border-top-color: #ffffff !important;
@@ -184,8 +186,9 @@
       const el = createMarkerEl(port);
       const popup = new mapboxgl.Popup({
         offset: 15,
-        maxWidth: '320px',
+        maxWidth: '300px',
         closeButton: true,
+        anchor: 'bottom',
         className: 'korea-port-popup',
       }).setHTML(buildPopupHtml(port));
 
