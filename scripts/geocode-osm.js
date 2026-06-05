@@ -138,9 +138,17 @@ function escapeRegex(s) {
   let appliedCount = 0;
   for (const r of results) {
     if (r.status !== 'OK') continue;
-    const namePattern = new RegExp(
+    // Match both multi-line and single-line entry formats
+    const multiLinePattern = new RegExp(
       `(\\{[^{}]*?name:\\s*'${escapeRegex(r.name)}'[^{}]*?)(\\n\\s*\\},)`
     );
+    const singleLinePattern = new RegExp(
+      `(\\{[^{}]*?name:\\s*'${escapeRegex(r.name)}'[^{}]*?)(\\s*\\},)`
+    );
+    let namePattern = multiLinePattern;
+    if (!updatedCode.match(multiLinePattern)) {
+      namePattern = singleLinePattern;
+    }
     const match = updatedCode.match(namePattern);
     if (!match) {
       console.log(`  [WARN] Entry not found in source: ${r.name}`);
@@ -150,9 +158,13 @@ function escapeRegex(s) {
       console.log(`  [WARN] Already has lat in source: ${r.name}`);
       continue;
     }
-    updatedCode = updatedCode.replace(namePattern, (_, body, close) =>
-      `${body}\n      lat: ${r.lat},\n      lng: ${r.lng},${close}`
-    );
+    updatedCode = updatedCode.replace(namePattern, (_, body, close) => {
+      const isSingleLine = !close.startsWith('\n');
+      if (isSingleLine) {
+        return `${body}, lat: ${r.lat}, lng: ${r.lng}${close}`;
+      }
+      return `${body}\n      lat: ${r.lat},\n      lng: ${r.lng},${close}`;
+    });
     appliedCount++;
   }
 
