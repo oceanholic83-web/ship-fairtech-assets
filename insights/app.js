@@ -43,6 +43,8 @@
   var allPosts = [];
   var activeLang = 'hello-korea';
   var activeCat = 'all-ko';
+  var currentFiltered = [];
+  var visibleCount = 6;
 
   function injectStyles() {
     var style = document.createElement('style');
@@ -54,12 +56,12 @@
       '#fct-insights-app *{box-sizing:border-box;}',
 
       '.fct-hero{text-align:center;padding:48px 16px 28px;}',
-      '.fct-hero h1{font-size:2rem;font-weight:700;color:#0f172a;margin:0 0 8px;letter-spacing:-0.02em;}',
-      '.fct-hero p{font-size:1rem;color:#64748b;margin:0;}',
+      '.fct-hero h1{font-size:32px;font-weight:800;color:#0f172a;margin:0 0 8px;letter-spacing:-0.02em;}',
+      '.fct-hero-sub{font-size:15px;color:#64748b;margin:0 0 6px;}',
+      '.fct-hero-stats{font-size:12px;color:#94a3b8;margin:0;}',
 
       '.fct-tabs{display:flex;justify-content:center;gap:8px;flex-wrap:wrap;',
         'margin-bottom:12px;padding:0 8px;}',
-
       '.fct-tab-btn{',
         'padding:8px 20px;border-radius:9999px;font-size:0.875rem;font-weight:600;',
         'cursor:pointer;border:1.5px solid #e2e8f0;background:#fff;color:#64748b;',
@@ -71,9 +73,18 @@
       '.fct-cat-tab.active{background:#0f172a;border-color:#0f172a;color:#fff;}',
       '.fct-cat-tab.active:hover{color:#fff;}',
 
+      '.fct-featured-grid{',
+        'display:grid;grid-template-columns:repeat(3,1fr);gap:20px;margin-top:20px;}',
+      '.fct-card-lg{border-bottom:3px solid #14b8a6;}',
+      '.fct-card-lg .fct-card-img{height:200px;}',
+      '.fct-card-lg .fct-card-img-ph{height:200px;}',
+      '.fct-card-lg .fct-card-title{font-size:16px;}',
+
+      '.fct-divider{border:none;border-top:1px solid #e2e8f0;margin:24px 0;}',
+
       '.fct-grid{',
         'display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));',
-        'gap:20px;margin-top:20px;}',
+        'gap:20px;transition:opacity 0.2s ease;}',
 
       '.fct-card{',
         'border:1px solid #e2e8f0;border-radius:8px;overflow:hidden;',
@@ -92,6 +103,13 @@
         '-webkit-box-orient:vertical;overflow:hidden;}',
       '.fct-card-date{font-size:12px;color:#94a3b8;}',
 
+      '.fct-more-btn{',
+        'display:block;margin:20px auto 0;padding:10px 28px;',
+        'border-radius:8px;border:1px solid #e2e8f0;background:#fff;',
+        'color:#0f172a;font-size:13px;font-weight:600;cursor:pointer;',
+        'font-family:inherit;transition:background 0.15s;}',
+      '.fct-more-btn:hover{background:#f8fafc;}',
+
       '.fct-loading{text-align:center;padding:56px;color:#64748b;font-size:0.95rem;}',
       '.fct-error{text-align:center;padding:56px;color:#f87171;font-size:0.95rem;}',
       '.fct-empty{text-align:center;padding:56px;color:#94a3b8;font-size:0.95rem;}',
@@ -105,8 +123,9 @@
       '.fct-fl-en{background:#f8fafc;color:#475569;border:1px solid #e2e8f0;}',
 
       '@media(max-width:480px){',
+        '.fct-featured-grid{grid-template-columns:1fr;}',
         '.fct-grid{grid-template-columns:1fr;}',
-        '.fct-hero h1{font-size:1.5rem;}}',
+        '.fct-hero h1{font-size:24px;}}',
     ].join('');
     document.head.appendChild(style);
   }
@@ -153,78 +172,141 @@
       .replace(/"/g, '&quot;');
   }
 
-  function renderGrid(posts) {
-    var grid = document.getElementById('fct-grid');
-    if (!grid) return;
-    if (!posts.length) {
-      grid.innerHTML = '<div class="fct-empty">게시물이 없습니다.</div>';
-      return;
-    }
-    grid.innerHTML = posts.map(function (post) {
-      var imgUrl = getFeaturedImage(post);
-      var catLabel = getCategoryLabel(post);
-      var title = escapeHtml(post.title.rendered.replace(/<[^>]+>/g, ''));
-      var date = formatDate(post.date);
-      var link = escapeHtml(post.link);
-      return (
-        '<a class="fct-card" href="' + link + '" target="_blank" rel="noopener noreferrer">' +
-          (imgUrl
-            ? '<img class="fct-card-img" src="' + escapeHtml(imgUrl) + '" alt="" loading="lazy">'
-            : '<div class="fct-card-img-ph"></div>') +
-          '<div class="fct-card-body">' +
-            (catLabel ? '<div class="fct-card-cat">' + escapeHtml(catLabel) + '</div>' : '') +
-            '<div class="fct-card-title">' + title + '</div>' +
-            '<div class="fct-card-date">' + date + '</div>' +
-          '</div>' +
-        '</a>'
-      );
-    }).join('');
+  function cardHtml(post, isFeatured) {
+    var imgUrl = getFeaturedImage(post);
+    var catLabel = getCategoryLabel(post);
+    var title = escapeHtml(post.title.rendered.replace(/<[^>]+>/g, ''));
+    var date = formatDate(post.date);
+    var link = escapeHtml(post.link);
+    return (
+      '<a class="fct-card' + (isFeatured ? ' fct-card-lg' : '') + '"' +
+        ' href="' + link + '" target="_blank" rel="noopener noreferrer">' +
+        (imgUrl
+          ? '<img class="fct-card-img" src="' + escapeHtml(imgUrl) + '" alt="" loading="lazy">'
+          : '<div class="fct-card-img-ph"></div>') +
+        '<div class="fct-card-body">' +
+          (catLabel ? '<div class="fct-card-cat">' + escapeHtml(catLabel) + '</div>' : '') +
+          '<div class="fct-card-title">' + title + '</div>' +
+          '<div class="fct-card-date">' + date + '</div>' +
+        '</div>' +
+      '</a>'
+    );
   }
 
-  function applyFilter() {
+  function renderFeatured() {
+    var el = document.getElementById('fct-featured-grid');
+    if (!el) return;
+    var langCatId = CAT_IDS[activeLang];
+    var top3 = allPosts.filter(function (p) {
+      return p.categories.indexOf(langCatId) !== -1;
+    }).slice(0, 3);
+    el.innerHTML = top3.map(function (p) { return cardHtml(p, true); }).join('');
+  }
+
+  function updateHeroStats() {
+    var el = document.getElementById('fct-hero-stats');
+    if (!el) return;
+    var koCount = allPosts.filter(function (p) {
+      return p.categories.indexOf(CAT_IDS['hello-korea']) !== -1;
+    }).length;
+    var enCount = allPosts.filter(function (p) {
+      return p.categories.indexOf(CAT_IDS['hello-world']) !== -1;
+    }).length;
+    el.textContent = '한국어 ' + koCount + '편 · English ' + enCount + '편';
+  }
+
+  function countForLangCat(langCatId, catId) {
+    return allPosts.filter(function (p) {
+      if (p.categories.indexOf(langCatId) === -1) return false;
+      if (catId !== null && p.categories.indexOf(catId) === -1) return false;
+      return true;
+    }).length;
+  }
+
+  function renderGrid() {
+    var grid = document.getElementById('fct-grid');
+    var moreBtn = document.getElementById('fct-more-btn');
+    if (!grid) return;
+    if (!currentFiltered.length) {
+      grid.innerHTML = '<div class="fct-empty">게시물이 없습니다.</div>';
+      if (moreBtn) moreBtn.style.display = 'none';
+      return;
+    }
+    grid.innerHTML = currentFiltered.slice(0, visibleCount).map(function (p) {
+      return cardHtml(p, false);
+    }).join('');
+    if (moreBtn) {
+      moreBtn.style.display = visibleCount < currentFiltered.length ? 'block' : 'none';
+    }
+  }
+
+  function applyFilter(fade) {
     var langCatId = CAT_IDS[activeLang];
     var catTabs = CAT_TABS[activeLang];
     var activeTab = catTabs.find(function (t) { return t.id === activeCat; });
 
-    var filtered = allPosts.filter(function (p) {
+    currentFiltered = allPosts.filter(function (p) {
       return p.categories.indexOf(langCatId) !== -1;
     });
 
     if (activeTab && activeTab.catId !== null) {
-      filtered = filtered.filter(function (p) {
+      currentFiltered = currentFiltered.filter(function (p) {
         return p.categories.indexOf(activeTab.catId) !== -1;
       });
     }
 
-    renderGrid(filtered);
+    if (fade) {
+      var grid = document.getElementById('fct-grid');
+      if (grid) {
+        grid.style.opacity = '0';
+        setTimeout(function () {
+          renderGrid();
+          grid.style.opacity = '1';
+        }, 50);
+        return;
+      }
+    }
+    renderGrid();
   }
 
   function updateCatTabs() {
     var container = document.getElementById('fct-cat-tabs');
     if (!container) return;
     var tabs = CAT_TABS[activeLang];
+    var langCatId = CAT_IDS[activeLang];
+    var hasPosts = allPosts.length > 0;
     container.innerHTML = tabs.map(function (tab) {
+      var isActive = tab.id === activeCat;
+      var countHtml = hasPosts
+        ? '<span style="color:' + (isActive ? 'rgba(255,255,255,0.7)' : '#94a3b8') +
+          ';font-weight:400;margin-left:4px">' +
+          countForLangCat(langCatId, tab.catId) + '</span>'
+        : '';
       return (
-        '<button class="fct-tab-btn fct-cat-tab' +
-          (tab.id === activeCat ? ' active' : '') +
-          '" data-cat="' + tab.id + '">' + tab.label + '</button>'
+        '<button class="fct-tab-btn fct-cat-tab' + (isActive ? ' active' : '') +
+          '" data-cat="' + tab.id + '">' + tab.label + countHtml + '</button>'
       );
     }).join('');
     var btns = container.querySelectorAll('.fct-cat-tab');
     for (var i = 0; i < btns.length; i++) {
       btns[i].addEventListener('click', function () {
         activeCat = this.getAttribute('data-cat');
+        visibleCount = 6;
         var siblings = container.querySelectorAll('.fct-cat-tab');
         for (var j = 0; j < siblings.length; j++) siblings[j].classList.remove('active');
         this.classList.add('active');
-        applyFilter();
+        applyFilter(true);
       });
     }
   }
 
   function renderApp(container) {
     container.innerHTML =
-      '<div class="fct-hero"><h1>Faircast Insights</h1><p>한국 해운·항만·조선 분석</p></div>' +
+      '<div class="fct-hero">' +
+        '<h1>Faircast</h1>' +
+        '<p class="fct-hero-sub">한국 해운·항만·조선 인사이트</p>' +
+        '<p id="fct-hero-stats" class="fct-hero-stats"></p>' +
+      '</div>' +
       '<div class="fct-tabs" id="fct-lang-tabs">' +
         LANG_TABS.map(function (tab) {
           return (
@@ -235,7 +317,10 @@
         }).join('') +
       '</div>' +
       '<div class="fct-tabs" id="fct-cat-tabs"></div>' +
-      '<div id="fct-grid"><div class="fct-loading">불러오는 중...</div></div>' +
+      '<div class="fct-featured-grid" id="fct-featured-grid"></div>' +
+      '<hr class="fct-divider">' +
+      '<div id="fct-grid" class="fct-grid"><div class="fct-loading">불러오는 중...</div></div>' +
+      '<button id="fct-more-btn" class="fct-more-btn" style="display:none">더 보기</button>' +
       '<div class="fct-footer">' +
         '<a class="fct-fl fct-fl-port" href="/category/port-guide/">항만 가이드 →</a>' +
         '<a class="fct-fl fct-fl-eta" href="https://fairwayeta.com/calculator" target="_blank" rel="noopener noreferrer">Fairway ETA 계산기 →</a>' +
@@ -247,13 +332,20 @@
       langBtns[i].addEventListener('click', function () {
         activeLang = this.getAttribute('data-lang');
         activeCat = activeLang === 'hello-korea' ? 'all-ko' : 'all-en';
+        visibleCount = 6;
         var siblings = document.getElementById('fct-lang-tabs').querySelectorAll('.fct-lang-tab');
         for (var j = 0; j < siblings.length; j++) siblings[j].classList.remove('active');
         this.classList.add('active');
         updateCatTabs();
+        renderFeatured();
         applyFilter();
       });
     }
+
+    document.getElementById('fct-more-btn').addEventListener('click', function () {
+      visibleCount += 6;
+      renderGrid();
+    });
 
     updateCatTabs();
   }
@@ -267,6 +359,9 @@
       })
       .then(function (data) {
         allPosts = data;
+        updateHeroStats();
+        renderFeatured();
+        updateCatTabs();
         applyFilter();
       })
       .catch(function () {
