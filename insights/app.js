@@ -19,8 +19,8 @@
   };
 
   var PINNED_KO = [
-    'busan-port-transshipment-hub-30-year-decision',
-    'shadow-fleet-korea-five-touchpoints-2026',
+    'busan-port-transshipment-hub-30-year-strategy',
+    'shadow-fleet-dark-fleet-2026-korea-5-touchpoints-guide',
     'ten-shipping-routes-korea-perspective-2026',
   ];
 
