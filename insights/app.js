@@ -18,6 +18,18 @@
     'port-guide': 47,
   };
 
+  var PINNED_KO = [
+    'busan-port-transshipment-hub-30-year-decision',
+    'shadow-fleet-korea-five-touchpoints-2026',
+    'ten-shipping-routes-korea-perspective-2026',
+  ];
+
+  var PINNED_EN = [
+    'korea-four-industrial-ports-2026',
+    'yard-capacity-binding-constraint-2026-newbuild-burst',
+    'what-is-charter-party-voyage-time-bareboat-explained-2026',
+  ];
+
   var LANG_TABS = [
     { id: 'hello-korea', label: 'Hello, Korea' },
     { id: 'hello-world', label: 'Hello, World' },
@@ -43,8 +55,8 @@
   var allPosts = [];
   var activeLang = 'hello-korea';
   var activeCat = 'all-ko';
-  var currentFiltered = [];
-  var visibleCount = 6;
+
+  /* ─── styles ─────────────────────────────────────────────── */
 
   function injectStyles() {
     var style = document.createElement('style');
@@ -55,13 +67,17 @@
         'min-height:60vh;box-sizing:border-box;}',
       '#fct-insights-app *{box-sizing:border-box;}',
 
+      /* hero */
       '.fct-hero{text-align:center;padding:48px 16px 28px;}',
       '.fct-hero h1{font-size:32px;font-weight:800;color:#0f172a;margin:0 0 8px;letter-spacing:-0.02em;}',
       '.fct-hero-sub{font-size:15px;color:#64748b;margin:0 0 6px;}',
       '.fct-hero-stats{font-size:12px;color:#94a3b8;margin:0;}',
 
-      '.fct-tabs{display:flex;justify-content:center;gap:8px;flex-wrap:wrap;',
-        'margin-bottom:12px;padding:0 8px;}',
+      /* lang tabs */
+      '.fct-lang-tabs{display:flex;justify-content:center;gap:8px;flex-wrap:wrap;',
+        'margin-bottom:28px;padding:0 8px;}',
+
+      /* shared tab button */
       '.fct-tab-btn{',
         'padding:8px 20px;border-radius:9999px;font-size:0.875rem;font-weight:600;',
         'cursor:pointer;border:1.5px solid #e2e8f0;background:#fff;color:#64748b;',
@@ -73,47 +89,70 @@
       '.fct-cat-tab.active{background:#0f172a;border-color:#0f172a;color:#fff;}',
       '.fct-cat-tab.active:hover{color:#fff;}',
 
-      '.fct-featured-grid{',
-        'display:grid;grid-template-columns:repeat(3,1fr);gap:20px;margin-top:20px;}',
-      '.fct-card-lg{border-bottom:3px solid #14b8a6;}',
-      '.fct-card-lg .fct-card-img{height:200px;}',
-      '.fct-card-lg .fct-card-img-ph{height:200px;}',
-      '.fct-card-lg .fct-card-title{font-size:16px;}',
+      /* section headings */
+      '.fct-section-hd{font-size:20px;font-weight:700;color:#0f172a;',
+        'margin:0 0 16px;letter-spacing:-0.01em;}',
+      '.fct-all-count{font-size:16px;font-weight:400;color:#94a3b8;margin-left:6px;}',
 
-      '.fct-divider{border:none;border-top:1px solid #e2e8f0;margin:24px 0;}',
+      /* cat tab row */
+      '.fct-cat-tab-row{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:16px;}',
 
-      '.fct-grid{',
-        'display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));',
+      /* featured grid */
+      '#fct-featured-grid{',
+        'display:grid;grid-template-columns:repeat(3,1fr);',
         'gap:20px;transition:opacity 0.2s ease;}',
 
-      '.fct-card{',
+      /* featured cards */
+      '.fct-feat-card{',
         'border:1px solid #e2e8f0;border-radius:8px;overflow:hidden;',
         'background:#fff;text-decoration:none;color:inherit;display:block;',
         'transition:box-shadow 0.15s;}',
-      '.fct-card:hover{box-shadow:0 4px 18px rgba(0,0,0,0.10);}',
-
-      '.fct-card-img{width:100%;height:160px;object-fit:cover;display:block;background:#1e293b;}',
-      '.fct-card-img-ph{width:100%;height:160px;background:#1e293b;}',
-
-      '.fct-card-body{padding:14px 16px 16px;}',
-      '.fct-card-cat{font-size:11px;font-weight:700;color:#14b8a6;',
+      '.fct-feat-card:hover{box-shadow:0 4px 18px rgba(0,0,0,0.10);}',
+      '.fct-feat-img{width:100%;height:180px;object-fit:cover;display:block;background:#1e293b;}',
+      '.fct-feat-img-ph{width:100%;height:180px;background:#1e293b;}',
+      '.fct-feat-body{padding:14px 16px 18px;}',
+      '.fct-feat-cat{font-size:11px;font-weight:700;color:#14b8a6;',
         'text-transform:uppercase;letter-spacing:0.05em;margin-bottom:6px;}',
-      '.fct-card-title{font-size:14px;font-weight:700;color:#0f172a;margin-bottom:8px;',
+      '.fct-feat-title{font-size:16px;font-weight:700;color:#0f172a;margin-bottom:8px;',
+        'line-height:1.4;display:-webkit-box;-webkit-line-clamp:2;',
+        '-webkit-box-orient:vertical;overflow:hidden;}',
+      '.fct-feat-excerpt{font-size:13px;color:#64748b;margin-bottom:10px;',
         'line-height:1.5;display:-webkit-box;-webkit-line-clamp:2;',
         '-webkit-box-orient:vertical;overflow:hidden;}',
-      '.fct-card-date{font-size:12px;color:#94a3b8;}',
+      '.fct-feat-date{font-size:12px;color:#94a3b8;}',
 
-      '.fct-more-btn{',
-        'display:block;margin:20px auto 0;padding:10px 28px;',
-        'border-radius:8px;border:1px solid #e2e8f0;background:#fff;',
-        'color:#0f172a;font-size:13px;font-weight:600;cursor:pointer;',
-        'font-family:inherit;transition:background 0.15s;}',
-      '.fct-more-btn:hover{background:#f8fafc;}',
+      /* list */
+      '#fct-list{transition:opacity 0.15s ease;}',
+      '.fct-list-item{',
+        'display:flex;gap:16px;align-items:flex-start;',
+        'padding:16px 8px;border-bottom:1px solid #f1f5f9;',
+        'text-decoration:none;color:inherit;transition:background 0.15s;}',
+      '.fct-list-item:hover{background:#f8fafc;}',
+      '.fct-list-item:last-child{border-bottom:none;}',
+      '.fct-list-thumb{',
+        'width:120px;min-width:120px;height:80px;',
+        'object-fit:cover;border-radius:6px;display:block;background:#1e293b;flex-shrink:0;}',
+      '.fct-list-thumb-ph{',
+        'width:120px;min-width:120px;height:80px;',
+        'background:#1e293b;border-radius:6px;flex-shrink:0;}',
+      '.fct-list-body{flex:1;min-width:0;}',
+      '.fct-list-meta{font-size:11px;color:#94a3b8;margin-bottom:4px;}',
+      '.fct-list-meta-cat{color:#14b8a6;font-weight:600;}',
+      '.fct-list-title{',
+        'font-size:15px;font-weight:700;color:#0f172a;',
+        'white-space:nowrap;overflow:hidden;text-overflow:ellipsis;',
+        'margin-bottom:4px;}',
+      '.fct-list-excerpt{',
+        'font-size:13px;color:#64748b;line-height:1.5;',
+        'display:-webkit-box;-webkit-line-clamp:2;',
+        '-webkit-box-orient:vertical;overflow:hidden;}',
 
+      /* states */
       '.fct-loading{text-align:center;padding:56px;color:#64748b;font-size:0.95rem;}',
       '.fct-error{text-align:center;padding:56px;color:#f87171;font-size:0.95rem;}',
-      '.fct-empty{text-align:center;padding:56px;color:#94a3b8;font-size:0.95rem;}',
+      '.fct-empty{text-align:center;padding:40px;color:#94a3b8;font-size:0.95rem;}',
 
+      /* footer */
       '.fct-footer{display:flex;justify-content:center;gap:12px;flex-wrap:wrap;margin-top:40px;}',
       '.fct-fl{padding:10px 22px;border-radius:8px;font-size:0.875rem;font-weight:600;',
         'text-decoration:none;transition:opacity 0.15s;}',
@@ -122,12 +161,25 @@
       '.fct-fl-eta{background:#fff7ed;color:#c2410c;border:1px solid #fed7aa;}',
       '.fct-fl-en{background:#f8fafc;color:#475569;border:1px solid #e2e8f0;}',
 
+      /* responsive */
+      '@media(max-width:700px){',
+        '#fct-featured-grid{grid-template-columns:repeat(2,1fr);}}',
       '@media(max-width:480px){',
-        '.fct-featured-grid{grid-template-columns:1fr;}',
-        '.fct-grid{grid-template-columns:1fr;}',
+        '#fct-featured-grid{grid-template-columns:1fr;}',
+        '.fct-list-thumb,.fct-list-thumb-ph{display:none;}',
         '.fct-hero h1{font-size:24px;}}',
     ].join('');
     document.head.appendChild(style);
+  }
+
+  /* ─── helpers ─────────────────────────────────────────────── */
+
+  function escapeHtml(str) {
+    return str
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;');
   }
 
   function getCategoryLabel(post) {
@@ -147,11 +199,8 @@
   }
 
   function getFeaturedImage(post) {
-    try {
-      return post._embedded['wp:featuredmedia'][0].source_url;
-    } catch (e) {
-      return null;
-    }
+    try { return post._embedded['wp:featuredmedia'][0].source_url; }
+    catch (e) { return null; }
   }
 
   function formatDate(dateStr) {
@@ -159,48 +208,99 @@
       return new Date(dateStr).toLocaleDateString('ko-KR', {
         year: 'numeric', month: 'long', day: 'numeric',
       });
-    } catch (e) {
-      return dateStr.slice(0, 10);
-    }
+    } catch (e) { return dateStr.slice(0, 10); }
   }
 
-  function escapeHtml(str) {
-    return str
-      .replace(/&/g, '&amp;')
-      .replace(/</g, '&lt;')
-      .replace(/>/g, '&gt;')
-      .replace(/"/g, '&quot;');
+  function getExcerpt(post) {
+    if (!post.excerpt || !post.excerpt.rendered) return '';
+    return post.excerpt.rendered
+      .replace(/<[^>]+>/g, '')
+      .replace(/\[&hellip;\]|\[…\]/g, '…')
+      .replace(/\[[^\]]*\]/g, '')
+      .replace(/&nbsp;/g, ' ')
+      .replace(/&amp;/g, '&')
+      .replace(/&lt;/g, '<')
+      .replace(/&gt;/g, '>')
+      .trim();
   }
 
-  function cardHtml(post, isFeatured) {
+  /* ─── card / item html ────────────────────────────────────── */
+
+  function featuredCardHtml(post) {
     var imgUrl = getFeaturedImage(post);
     var catLabel = getCategoryLabel(post);
     var title = escapeHtml(post.title.rendered.replace(/<[^>]+>/g, ''));
+    var excerpt = escapeHtml(getExcerpt(post));
     var date = formatDate(post.date);
     var link = escapeHtml(post.link);
     return (
-      '<a class="fct-card' + (isFeatured ? ' fct-card-lg' : '') + '"' +
-        ' href="' + link + '" target="_blank" rel="noopener noreferrer">' +
+      '<a class="fct-feat-card" href="' + link + '" target="_blank" rel="noopener noreferrer">' +
         (imgUrl
-          ? '<img class="fct-card-img" src="' + escapeHtml(imgUrl) + '" alt="" loading="lazy">'
-          : '<div class="fct-card-img-ph"></div>') +
-        '<div class="fct-card-body">' +
-          (catLabel ? '<div class="fct-card-cat">' + escapeHtml(catLabel) + '</div>' : '') +
-          '<div class="fct-card-title">' + title + '</div>' +
-          '<div class="fct-card-date">' + date + '</div>' +
+          ? '<img class="fct-feat-img" src="' + escapeHtml(imgUrl) + '" alt="" loading="lazy">'
+          : '<div class="fct-feat-img-ph"></div>') +
+        '<div class="fct-feat-body">' +
+          (catLabel ? '<div class="fct-feat-cat">' + escapeHtml(catLabel) + '</div>' : '') +
+          '<div class="fct-feat-title">' + title + '</div>' +
+          (excerpt ? '<div class="fct-feat-excerpt">' + excerpt + '</div>' : '') +
+          '<div class="fct-feat-date">' + date + '</div>' +
         '</div>' +
       '</a>'
     );
   }
 
+  function listItemHtml(post) {
+    var imgUrl = getFeaturedImage(post);
+    var catLabel = getCategoryLabel(post);
+    var title = escapeHtml(post.title.rendered.replace(/<[^>]+>/g, ''));
+    var excerpt = escapeHtml(getExcerpt(post));
+    var date = formatDate(post.date);
+    var link = escapeHtml(post.link);
+    return (
+      '<a class="fct-list-item" href="' + link + '" target="_blank" rel="noopener noreferrer">' +
+        (imgUrl
+          ? '<img class="fct-list-thumb" src="' + escapeHtml(imgUrl) + '" alt="" loading="lazy">'
+          : '<div class="fct-list-thumb-ph"></div>') +
+        '<div class="fct-list-body">' +
+          '<div class="fct-list-meta">' +
+            (catLabel
+              ? '<span class="fct-list-meta-cat">' + escapeHtml(catLabel) + '</span><span> · </span>'
+              : '') +
+            '<span>' + date + '</span>' +
+          '</div>' +
+          '<div class="fct-list-title">' + title + '</div>' +
+          (excerpt ? '<div class="fct-list-excerpt">' + excerpt + '</div>' : '') +
+        '</div>' +
+      '</a>'
+    );
+  }
+
+  /* ─── render functions ────────────────────────────────────── */
+
   function renderFeatured() {
     var el = document.getElementById('fct-featured-grid');
     if (!el) return;
     var langCatId = CAT_IDS[activeLang];
-    var top3 = allPosts.filter(function (p) {
+    var langPosts = allPosts.filter(function (p) {
       return p.categories.indexOf(langCatId) !== -1;
-    }).slice(0, 3);
-    el.innerHTML = top3.map(function (p) { return cardHtml(p, true); }).join('');
+    });
+    var top3 = langPosts.slice(0, 3);
+    var top3Ids = top3.map(function (p) { return p.id; });
+    var pinnedSlugs = activeLang === 'hello-korea' ? PINNED_KO : PINNED_EN;
+    var pinned = pinnedSlugs
+      .map(function (slug) {
+        return allPosts.find(function (p) { return p.slug === slug; });
+      })
+      .filter(function (p) { return p && top3Ids.indexOf(p.id) === -1; })
+      .slice(0, 3);
+    el.innerHTML = top3.concat(pinned).map(featuredCardHtml).join('');
+  }
+
+  function renderList(posts) {
+    var el = document.getElementById('fct-list');
+    if (!el) return;
+    el.innerHTML = posts.length
+      ? posts.map(listItemHtml).join('')
+      : '<div class="fct-empty">게시물이 없습니다.</div>';
   }
 
   function updateHeroStats() {
@@ -221,52 +321,6 @@
       if (catId !== null && p.categories.indexOf(catId) === -1) return false;
       return true;
     }).length;
-  }
-
-  function renderGrid() {
-    var grid = document.getElementById('fct-grid');
-    var moreBtn = document.getElementById('fct-more-btn');
-    if (!grid) return;
-    if (!currentFiltered.length) {
-      grid.innerHTML = '<div class="fct-empty">게시물이 없습니다.</div>';
-      if (moreBtn) moreBtn.style.display = 'none';
-      return;
-    }
-    grid.innerHTML = currentFiltered.slice(0, visibleCount).map(function (p) {
-      return cardHtml(p, false);
-    }).join('');
-    if (moreBtn) {
-      moreBtn.style.display = visibleCount < currentFiltered.length ? 'block' : 'none';
-    }
-  }
-
-  function applyFilter(fade) {
-    var langCatId = CAT_IDS[activeLang];
-    var catTabs = CAT_TABS[activeLang];
-    var activeTab = catTabs.find(function (t) { return t.id === activeCat; });
-
-    currentFiltered = allPosts.filter(function (p) {
-      return p.categories.indexOf(langCatId) !== -1;
-    });
-
-    if (activeTab && activeTab.catId !== null) {
-      currentFiltered = currentFiltered.filter(function (p) {
-        return p.categories.indexOf(activeTab.catId) !== -1;
-      });
-    }
-
-    if (fade) {
-      var grid = document.getElementById('fct-grid');
-      if (grid) {
-        grid.style.opacity = '0';
-        setTimeout(function () {
-          renderGrid();
-          grid.style.opacity = '1';
-        }, 50);
-        return;
-      }
-    }
-    renderGrid();
   }
 
   function updateCatTabs() {
@@ -291,7 +345,6 @@
     for (var i = 0; i < btns.length; i++) {
       btns[i].addEventListener('click', function () {
         activeCat = this.getAttribute('data-cat');
-        visibleCount = 6;
         var siblings = container.querySelectorAll('.fct-cat-tab');
         for (var j = 0; j < siblings.length; j++) siblings[j].classList.remove('active');
         this.classList.add('active');
@@ -300,6 +353,46 @@
     }
   }
 
+  function getFiltered() {
+    var langCatId = CAT_IDS[activeLang];
+    var catTabs = CAT_TABS[activeLang];
+    var activeTab = catTabs.find(function (t) { return t.id === activeCat; });
+    var filtered = allPosts.filter(function (p) {
+      return p.categories.indexOf(langCatId) !== -1;
+    });
+    if (activeTab && activeTab.catId !== null) {
+      filtered = filtered.filter(function (p) {
+        return p.categories.indexOf(activeTab.catId) !== -1;
+      });
+    }
+    return filtered;
+  }
+
+  function applyFilter(fadeList) {
+    var filtered = getFiltered();
+
+    // "전체 글 N편" always shows total for the active language
+    var langCatId = CAT_IDS[activeLang];
+    var total = countForLangCat(langCatId, null);
+    var countEl = document.getElementById('fct-all-count');
+    if (countEl) countEl.textContent = total + '편';
+
+    if (fadeList) {
+      var listEl = document.getElementById('fct-list');
+      if (listEl) {
+        listEl.style.opacity = '0';
+        setTimeout(function () {
+          renderList(filtered);
+          listEl.style.opacity = '1';
+        }, 50);
+        return;
+      }
+    }
+    renderList(filtered);
+  }
+
+  /* ─── app shell ───────────────────────────────────────────── */
+
   function renderApp(container) {
     container.innerHTML =
       '<div class="fct-hero">' +
@@ -307,7 +400,7 @@
         '<p class="fct-hero-sub">한국 해운·항만·조선 인사이트</p>' +
         '<p id="fct-hero-stats" class="fct-hero-stats"></p>' +
       '</div>' +
-      '<div class="fct-tabs" id="fct-lang-tabs">' +
+      '<div class="fct-lang-tabs" id="fct-lang-tabs">' +
         LANG_TABS.map(function (tab) {
           return (
             '<button class="fct-tab-btn fct-lang-tab' +
@@ -316,11 +409,16 @@
           );
         }).join('') +
       '</div>' +
-      '<div class="fct-tabs" id="fct-cat-tabs"></div>' +
-      '<div class="fct-featured-grid" id="fct-featured-grid"></div>' +
-      '<hr class="fct-divider">' +
-      '<div id="fct-grid" class="fct-grid"><div class="fct-loading">불러오는 중...</div></div>' +
-      '<button id="fct-more-btn" class="fct-more-btn" style="display:none">더 보기</button>' +
+      '<h2 class="fct-section-hd">주요 글</h2>' +
+      '<div id="fct-featured-grid"></div>' +
+      '<div style="margin-top:40px">' +
+        '<div style="display:flex;align-items:baseline;margin-bottom:16px">' +
+          '<h2 class="fct-section-hd" style="margin:0">전체 글</h2>' +
+          '<span id="fct-all-count" class="fct-all-count"></span>' +
+        '</div>' +
+        '<div class="fct-cat-tab-row" id="fct-cat-tabs"></div>' +
+        '<div id="fct-list"><div class="fct-loading">불러오는 중...</div></div>' +
+      '</div>' +
       '<div class="fct-footer">' +
         '<a class="fct-fl fct-fl-port" href="/category/port-guide/">항만 가이드 →</a>' +
         '<a class="fct-fl fct-fl-eta" href="https://fairwayeta.com/calculator" target="_blank" rel="noopener noreferrer">Fairway ETA 계산기 →</a>' +
@@ -332,23 +430,27 @@
       langBtns[i].addEventListener('click', function () {
         activeLang = this.getAttribute('data-lang');
         activeCat = activeLang === 'hello-korea' ? 'all-ko' : 'all-en';
-        visibleCount = 6;
         var siblings = document.getElementById('fct-lang-tabs').querySelectorAll('.fct-lang-tab');
         for (var j = 0; j < siblings.length; j++) siblings[j].classList.remove('active');
         this.classList.add('active');
         updateCatTabs();
-        renderFeatured();
-        applyFilter();
+        var featGrid = document.getElementById('fct-featured-grid');
+        var listEl = document.getElementById('fct-list');
+        if (featGrid) featGrid.style.opacity = '0';
+        if (listEl) listEl.style.opacity = '0';
+        setTimeout(function () {
+          renderFeatured();
+          applyFilter(false);
+          if (featGrid) featGrid.style.opacity = '1';
+          if (listEl) listEl.style.opacity = '1';
+        }, 50);
       });
     }
 
-    document.getElementById('fct-more-btn').addEventListener('click', function () {
-      visibleCount += 6;
-      renderGrid();
-    });
-
     updateCatTabs();
   }
+
+  /* ─── fetch ───────────────────────────────────────────────── */
 
   function fetchPosts() {
     var url = API_URL + '?categories=' + CAT_IDS.insights + '&per_page=100&_embed';
@@ -362,13 +464,15 @@
         updateHeroStats();
         renderFeatured();
         updateCatTabs();
-        applyFilter();
+        applyFilter(false);
       })
       .catch(function () {
-        var grid = document.getElementById('fct-grid');
-        if (grid) grid.innerHTML = '<div class="fct-error">글을 불러올 수 없습니다.</div>';
+        var listEl = document.getElementById('fct-list');
+        if (listEl) listEl.innerHTML = '<div class="fct-error">글을 불러올 수 없습니다.</div>';
       });
   }
+
+  /* ─── init ────────────────────────────────────────────────── */
 
   function init() {
     var container = document.getElementById('fct-insights-app');
