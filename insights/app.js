@@ -121,11 +121,16 @@
         '-webkit-box-orient:vertical;overflow:hidden;}',
       '.fct-feat-date{font-size:12px;color:#94a3b8;}',
 
-      /* list */
-      '#fct-list{transition:opacity 0.15s ease;}',
+      /* divider */
+      '.fct-divider{border:none;border-top:1px solid #e2e8f0;margin:40px 0 0;}',
+
+      /* list — full-width vertical rows, not a card grid */
+      '#fct-insights-app #fct-list{',
+        'display:flex;flex-direction:column;width:100%;',
+        'transition:opacity 0.15s ease;}',
       '.fct-list-item{',
-        'display:flex;gap:16px;align-items:flex-start;',
-        'padding:16px 8px;border-bottom:1px solid #f1f5f9;',
+        'display:flex;gap:16px;align-items:flex-start;width:100%;',
+        'padding:16px 8px;border-bottom:1px solid #e2e8f0;',
         'text-decoration:none;color:inherit;transition:background 0.15s;}',
       '.fct-list-item:hover{background:#f8fafc;}',
       '.fct-list-item:last-child{border-bottom:none;}',
@@ -276,23 +281,45 @@
 
   /* ─── render functions ────────────────────────────────────── */
 
-  function renderFeatured() {
-    var el = document.getElementById('fct-featured-grid');
-    if (!el) return;
+  function findPostBySlug(slug) {
+    var langCatId = CAT_IDS[activeLang];
+    var inLang = allPosts.find(function (p) {
+      return p.slug === slug && p.categories.indexOf(langCatId) !== -1;
+    });
+    if (inLang) return inLang;
+    return allPosts.find(function (p) { return p.slug === slug; }) || null;
+  }
+
+  function buildFeaturedPosts() {
     var langCatId = CAT_IDS[activeLang];
     var langPosts = allPosts.filter(function (p) {
       return p.categories.indexOf(langCatId) !== -1;
     });
-    var top3 = langPosts.slice(0, 3);
-    var top3Ids = top3.map(function (p) { return p.id; });
+    var used = {};
+    var featured = [];
+
+    langPosts.slice(0, 3).forEach(function (p) {
+      used[p.id] = true;
+      featured.push(p);
+    });
+
     var pinnedSlugs = activeLang === 'hello-korea' ? PINNED_KO : PINNED_EN;
-    var pinned = pinnedSlugs
-      .map(function (slug) {
-        return allPosts.find(function (p) { return p.slug === slug; });
-      })
-      .filter(function (p) { return p && top3Ids.indexOf(p.id) === -1; })
-      .slice(0, 3);
-    el.innerHTML = top3.concat(pinned).map(featuredCardHtml).join('');
+    pinnedSlugs.forEach(function (slug) {
+      if (featured.length >= 6) return;
+      var p = findPostBySlug(slug);
+      if (p && !used[p.id]) {
+        used[p.id] = true;
+        featured.push(p);
+      }
+    });
+
+    return featured;
+  }
+
+  function renderFeatured() {
+    var el = document.getElementById('fct-featured-grid');
+    if (!el) return;
+    el.innerHTML = buildFeaturedPosts().map(featuredCardHtml).join('');
   }
 
   function renderList(posts) {
@@ -370,6 +397,9 @@
 
   function applyFilter(fadeList) {
     var filtered = getFiltered();
+    var featuredIds = {};
+    buildFeaturedPosts().forEach(function (p) { featuredIds[p.id] = true; });
+    var listPosts = filtered.filter(function (p) { return !featuredIds[p.id]; });
 
     // "전체 글 N편" always shows total for the active language
     var langCatId = CAT_IDS[activeLang];
@@ -382,13 +412,13 @@
       if (listEl) {
         listEl.style.opacity = '0';
         setTimeout(function () {
-          renderList(filtered);
+          renderList(listPosts);
           listEl.style.opacity = '1';
         }, 50);
         return;
       }
     }
-    renderList(filtered);
+    renderList(listPosts);
   }
 
   /* ─── app shell ───────────────────────────────────────────── */
@@ -411,7 +441,8 @@
       '</div>' +
       '<h2 class="fct-section-hd">주요 글</h2>' +
       '<div id="fct-featured-grid"></div>' +
-      '<div style="margin-top:40px">' +
+      '<hr class="fct-divider">' +
+      '<div style="margin-top:32px">' +
         '<div style="display:flex;align-items:baseline;margin-bottom:16px">' +
           '<h2 class="fct-section-hd" style="margin:0">전체 글</h2>' +
           '<span id="fct-all-count" class="fct-all-count"></span>' +
