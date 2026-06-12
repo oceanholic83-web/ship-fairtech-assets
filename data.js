@@ -850,7 +850,7 @@
       facilities: '동부두, 서부두, 자동차전용, LNG돌핀, 한전돌핀, 현대제철',
       note: '자동차 수출 1위, LNG 도입 거점',
       faircall: 'https://faircall.kr/regions/capital/031',
-      guideUrl: null,
+      guideUrl: 'https://faircast.kr/pyeongtaek-dangjin-port-lng-auto-korea-guide/',
     },
     {
       name: '대산항',
@@ -868,7 +868,7 @@
       facilities: '일반부두, 석유화학부두(현대오일뱅크/롯데케미칼/한화토탈/LG화학), SBM',
       note: '한국 3위 액체화물 항만, Suezmax~VLCC 접안',
       faircall: 'https://faircall.kr/regions/chungcheong/daesan',
-      guideUrl: null,
+      guideUrl: 'https://faircast.kr/daesan-port-petrochemical-korea-restructuring-guide/',
     },
     {
       name: '군산항',
@@ -994,7 +994,7 @@
       facilities: '신항(POSCO 원료부두), 구항, 영일만항',
       note: 'POSCO 포항제철소 연결, 원료(철광석/석탄) 중심',
       faircall: 'https://faircall.kr/regions/yeongnam/pohang',
-      guideUrl: null,
+      guideUrl: 'https://faircast.kr/pohang-port-posco-steel-hydrogen-korea-guide/',
     },
     {
       name: '동해·묵호항',
@@ -1012,7 +1012,7 @@
       facilities: '일반부두, 시멘트, 잡화 (옥계/묵호 포함)',
       note: '동해안 산업 항만, 시멘트/석탄 중심',
       faircall: 'https://faircall.kr/regions/east-coast/donghae',
-      guideUrl: null,
+      guideUrl: 'https://faircast.kr/donghae-port-next-40-years-three-cards-2026/',
     },
     {
       name: '제주항',

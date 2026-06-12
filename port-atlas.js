@@ -196,14 +196,17 @@
         .setPopup(popup)
         .addTo(map);
 
-      el.addEventListener('click', (ev) => {
-        ev.stopPropagation();
-        // Recenter map on marker with vertical offset so popup has room on both sides
+      el.addEventListener('click', () => {
         map.flyTo({
           center: port.coords,
           zoom: Math.max(map.getZoom(), 8),
           duration: 600,
         });
+        setTimeout(() => {
+          if (!marker.getPopup().isOpen()) {
+            marker.togglePopup();
+          }
+        }, 650);
       });
 
       markersByName[port.name] = marker;
