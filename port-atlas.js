@@ -198,7 +198,7 @@
 
       el.addEventListener('click', () => {
         map.flyTo({
-          center: port.coords,
+          center: [port.coords[0], port.coords[1] - 0.8],
           zoom: Math.max(map.getZoom(), 6),
           duration: 600,
         });
