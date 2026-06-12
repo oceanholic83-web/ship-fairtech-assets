@@ -213,21 +213,27 @@
     });
 
     window.addEventListener('port-atlas:focus-port', (e) => {
-      const portKey = e.detail.portKey;
-      const port = PORTS.find(p => p.name === portKey);
-      if (!port) {
-        console.warn('[port-atlas] Port not found:', portKey);
-        return;
+      const { portKey, lat, lng } = e.detail;
+      let center;
+      if (lat && lng) {
+        center = [lng, lat];
+      } else {
+        const port = PORTS.find(p => p.name === portKey);
+        if (!port) {
+          console.warn('[port-atlas] Port not found:', portKey);
+          return;
+        }
+        center = port.coords;
       }
       map.flyTo({
-        center: port.coords,
+        center,
         zoom: 9,
         duration: 1500,
         essential: true,
       });
-      const marker = markersByName[portKey];
-      if (marker) {
-        marker.togglePopup();
+      if (portKey) {
+        const marker = markersByName[portKey];
+        if (marker) marker.togglePopup();
       }
     });
   }

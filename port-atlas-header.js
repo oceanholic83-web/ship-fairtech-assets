@@ -182,7 +182,7 @@
       const actionButtons = `
         <div style="margin-top:8px;display:flex;gap:6px;flex-wrap:wrap;">
           ${url ? `<a href="${url}" target="_blank" rel="noopener" style="padding:5px 10px;background:#f1f5f9;color:#0f172a;text-decoration:none;border-radius:4px;font-size:10px;font-weight:600;">🌐 공식 사이트</a>` : ''}
-          ${portKey ? `<button data-action="focus-port" data-port-key="${portKey}" class="dir-action-btn" style="padding:5px 10px;background:${color};color:#ffffff;border:none;border-radius:4px;font-size:10px;font-weight:600;cursor:pointer;font-family:inherit;">📍 지도에서 보기</button>` : ''}
+          ${(portKey || (item.lat && item.lng)) ? `<button data-action="focus-port" data-port-key="${portKey || ''}" data-lat="${item.lat || ''}" data-lng="${item.lng || ''}" class="dir-action-btn" style="padding:5px 10px;background:${color};color:#ffffff;border:none;border-radius:4px;font-size:10px;font-weight:600;cursor:pointer;font-family:inherit;">📍 지도에서 보기</button>` : ''}
         </div>
       `;
 
@@ -506,9 +506,9 @@
       if (actionBtn) {
         e.stopPropagation();
         const portKey = actionBtn.getAttribute('data-port-key');
-        if (portKey) {
-          window.dispatchEvent(new CustomEvent('port-atlas:focus-port', { detail: { portKey } }));
-        }
+        const lat = parseFloat(actionBtn.dataset.lat);
+        const lng = parseFloat(actionBtn.dataset.lng);
+        window.dispatchEvent(new CustomEvent('port-atlas:focus-port', { detail: { portKey, lat: isNaN(lat) ? null : lat, lng: isNaN(lng) ? null : lng } }));
         return;
       }
 
