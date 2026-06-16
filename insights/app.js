@@ -187,6 +187,12 @@
       .replace(/"/g, '&quot;');
   }
 
+  function decodeHtml(html) {
+    var el = document.createElement('textarea');
+    el.innerHTML = html;
+    return el.value;
+  }
+
   function getCategoryLabel(post) {
     if (!post._embedded || !post._embedded['wp:term']) return '';
     var terms = [].concat.apply([], post._embedded['wp:term']);
@@ -218,7 +224,7 @@
 
   function getExcerpt(post) {
     if (!post.excerpt || !post.excerpt.rendered) return '';
-    return post.excerpt.rendered
+    return decodeHtml(post.excerpt.rendered
       .replace(/<[^>]+>/g, '')
       .replace(/\[&hellip;\]|\[…\]/g, '…')
       .replace(/\[[^\]]*\]/g, '')
@@ -226,7 +232,7 @@
       .replace(/&amp;/g, '&')
       .replace(/&lt;/g, '<')
       .replace(/&gt;/g, '>')
-      .trim();
+      .trim());
   }
 
   /* ─── card / item html ────────────────────────────────────── */
@@ -234,7 +240,7 @@
   function featuredCardHtml(post) {
     var imgUrl = getFeaturedImage(post);
     var catLabel = getCategoryLabel(post);
-    var title = escapeHtml(post.title.rendered.replace(/<[^>]+>/g, ''));
+    var title = escapeHtml(decodeHtml(post.title.rendered.replace(/<[^>]+>/g, '')));
     var excerpt = escapeHtml(getExcerpt(post));
     var date = formatDate(post.date);
     var link = escapeHtml(post.link);
@@ -256,7 +262,7 @@
   function listItemHtml(post) {
     var imgUrl = getFeaturedImage(post);
     var catLabel = getCategoryLabel(post);
-    var title = escapeHtml(post.title.rendered.replace(/<[^>]+>/g, ''));
+    var title = escapeHtml(decodeHtml(post.title.rendered.replace(/<[^>]+>/g, '')));
     var excerpt = escapeHtml(getExcerpt(post));
     var date = formatDate(post.date);
     var link = escapeHtml(post.link);
