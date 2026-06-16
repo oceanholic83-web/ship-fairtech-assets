@@ -19,9 +19,9 @@
   };
 
   var PINNED_KO = [
+    'hormuz-reopening-tanker-rate-floor-supply-constraint-korea-2026',
     'busan-port-transshipment-hub-30-year-strategy',
     'shadow-fleet-dark-fleet-2026-korea-5-touchpoints-guide',
-    'ten-shipping-routes-korea-perspective-2026',
   ];
 
   var PINNED_EN = [
