@@ -397,9 +397,15 @@
 
   function applyFilter(fadeList) {
     var filtered = getFiltered();
-    var featuredIds = {};
-    buildFeaturedPosts().forEach(function (p) { featuredIds[p.id] = true; });
-    var listPosts = filtered.filter(function (p) { return !featuredIds[p.id]; });
+    var isAllTab = (activeCat === 'all-ko' || activeCat === 'all-en');
+    var listPosts;
+    if (isAllTab) {
+      var featuredIds = {};
+      buildFeaturedPosts().forEach(function (p) { featuredIds[p.id] = true; });
+      listPosts = filtered.filter(function (p) { return !featuredIds[p.id]; });
+    } else {
+      listPosts = filtered;
+    }
 
     // "전체 글 N편" always shows total for the active language
     var langCatId = CAT_IDS[activeLang];
