@@ -964,7 +964,7 @@
       facilities: '일반부두, 컨테이너, 잡화',
       note: '창원·진해 산업 단지 연결',
       faircall: 'https://faircall.kr/regions/yeongnam/masan',
-      guideUrl: null,
+      guideUrl: 'https://faircast.kr/masan-port-changwon-defense-energy-korea-guide-2026/',
     },
     {
       name: '울산항',
