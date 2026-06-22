@@ -28,8 +28,8 @@
   // 페이지 구조 HTML
   function buildAppHtml() {
     return `
-      <div style="margin:24px 0;">
-        <div style="background:#f8fafc;border:1px solid #e2e8f0;border-radius:10px;padding:14px 18px;margin-bottom:12px;font-family:ui-sans-serif,system-ui,-apple-system,'Segoe UI','Apple SD Gothic Neo','Noto Sans KR',sans-serif;color:#0f172a;">
+      <div style="margin:8px 0 16px;">
+        <div style="background:#f8fafc;border:1px solid #e2e8f0;border-radius:10px;padding:10px 16px;margin-bottom:8px;font-family:ui-sans-serif,system-ui,-apple-system,'Segoe UI','Apple SD Gothic Neo','Noto Sans KR',sans-serif;color:#0f172a;">
           <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:14px;flex-wrap:wrap;">
             <div style="flex:1;min-width:240px;">
               <div style="font-size:10px;letter-spacing:1.5px;color:#94a3b8;text-transform:uppercase;margin-bottom:4px;font-weight:500;">FAIRCAST 항만 가이드</div>
@@ -38,8 +38,8 @@
           </div>
         </div>
         <div id="korea-port-header"></div>
-        <div id="korea-port-map" style="width:100%;height:600px;border-radius:10px;border:1px solid #e2e8f0;overflow:hidden;margin-top:12px;"></div>
-        <div style="display:flex;flex-wrap:wrap;gap:10px;margin-top:10px;font-family:ui-sans-serif,system-ui,-apple-system,'Segoe UI','Apple SD Gothic Neo','Noto Sans KR',sans-serif;font-size:11px;color:#475569;">
+        <div id="korea-port-map" style="width:100%;height:600px;border-radius:10px;border:1px solid #e2e8f0;overflow:hidden;margin-top:8px;"></div>
+        <div style="display:flex;flex-wrap:wrap;gap:10px;margin-top:6px;font-family:ui-sans-serif,system-ui,-apple-system,'Segoe UI','Apple SD Gothic Neo','Noto Sans KR',sans-serif;font-size:11px;color:#475569;">
           <div style="display:flex;align-items:center;gap:6px;"><span style="display:inline-block;width:10px;height:10px;border-radius:50%;background:#14b8a6;"></span>수도권·충청</div>
           <div style="display:flex;align-items:center;gap:6px;"><span style="display:inline-block;width:10px;height:10px;border-radius:50%;background:#fbbf24;"></span>호남</div>
           <div style="display:flex;align-items:center;gap:6px;"><span style="display:inline-block;width:10px;height:10px;border-radius:50%;background:#f97316;"></span>영남</div>
