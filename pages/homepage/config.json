@@ -1,0 +1,25 @@
+{
+  "site": "https://faircast.kr",
+  "excludeCategoryIds": [47],
+  "editorsPick": [
+    "hormuz-reopening-tanker-rate-floor-supply-constraint-korea-2026",
+    "shadow-fleet-dark-fleet-2026-korea-5-touchpoints-guide",
+    "masan-port-changwon-defense-energy-korea-guide-2026"
+  ],
+  "categoryLabels": {
+    "1": "Hello Korea",
+    "8": "Hello World",
+    "47": "항만",
+    "192": "분석",
+    "228": "시장",
+    "229": "산업",
+    "230": "항로·항만",
+    "231": "지정학",
+    "232": "일반",
+    "233": "Korea Market",
+    "234": "Korea Industry",
+    "235": "Explainer"
+  },
+  "fallbackImage": "https://res.cloudinary.com/dzatgu3y7/image/upload/q_auto/f_auto/v1/ship-fairtech/placeholder.jpg",
+  "excerptMaxLen": 90
+}
