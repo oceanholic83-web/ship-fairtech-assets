@@ -79,15 +79,15 @@ function fmtDate(iso) {
 // 글에서 카테고리 라벨, 이미지 URL 추출
 function extractMeta(post) {
   let catLabel = '분석';
+  let catTags = [];
   let imgUrl = FALLBACK_IMG;
 
-  // 카테고리: _embedded["wp:term"] 첫 번째 그룹 = 카테고리
   if (post._embedded && post._embedded['wp:term']) {
     const terms = post._embedded['wp:term'][0] || [];
-    // EXCLUDE에 없는 카테고리 중 첫 번째 사용 (port-guide 제외)
-    const cat = terms.find(t => !EXCLUDE_CATS.includes(t.id)) || terms[0];
-    if (cat) {
-      catLabel = CAT_LABELS[String(cat.id)] || cat.name || '분석';
+    const filtered = terms.filter(t => !EXCLUDE_CATS.includes(t.id));
+    if (filtered.length > 0) {
+      catLabel = CAT_LABELS[String(filtered[0].id)] || filtered[0].name || '분석';
+      catTags = filtered.map(t => (CAT_LABELS[String(t.id)] || t.name || '').toUpperCase()).filter(Boolean);
     }
   }
 
@@ -117,6 +117,7 @@ function extractMeta(post) {
     title: stripHtml(post.title.rendered),
     excerpt,
     catLabel,
+    catTags: catTags.join(' · '),
     imgUrl,
     date: fmtDate(post.date),
     slug: post.slug,
@@ -213,6 +214,7 @@ async function fetchTotalCount() {
     out = out.replace(new RegExp(`\\{\\{LATEST_${n}_TITLE\\}\\}`, 'g'), escHtml(m.title));
     out = out.replace(new RegExp(`\\{\\{LATEST_${n}_EXC\\}\\}`, 'g'), escHtml(m.excerpt));
     out = out.replace(new RegExp(`\\{\\{LATEST_${n}_CAT\\}\\}`, 'g'), escHtml(m.catLabel));
+    out = out.replace(new RegExp(`\\{\\{LATEST_${n}_CATS\\}\\}`, 'g'), escHtml(m.catTags));
   }
 
   // Desk Pick 3편
@@ -223,6 +225,7 @@ async function fetchTotalCount() {
     out = out.replace(new RegExp(`\\{\\{DESK_${n}_IMG\\}\\}`, 'g'), escHtml(m.imgUrl));
     out = out.replace(new RegExp(`\\{\\{DESK_${n}_TITLE\\}\\}`, 'g'), escHtml(m.title));
     out = out.replace(new RegExp(`\\{\\{DESK_${n}_EXC\\}\\}`, 'g'), escHtml(m.excerpt));
+    out = out.replace(new RegExp(`\\{\\{DESK_${n}_CATS\\}\\}`, 'g'), escHtml(m.catTags));
   }
 
   // Pro Pick 3편
@@ -233,6 +236,7 @@ async function fetchTotalCount() {
     out = out.replace(new RegExp(`\\{\\{PRO_${n}_IMG\\}\\}`, 'g'), escHtml(m.imgUrl));
     out = out.replace(new RegExp(`\\{\\{PRO_${n}_TITLE\\}\\}`, 'g'), escHtml(m.title));
     out = out.replace(new RegExp(`\\{\\{PRO_${n}_EXC\\}\\}`, 'g'), escHtml(m.excerpt));
+    out = out.replace(new RegExp(`\\{\\{PRO_${n}_CATS\\}\\}`, 'g'), escHtml(m.catTags));
   }
 
   // 단축 리스트 8편
@@ -242,7 +246,7 @@ async function fetchTotalCount() {
     out = out.replace(new RegExp(`\\{\\{LIST_${n}_URL\\}\\}`, 'g'), escHtml(m.url));
     out = out.replace(new RegExp(`\\{\\{LIST_${n}_TITLE\\}\\}`, 'g'), escHtml(m.title));
     out = out.replace(new RegExp(`\\{\\{LIST_${n}_EXC\\}\\}`, 'g'), escHtml(m.excerpt));
-    out = out.replace(new RegExp(`\\{\\{LIST_${n}_META\\}\\}`, 'g'), escHtml(`${m.catLabel} · ${m.date}`));
+    out = out.replace(new RegExp(`\\{\\{LIST_${n}_META\\}\\}`, 'g'), escHtml(`${m.catTags} · ${m.date}`));
   }
 
   // 미치환 변수 검사
