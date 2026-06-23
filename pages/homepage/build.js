@@ -14,7 +14,8 @@ const tpl = fs.readFileSync(path.join(ROOT, 'template.html'), 'utf-8');
 
 const SITE = cfg.site.replace(/\/$/, '');
 const EXCLUDE_CATS = cfg.excludeCategoryIds || [];
-const PICK_SLUGS = cfg.editorsPick || [];
+const DESK_SLUGS = cfg.deskPick || [];
+const PRO_SLUGS = cfg.proPick || [];
 const CAT_LABELS = cfg.categoryLabels || {};
 const FALLBACK_IMG = cfg.fallbackImage;
 const EXC_MAX = cfg.excerptMaxLen || 90;
@@ -162,14 +163,22 @@ async function fetchTotalCount() {
 (async () => {
   console.log('Faircast Home Builder\n');
 
-  // 1. Editor's Pick 슬러그 → 글 fetch (병렬)
-  console.log('1. Fetching Editor\'s Pick posts...');
-  const picks = await Promise.all(PICK_SLUGS.map(fetchPostBySlug));
-  const validPicks = picks.filter(Boolean);
-  if (validPicks.length < 3) {
-    console.warn(`  ⚠ Only ${validPicks.length} Editor's Picks resolved (expected 3)`);
+  // 1. Desk Pick + Pro Pick 슬러그 → 글 fetch (병렬)
+  console.log('1. Fetching Desk Pick posts...');
+  const deskPicks = await Promise.all(DESK_SLUGS.map(fetchPostBySlug));
+  const validDesk = deskPicks.filter(Boolean);
+  if (validDesk.length < 3) {
+    console.warn(`  ⚠ Only ${validDesk.length} Desk Picks resolved (expected 3)`);
   }
-  const pickIds = new Set(validPicks.map(p => p.id));
+
+  console.log('   Fetching Pro Pick posts...');
+  const proPicks = await Promise.all(PRO_SLUGS.map(fetchPostBySlug));
+  const validPro = proPicks.filter(Boolean);
+  if (validPro.length < 3) {
+    console.warn(`  ⚠ Only ${validPro.length} Pro Picks resolved (expected 3)`);
+  }
+
+  const pickIds = new Set([...validDesk, ...validPro].map(p => p.id));
 
   // 2. 최신 글 30편 fetch (Pick 제외하고 11편 + 여유분)
   console.log('2. Fetching latest posts...');
@@ -186,7 +195,8 @@ async function fetchTotalCount() {
 
   // 4. 데이터 추출
   const latestMeta = latest3.map(extractMeta);
-  const pickMeta = validPicks.map(extractMeta);
+  const deskMeta = validDesk.map(extractMeta);
+  const proMeta = validPro.map(extractMeta);
   const listMeta = list8.map(extractMeta);
 
   // 5. 치환
@@ -205,14 +215,24 @@ async function fetchTotalCount() {
     out = out.replace(new RegExp(`\\{\\{LATEST_${n}_CAT\\}\\}`, 'g'), escHtml(m.catLabel));
   }
 
-  // Editor's Pick 3편
+  // Desk Pick 3편
   for (let i = 0; i < 3; i++) {
-    const m = pickMeta[i] || { url: '#', title: '(Pick 슬러그 확인 필요)', excerpt: '', imgUrl: FALLBACK_IMG };
+    const m = deskMeta[i] || { url: '#', title: '(Desk Pick 슬러그 확인 필요)', excerpt: '', imgUrl: FALLBACK_IMG };
     const n = i + 1;
-    out = out.replace(new RegExp(`\\{\\{PICK_${n}_URL\\}\\}`, 'g'), escHtml(m.url));
-    out = out.replace(new RegExp(`\\{\\{PICK_${n}_IMG\\}\\}`, 'g'), escHtml(m.imgUrl));
-    out = out.replace(new RegExp(`\\{\\{PICK_${n}_TITLE\\}\\}`, 'g'), escHtml(m.title));
-    out = out.replace(new RegExp(`\\{\\{PICK_${n}_EXC\\}\\}`, 'g'), escHtml(m.excerpt));
+    out = out.replace(new RegExp(`\\{\\{DESK_${n}_URL\\}\\}`, 'g'), escHtml(m.url));
+    out = out.replace(new RegExp(`\\{\\{DESK_${n}_IMG\\}\\}`, 'g'), escHtml(m.imgUrl));
+    out = out.replace(new RegExp(`\\{\\{DESK_${n}_TITLE\\}\\}`, 'g'), escHtml(m.title));
+    out = out.replace(new RegExp(`\\{\\{DESK_${n}_EXC\\}\\}`, 'g'), escHtml(m.excerpt));
+  }
+
+  // Pro Pick 3편
+  for (let i = 0; i < 3; i++) {
+    const m = proMeta[i] || { url: '#', title: '(Pro Pick 슬러그 확인 필요)', excerpt: '', imgUrl: FALLBACK_IMG };
+    const n = i + 1;
+    out = out.replace(new RegExp(`\\{\\{PRO_${n}_URL\\}\\}`, 'g'), escHtml(m.url));
+    out = out.replace(new RegExp(`\\{\\{PRO_${n}_IMG\\}\\}`, 'g'), escHtml(m.imgUrl));
+    out = out.replace(new RegExp(`\\{\\{PRO_${n}_TITLE\\}\\}`, 'g'), escHtml(m.title));
+    out = out.replace(new RegExp(`\\{\\{PRO_${n}_EXC\\}\\}`, 'g'), escHtml(m.excerpt));
   }
 
   // 단축 리스트 8편
@@ -238,7 +258,8 @@ async function fetchTotalCount() {
   console.log('\n✓ Build complete');
   console.log(`  Output: ${outPath}`);
   console.log(`  Latest: ${latestMeta.map(m => m.title.slice(0, 30)).join(' | ')}`);
-  console.log(`  Picks:  ${pickMeta.map(m => m.title.slice(0, 30)).join(' | ')}`);
+  console.log(`  Desk:   ${deskMeta.map(m => m.title.slice(0, 30)).join(' | ')}`);
+  console.log(`  Pro:    ${proMeta.map(m => m.title.slice(0, 30)).join(' | ')}`);
   console.log(`  List:   ${listMeta.length} posts`);
   console.log('\nNext: open dist/homepage.html, copy all, paste into WordPress code editor.');
 })().catch(err => {

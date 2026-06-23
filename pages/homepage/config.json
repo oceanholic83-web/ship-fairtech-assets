@@ -1,10 +1,15 @@
 {
   "site": "https://faircast.kr",
   "excludeCategoryIds": [47],
-  "editorsPick": [
-    "hormuz-reopening-tanker-rate-floor-supply-constraint-korea-2026",
+  "deskPick": [
+    "ten-shipping-routes-korea-perspective-2026",
+    "classification-society-iacs-12-korean-register-kr-guide",
+    "pi-clubs-mutual-insurance-korea-shipping-explained"
+  ],
+  "proPick": [
     "shadow-fleet-dark-fleet-2026-korea-5-touchpoints-guide",
-    "masan-port-changwon-defense-energy-korea-guide-2026"
+    "hormuz-reopening-tanker-rate-floor-supply-constraint-korea-2026",
+    "vlcc-fleet-900-effective-570-supply-gap-korea-2026"
   ],
   "categoryLabels": {
     "1": "Hello Korea",
