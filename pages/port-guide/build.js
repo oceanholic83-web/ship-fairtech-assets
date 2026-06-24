@@ -116,12 +116,18 @@ async function main() {
   const cardsHtml = metas.map(m => `
 <a href="${escHtml(m.url)}" class="fct-bigcard"><img class="fct-bigcard-img" src="${escHtml(m.imgUrl)}" alt="${escHtml(m.title)}" loading="lazy"><div class="fct-bigcard-body"><span class="fct-bigcard-tag">${escHtml(m.catTags)} · ${escHtml(m.date)}</span><h3 class="fct-bigcard-ttl">${escHtml(m.title)}</h3><p class="fct-bigcard-exc">${escHtml(m.excerpt)}</p></div></a>`).join('\n');
 
+  const articleCount = metas.length;
+  const badge = (cfg.badge || '{{articleCount}} / 12 ports').replace(/\{\{articleCount\}\}/g, String(articleCount));
+  const sectionTitle = `${articleCount}개 무역항 가이드`;
+
   let out = TEMPLATE;
   const vars = {
     title: escHtml(cfg.title),
     eyebrow: escHtml(cfg.eyebrow),
     description: escHtml(cfg.description),
-    badge: escHtml(cfg.badge),
+    badge: escHtml(badge),
+    sectionTitle: escHtml(sectionTitle),
+    articleCount: String(articleCount),
     heroImage: cfg.heroImage,
     mapboxToken: escJs(cfg.mapboxToken),
     loaderUrl: cfg.loaderUrl,
