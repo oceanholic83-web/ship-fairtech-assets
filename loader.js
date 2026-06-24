@@ -13,6 +13,7 @@
   'use strict';
 
   const MAPBOX_TOKEN = (window.PORT_ATLAS_CONFIG && window.PORT_ATLAS_CONFIG.mapboxToken) || '';
+  const HIDE_INTRO = !!(window.PORT_ATLAS_CONFIG && window.PORT_ATLAS_CONFIG.hideIntro);
   const REPO_BASE = (() => {
     // Try to extract base (including @version anchor) from this script's own src
     const scripts = document.querySelectorAll('script[src]');
@@ -27,8 +28,7 @@
 
   // 페이지 구조 HTML
   function buildAppHtml() {
-    return `
-      <div style="margin:8px 0 16px;">
+    const introHtml = HIDE_INTRO ? '' : `
         <div style="background:#f8fafc;border:1px solid #e2e8f0;border-radius:10px;padding:10px 16px;margin-bottom:8px;font-family:ui-sans-serif,system-ui,-apple-system,'Segoe UI','Apple SD Gothic Neo','Noto Sans KR',sans-serif;color:#0f172a;">
           <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:14px;flex-wrap:wrap;">
             <div style="flex:1;min-width:240px;">
@@ -36,7 +36,10 @@
               <div style="font-size:13px;color:#475569;line-height:1.6;">한국 12개 무역항의 입항 절차, 시설, 운영 정보를 정리한 실용 가이드입니다. 지도에서 항만을 클릭하거나, 아래 카드에서 각 항만의 상세 가이드로 이동할 수 있습니다.</div>
             </div>
           </div>
-        </div>
+        </div>`;
+    return `
+      <div style="margin:8px 0 16px;">
+        ${introHtml}
         <div id="korea-port-header"></div>
         <div id="korea-port-map" style="width:100%;height:600px;border-radius:10px;border:1px solid #e2e8f0;overflow:hidden;margin-top:8px;"></div>
         <div style="display:flex;flex-wrap:wrap;gap:10px;margin-top:6px;font-family:ui-sans-serif,system-ui,-apple-system,'Segoe UI','Apple SD Gothic Neo','Noto Sans KR',sans-serif;font-size:11px;color:#475569;">

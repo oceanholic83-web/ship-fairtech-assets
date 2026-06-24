@@ -5,7 +5,10 @@
 
 <section class="fct-cat-hero"><div class="fct-cat-label">{{eyebrow}}</div><h1 class="fct-cat-title">{{title}}</h1><p class="fct-cat-desc">{{description}}</p><div class="fct-cat-count">{{badge}}</div></section>
 
-<script>window.PORT_ATLAS_CONFIG={mapboxToken:'{{mapboxToken}}'};</script>
+<script>window.PORT_ATLAS_CONFIG = {
+  mapboxToken: '{{mapboxToken}}',
+  hideIntro: true
+};</script>
 <div id="korea-port-app"></div>
 <script src="{{loaderUrl}}"></script>
 
