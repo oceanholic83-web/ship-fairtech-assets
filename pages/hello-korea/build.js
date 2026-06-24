@@ -21,7 +21,20 @@ function fetchJson(url) {
 }
 
 function stripHtml(s) {
-  return (s || '').replace(/&#8217;/g, "'").replace(/&#8220;/g, '"').replace(/&#8221;/g, '"').replace(/&#038;/g, '&').replace(/&amp;/g, '&').replace(/&[a-z]+;/g, '').replace(/<[^>]*>/g, '').trim();
+  return (s || '')
+    .replace(/&#8211;/g, '–')
+    .replace(/&#8212;/g, '—')
+    .replace(/&#8217;/g, "'")
+    .replace(/&#8216;/g, "'")
+    .replace(/&#8220;/g, '"')
+    .replace(/&#8221;/g, '"')
+    .replace(/&#038;/g, '&')
+    .replace(/&#8230;/g, '…')
+    .replace(/&amp;/g, '&')
+    .replace(/&nbsp;/g, ' ')
+    .replace(/&[a-z]+;/g, '')
+    .replace(/<[^>]*>/g, '')
+    .trim();
 }
 
 function escHtml(s) {
