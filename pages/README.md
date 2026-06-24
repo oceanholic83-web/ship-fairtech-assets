@@ -17,8 +17,10 @@ faircast.kr의 워드프레스 페이지 3개를 자동 빌드합니다.
 ```powershell
 cd C:\Users\user\Desktop\CURSOR\ship-fairtech-assets\pages\homepage
 node build.js
+
 cd C:\Users\user\Desktop\CURSOR\ship-fairtech-assets\pages\hello-korea
 node build.js
+
 cd C:\Users\user\Desktop\CURSOR\ship-fairtech-assets\pages\hello-world
 node build.js
 ```
