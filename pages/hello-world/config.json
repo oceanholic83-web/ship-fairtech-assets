@@ -7,16 +7,12 @@
   "wpPostId": 490,
   "excludeCategoryIds": [1, 8, 47, 192],
   "categoryLabels": {
-    "228": "Market (시장)",
-    "229": "Industry (산업)",
-    "230": "Routes·Ports (항로·항만)",
-    "231": "Geopolitics (지정학)",
-    "232": "General (일반)",
     "233": "Korea Market",
     "234": "Korea Industry",
     "235": "Explainer"
   },
+  "pickFixed": null,
+  "pickFromHomepage": false,
   "fallbackImage": "https://res.cloudinary.com/dzatgu3y7/image/upload/q_auto/f_auto/v1/ship-fairtech/placeholder.jpg",
-  "excerptMaxLen": 100,
-  "postsPerPage": 24
+  "excerptMaxLen": 100
 }
