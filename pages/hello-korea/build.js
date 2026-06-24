@@ -41,9 +41,9 @@ function fmtDate(iso) {
 
 async function fetchPostBySlug(slug) {
   try {
-    const url = `${cfg.site}/wp-json/wp/v2/posts?slug=${encodeURIComponent(slug)}&_embed`;
-    const arr = await fetchJson(url);
-    return arr && arr[0] ? arr[0] : null;
+    const url = `${cfg.monitorApi}?key=${encodeURIComponent(cfg.monitorKey)}&mode=post&slug=${encodeURIComponent(slug)}`;
+    const post = await fetchJson(url);
+    return post && post.id ? post : null;
   } catch (e) {
     console.warn(`  ⚠ Failed: ${slug}: ${e.message}`);
     return null;
