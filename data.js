@@ -908,9 +908,9 @@
       pilotage: '목포항도선사회',
       vts: 'CH 14',
       facilities: '내항, 남항, 신항(자동차/잡화), 연안여객',
-      note: '서남해 거점, 도서 여객 + 자동차',
+      note: '서남권 조선 클러스터 관문, 국내 첫 해상풍력 특화항만',
       faircall: 'https://faircall.kr/regions/honam/mokpo',
-      guideUrl: null,
+      guideUrl: 'https://faircast.kr/mokpo-port-shipbuilding-cluster-offshore-wind-hub-korea-guide-2026/',
     },
     {
       name: '광양항',
