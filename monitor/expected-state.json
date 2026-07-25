@@ -1,0 +1,166 @@
+{
+  "_comment": "faircast.kr 기대 상태 정의. 2026-07-25 기준.",
+  "site": "https://faircast.kr",
+  "lastUpdated": "2026-07-25",
+
+  "keyPages": {
+    "https://faircast.kr/": {
+      "label": "홈",
+      "expectStatus": 200,
+      "expectIndexable": true,
+      "descriptionMustBeKorean": true
+    },
+    "https://faircast.kr/about/": {
+      "label": "About",
+      "expectStatus": 200,
+      "expectIndexable": true,
+      "descriptionMustBeKorean": true
+    },
+    "https://faircast.kr/hello-korea-page/": {
+      "label": "Hello Korea",
+      "expectStatus": 200,
+      "expectIndexable": true,
+      "descriptionMustBeKorean": true
+    },
+    "https://faircast.kr/hello-world-page/": {
+      "label": "Hello World",
+      "expectStatus": 200,
+      "expectIndexable": true,
+      "descriptionMustBeKorean": false
+    },
+    "https://faircast.kr/port-guide/": {
+      "label": "항만 가이드",
+      "expectStatus": 200,
+      "expectIndexable": true,
+      "descriptionMustBeKorean": true
+    },
+    "https://faircast.kr/privacy/": {
+      "label": "개인정보처리방침",
+      "expectStatus": 200,
+      "expectIndexable": true
+    },
+    "https://faircast.kr/terms/": {
+      "label": "이용약관",
+      "expectStatus": 200,
+      "expectIndexable": true
+    },
+    "https://faircast.kr/contact/": {
+      "label": "Contact",
+      "expectStatus": 200,
+      "expectIndexable": true
+    }
+  },
+
+  "legacyRedirects": {
+    "_comment": "World Cup 잔재. 전부 홈으로 301이어야 색인에서 빠진다.",
+    "expectRedirectTo": "https://faircast.kr/",
+    "urls": [
+      "https://faircast.kr/matchup",
+      "https://faircast.kr/simulate",
+      "https://faircast.kr/simulate/france",
+      "https://faircast.kr/match/france-vs-senegal",
+      "https://faircast.kr/match/argentina-vs-austria",
+      "https://faircast.kr/bracket",
+      "https://faircast.kr/rankings",
+      "https://faircast.kr/tournament",
+      "https://faircast.kr/insights/",
+      "https://faircast.kr/insights/mbappe-injury-scare-world-cup-2026-france"
+    ]
+  },
+
+  "categoryRedirects": {
+    "_comment": "494 스니펫. 카테고리 1·8은 정적 페이지로 301.",
+    "https://faircast.kr/category/insights/hello-korea/": "https://faircast.kr/hello-korea-page/",
+    "https://faircast.kr/category/insights/hello-world/": "https://faircast.kr/hello-world-page/"
+  },
+
+  "categoryNoindex": {
+    "_comment": "529 스니펫. 리디렉션되지 않는 카테고리는 noindex여야 한다.",
+    "urls": [
+      "https://faircast.kr/category/port-guide/"
+    ]
+  },
+
+  "robotsTxt": {
+    "mustContain": [
+      "Sitemap: https://faircast.kr/wp-sitemap.xml",
+      "Disallow: /wp-admin/"
+    ],
+    "mustNotContain": [
+      "Disallow: /match/",
+      "Disallow: /simulate/",
+      "Disallow: /insights/",
+      "Disallow: /matchup",
+      "Disallow: /tournament",
+      "Disallow: /rankings",
+      "Disallow: /bracket"
+    ],
+    "mustNotContainReason": "617 스니펫. robots.txt 차단은 색인 제거를 오히려 막는다. 절대 켜지 말 것."
+  },
+
+  "adsTxt": {
+    "mustContain": "google.com, pub-9894725798878226, DIRECT, f08c47fec0942fa0"
+  },
+
+  "sitemaps": {
+    "https://faircast.kr/wp-sitemap.xml": { "minUrls": 3 },
+    "https://faircast.kr/wp-sitemap-posts-post-1.xml": { "minUrls": 55 },
+    "https://faircast.kr/wp-sitemap-posts-page-1.xml": { "minUrls": 6 }
+  },
+
+  "snippetFootprints": {
+    "_comment": "스니펫 활성 여부를 HTML 출력 흔적으로 역추적한다.",
+
+    "378_metaDescription": {
+      "expect": "active",
+      "checkUrl": "https://faircast.kr/",
+      "test": "metaDescriptionIsClean"
+    },
+    "574_orgSchema": {
+      "expect": "active",
+      "checkUrl": "https://faircast.kr/",
+      "test": "htmlContains",
+      "needle": "\"@id\": \"https://faircast.kr/#organization\""
+    },
+    "575_articleSchema": {
+      "expect": "active",
+      "checkUrl": "SAMPLE_POST",
+      "test": "htmlContains",
+      "needle": "\"@type\":\"Article\""
+    },
+    "573_authorBio": {
+      "expect": "active",
+      "checkUrl": "SAMPLE_POST",
+      "test": "htmlContains",
+      "needle": "ABOUT THE EDITORIAL DESK"
+    },
+    "259_ga4": {
+      "expect": "active",
+      "checkUrl": "https://faircast.kr/",
+      "test": "htmlContains",
+      "needle": "googletagmanager.com/gtag/js"
+    },
+    "201_rightClickBlock": {
+      "expect": "inactive",
+      "checkUrl": "https://faircast.kr/",
+      "test": "htmlNotContains",
+      "needle": "contextmenu",
+      "reason": "AdSense Abusive experiences 정책 위반 소지. Ctrl+U·F12 차단 코드."
+    },
+    "adsenseCode": {
+      "expect": "active",
+      "checkUrl": "https://faircast.kr/",
+      "test": "htmlContains",
+      "needle": "pub-9894725798878226"
+    }
+  },
+
+  "policyRedFlags": {
+    "_comment": "AdSense 정책 위반 소지가 있는 패턴. 발견되면 경고.",
+    "htmlMustNotContain": [
+      { "needle": "contextmenu", "why": "우클릭 차단 = Abusive experiences" },
+      { "needle": "e.key === 'F12'", "why": "개발자 도구 차단 = Abusive experiences" },
+      { "needle": "user-select: none", "why": "텍스트 선택 차단. 본문 적용 시 문제" }
+    ]
+  }
+}
