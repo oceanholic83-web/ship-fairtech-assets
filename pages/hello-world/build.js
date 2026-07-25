@@ -3,7 +3,29 @@ const fs = require('fs');
 const path = require('path');
 const https = require('https');
 
-const cfg = JSON.parse(fs.readFileSync(path.join(__dirname, 'config.json'), 'utf8'));
+function loadConfig(dir) {
+  const base = JSON.parse(fs.readFileSync(path.join(dir, 'config.json'), 'utf8'));
+
+  const localPath = path.join(dir, 'config.local.json');
+  if (!fs.existsSync(localPath)) {
+    console.error('\n[ERROR] config.local.json 이 없습니다.');
+    console.error('  경로: ' + localPath);
+    console.error('  config.local.json.example 을 복사한 뒤 실제 키를 입력하세요.\n');
+    process.exit(1);
+  }
+
+  const local = JSON.parse(fs.readFileSync(localPath, 'utf8'));
+  const cfg = Object.assign({}, base, local);
+
+  if (!cfg.monitorKey) {
+    console.error('\n[ERROR] monitorKey 가 설정되지 않았습니다. config.local.json 을 확인하세요.\n');
+    process.exit(1);
+  }
+
+  return cfg;
+}
+
+const cfg = loadConfig(__dirname);
 const TEMPLATE = fs.readFileSync(path.join(__dirname, 'template.html'), 'utf8');
 const OUTPUT = path.join(__dirname, path.basename(__dirname) + '.html');
 

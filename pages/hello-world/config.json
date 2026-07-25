@@ -3,7 +3,6 @@
   "categoryId": 8,
   "categoryName": "Hello, World",
   "monitorApi": "https://www.fairwayeta.com/api/faircast-monitor",
-  "monitorKey": "fcmonitor071820!",
   "wpPostId": 490,
   "excludeCategoryIds": [1, 8, 47, 192],
   "categoryLabels": {

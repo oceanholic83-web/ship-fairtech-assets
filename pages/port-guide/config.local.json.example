@@ -1,3 +1,4 @@
 {
+  "monitorKey": "YOUR_MONITOR_KEY",
   "mapboxToken": "pk.YOUR_MAPBOX_PUBLIC_TOKEN"
 }
