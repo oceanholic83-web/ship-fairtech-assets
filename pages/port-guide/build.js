@@ -165,7 +165,20 @@ function renderDirItem(it) {
 }
 
 function buildDirectoryHtml() {
+  // MOF uses different field names (headquarters / callCenter) — adapt to the item shape.
+  const mofItem = {
+    name: ATLAS.MOF.name,
+    abbr: ATLAS.MOF.abbr,
+    url: ATLAS.MOF.url,
+    role: '해양수산 정책 총괄 부처',
+    address: ATLAS.MOF.headquarters,
+    tel: ATLAS.MOF.callCenter,
+    note: ATLAS.MOF.note,
+  };
+
   const groups = [
+    { title: '해양수산부', items: [mofItem], open: true,
+      desc: '항만·해운·수산 정책을 총괄하는 중앙 부처입니다. 지방해양수산청이 그 집행 기관입니다.' },
     { title: '지방해양수산청', items: flattenGrouped(ATLAS.OFFICES), open: true,
       desc: '입출항 신고, 부두 사용 허가, 항만 운영 행정의 1차 창구입니다.' },
     { title: '항만공사', items: ATLAS.PORT_AUTHORITIES, open: true,
