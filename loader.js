@@ -33,7 +33,7 @@
           <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:14px;flex-wrap:wrap;">
             <div style="flex:1;min-width:240px;">
               <div style="font-size:10px;letter-spacing:1.5px;color:#94a3b8;text-transform:uppercase;margin-bottom:4px;font-weight:500;">FAIRCAST 항만 가이드</div>
-              <div style="font-size:13px;color:#475569;line-height:1.6;">한국 12개 무역항의 입항 절차, 시설, 운영 정보를 정리한 실용 가이드입니다. 지도에서 항만을 클릭하거나, 아래 카드에서 각 항만의 상세 가이드로 이동할 수 있습니다.</div>
+              <div style="font-size:13px;color:#475569;line-height:1.6;">한국 주요 무역항의 관할 기관과 운영 정보를 정리했습니다. 지도에서 항만을 클릭하면 관할청·항만공사·도선사회·VTS 채널을 볼 수 있습니다.</div>
             </div>
           </div>
         </div>`;
