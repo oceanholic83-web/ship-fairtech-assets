@@ -77,6 +77,18 @@ function isDescCssPolluted(desc) {
 
 function hasKorean(text) { return /[가-힣]/.test(text || ''); }
 
+// WordPress emits its own <meta name="robots" content="max-image-preview:large">, and
+// snippets (529 etc.) add a SECOND robots tag. Reading only the first one misjudges the page.
+// Collect every robots meta and join them.
+function robotsContent($) {
+  const parts = [];
+  $('meta[name="robots"]').each((_, el) => {
+    const v = ($(el).attr('content') || '').trim();
+    if (v) parts.push(v);
+  });
+  return parts.join(' | ');
+}
+
 function locationsMatch(actual, expected) {
   if (!actual || !expected) return false;
   const norm = s => s.trim().replace(/\/$/, '');
@@ -220,7 +232,7 @@ async function checkSinglePost(apiPost) {
 
   const $ = cheerio.load(html);
 
-  r.hasNoindex = /noindex/i.test($('meta[name="robots"]').attr('content') || '');
+  r.hasNoindex = /noindex/i.test(robotsContent($));
 
   r.metaDesc = ($('meta[name="description"]').attr('content') || '').trim();
   r.descMissing = !r.metaDesc;
@@ -296,7 +308,7 @@ async function checkKeyPages(expected) {
     } catch (e) { error = e.message; }
 
     const $ = cheerio.load(html || '');
-    const robots = $('meta[name="robots"]').attr('content') || '';
+    const robots = robotsContent($);
     const hasNoindex = /noindex/i.test(robots);
     const desc = ($('meta[name="description"]').attr('content') || '').trim();
     const canonical = $('link[rel="canonical"]').attr('href') || '';
@@ -376,7 +388,7 @@ async function checkCategoryNoindex(expected) {
       status = res.status; html = typeof res.data === 'string' ? res.data : '';
     } catch (e) { error = e.message; }
     const $ = cheerio.load(html || '');
-    const robots = $('meta[name="robots"]').attr('content') || '';
+    const robots = robotsContent($);
     const hasNoindex = /noindex/i.test(robots);
     const row = { url, status: status ?? 'ERR', robots, hasNoindex, verdict: '✅' };
     if (error) { addCritical(`catNoindex ${url}`, 'noindex', `실패: ${error}`, '확인 불가'); row.verdict = '🔴'; }
