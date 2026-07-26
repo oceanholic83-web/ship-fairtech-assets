@@ -3,6 +3,7 @@
 const axios = require('axios');
 const cheerio = require('cheerio');
 const fs = require('fs');
+const crypto = require('crypto');
 const path = require('path');
 
 const GOOGLEBOT_UA = 'Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)';
@@ -33,6 +34,7 @@ const detail = {
   sitemaps: [],
   snippets: [],
   policyRedFlags: [],
+  buildStamp: null,
 };
 
 // Post audit state (kept separate from infra results for clean grouping)
@@ -465,6 +467,62 @@ async function checkSnippetFootprints(expected) {
   });
 }
 
+async function checkBuildStamp(expected) {
+  const cfg = expected.buildStamp;
+  if (!cfg) return;
+
+  const srcPath = path.join(ROOT, cfg.sourceFile);
+  let localRev = null;
+  try {
+    localRev = crypto.createHash('sha256').update(fs.readFileSync(srcPath)).digest('hex').slice(0, 8);
+  } catch (e) {
+    addWarning('buildStamp', `${cfg.sourceFile} 읽기`, `실패: ${e.message}`, '로컬 파일 없음');
+    detail.buildStamp = { verdict: '🟡', localRev: null, liveRev: null, builtAt: null, why: '로컬 파일 읽기 실패' };
+    return;
+  }
+
+  let html = '';
+  try {
+    const e = await getHtml(cfg.checkUrl);
+    html = e.html;
+  } catch (e) {
+    addCritical('buildStamp', '라이브 페이지 조회', `실패: ${e.message}`, '확인 불가');
+    detail.buildStamp = { verdict: '🔴', localRev, liveRev: null, builtAt: null, why: '페이지 조회 실패' };
+    return;
+  }
+
+  const re = new RegExp(cfg.marker + ' data-rev:([0-9a-f]{8}) built:(\\d{4}-\\d{2}-\\d{2})');
+  const m = html.match(re);
+
+  if (!m) {
+    addCritical(
+      'buildStamp',
+      `${cfg.marker} 스탬프 존재`,
+      '없음',
+      '라이브 페이지에 빌드 스탬프가 없다. 구버전 HTML이 붙어 있을 가능성이 높다.'
+    );
+    detail.buildStamp = { verdict: '🔴', localRev, liveRev: null, builtAt: null, why: '스탬프 없음' };
+    return;
+  }
+
+  const liveRev = m[1];
+  const builtAt = m[2];
+  detail.buildStamp = { verdict: '✅', localRev, liveRev, builtAt, why: '' };
+
+  if (liveRev !== localRev) {
+    detail.buildStamp.verdict = '🔴';
+    detail.buildStamp.why = '붙여넣기 누락 의심';
+    addCritical(
+      'buildStamp',
+      `data-rev:${localRev} (로컬 ${cfg.sourceFile})`,
+      `data-rev:${liveRev} (라이브, ${builtAt} 빌드)`,
+      `${cfg.sourceFile}가 라이브에 반영되지 않았다. pages/port-guide 에서 node build.js 실행 후 생성된 port-guide.html을 WordPress 항만 가이드 페이지에 붙여넣을 것.`
+    );
+  } else {
+    addOk(`buildStamp ${liveRev} (${builtAt}) = 로컬 ${cfg.sourceFile}`);
+  }
+}
+
 async function checkPolicyRedFlags(expected) {
   const needles = (expected.policyRedFlags && expected.policyRedFlags.htmlMustNotContain) || [];
   const keyUrls = Object.keys(expected.keyPages || {});
@@ -741,7 +799,26 @@ function buildReport(stamp, apiConnected) {
 
   // 스니펫 상태
   if (!POSTS_ONLY && detail.snippets.length > 0) {
-    L.push('## 스니펫 상태 (외부 탐지)');
+    if (detail.buildStamp) {
+    const b = detail.buildStamp;
+    L.push('## 빌드 스탬프 (data.js → 라이브 반영)');
+    L.push('');
+    L.push('| 항목 | 값 |');
+    L.push('|---|---|');
+    L.push(`| 판정 | ${b.verdict} |`);
+    L.push(`| 로컬 data.js rev | ${b.localRev || '—'} |`);
+    L.push(`| 라이브 data-rev | ${b.liveRev || '없음'} |`);
+    L.push(`| 라이브 빌드일 | ${b.builtAt || '—'} |`);
+    if (b.why) L.push(`| 사유 | ${b.why} |`);
+    L.push('');
+    if (b.verdict !== '✅') {
+      L.push('> 대응: `cd pages/port-guide && node build.js` 실행 후 생성된 `port-guide.html`을');
+      L.push('> WordPress 항만 가이드 페이지 코드 편집기에 통째로 붙여넣을 것.');
+      L.push('');
+    }
+  }
+
+  L.push('## 스니펫 상태 (외부 탐지)');
     L.push('');
     if (samplePostUrl) L.push(`> SAMPLE_POST: ${samplePostUrl}`);
     L.push('');
@@ -830,31 +907,35 @@ async function main() {
     if (samplePostUrl) console.log(`SAMPLE_POST: ${samplePostUrl}`);
 
     if (QUICK) {
-      console.log('\n[1/3] legacyRedirects...');
+      console.log('\n[1/4] legacyRedirects...');
       await checkLegacyRedirects(expected);
-      console.log('[2/3] robotsTxt...');
+      console.log('[2/4] robotsTxt...');
       await checkRobotsTxt(expected);
-      console.log('[3/3] snippetFootprints...');
+      console.log('[3/4] snippetFootprints...');
       await checkSnippetFootprints(expected);
+      console.log('[4/4] buildStamp...');
+      await checkBuildStamp(expected);
     } else {
-      console.log('\n[1/9] keyPages...');
+      console.log('\n[1/10] keyPages...');
       await checkKeyPages(expected);
-      console.log('[2/9] legacyRedirects...');
+      console.log('[2/10] legacyRedirects...');
       await checkLegacyRedirects(expected);
-      console.log('[3/9] categoryRedirects...');
+      console.log('[3/10] categoryRedirects...');
       await checkCategoryRedirects(expected);
-      console.log('[4/9] categoryNoindex...');
+      console.log('[4/10] categoryNoindex...');
       await checkCategoryNoindex(expected);
-      console.log('[5/9] robotsTxt...');
+      console.log('[5/10] robotsTxt...');
       await checkRobotsTxt(expected);
-      console.log('[6/9] adsTxt...');
+      console.log('[6/10] adsTxt...');
       await checkAdsTxt(expected);
-      console.log('[7/9] sitemaps...');
+      console.log('[7/10] sitemaps...');
       await checkSitemaps(expected);
-      console.log('[8/9] snippetFootprints...');
+      console.log('[8/10] snippetFootprints...');
       await checkSnippetFootprints(expected);
-      console.log('[9/9] policyRedFlags...');
+      console.log('[9/10] policyRedFlags...');
       await checkPolicyRedFlags(expected);
+      console.log('[10/10] buildStamp...');
+      await checkBuildStamp(expected);
     }
   }
 

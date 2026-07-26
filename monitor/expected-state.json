@@ -155,6 +155,13 @@
     }
   },
 
+  "buildStamp": {
+    "_comment": "항만 가이드 페이지는 build.js 산출물을 사람이 WordPress에 붙여넣는 구조다. data.js를 고치고 빌드까지 해도 붙여넣기를 잊으면 지도(CDN)와 정적 목록이 갈라진다. build.js가 심은 data-rev 주석을 라이브에서 읽어 로컬 data.js 해시와 비교한다.",
+    "checkUrl": "https://faircast.kr/port-guide/",
+    "sourceFile": "data.js",
+    "marker": "faircast-port-guide"
+  },
+
   "policyRedFlags": {
     "_comment": "AdSense 정책 위반 소지가 있는 패턴. 발견되면 경고.",
     "htmlMustNotContain": [
