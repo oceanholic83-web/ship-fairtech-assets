@@ -1,0 +1,28 @@
+---
+description: Never touch sibling projects; warn if the task targets another repo
+alwaysApply: true
+---
+
+# Workspace boundary — do not touch other projects
+
+This workspace is **ship-fairtech-assets** only
+(`C:\Users\bab5s\Desktop\project\ship-fairtech-assets`).
+
+## Hard rule
+
+- **Never** read, create, edit, delete, or run git/CLI commands in a sibling project
+  (e.g. `faircall`, `faircar`, `Fairtrading`, `ship-eta-calculator`, or any path
+  outside this workspace root) unless the user **explicitly** asks to work in that
+  project **and** that folder is the active Cursor workspace.
+- If an order, path, or error message points at another repo (different `supabase/`,
+  different `orders/S…`, "Repo: faircall", etc.):
+  1. **Stop.** Do not create or modify files there.
+  2. Warn the user that the task belongs to another project and this workspace
+     does not contain it.
+  3. Ask whether to switch workspace / open that project, or cancel.
+
+## Why
+
+Cross-project edits from the wrong workspace have already happened (S19a migration
+written into `faircall` while this chat was open on `ship-fairtech-assets`).
+That must not recur.
