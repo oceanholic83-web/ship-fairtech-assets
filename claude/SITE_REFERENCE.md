@@ -14,7 +14,7 @@
 | Featured Image | **FIFU** 플러그인 (Cloudinary URL 직접 지정) |
 | 이미지 호스팅 | Cloudinary 계정 `dzatgu3y7` |
 | 스니펫 관리 | **WPCode** |
-| 보안 | **Wordfence** — `web_fetch` 를 막는다. faircast.kr은 자동 조회 불가 |
+| 보안 | **Wordfence** — 활성. 단 `web_fetch` 는 막지 않는다 (2026-08-04 실측 정정) |
 | 정적 자산 | GitHub `oceanholic83-web/ship-fairtech-assets` → **jsDelivr** CDN |
 | 분석 | GA4 `G-ETQ9ZF78CF` ⚠️ `G-3L86TW7BFJ` 중복 존재 |
 | 지도 | Mapbox |
@@ -27,7 +27,8 @@
 |---|---|---|---|
 | 573 | Author Bio | 활성 | 문구에 **선박엔지니어만 지칭 금지.** 독자는 갑판부·기관부·영업부 전부 |
 | 378 | Meta Description | 활성 | **`chr(60)` / `'scr' . 'ipt'` 분할을 합치지 말 것** (Wordfence WAF 회피). 페이지 ID 269/522/488/490 하드코딩 |
-| 406 | World Cup 301 | 활성 | 617 대신 이걸로 처리 |
+| 406 | World Cup **410 Gone** | 활성 | 2026-08-04 301→410 교체. 홈 301은 soft 404 취급이라 색인에서 안 빠졌다 |
+| ? | Feed & Paged Archive Noindex | 활성 | 2026-08-04 신설. `X-Robots-Tag` 헤더. 경로 정규식 `#/page/[0-9]+/?$#` |
 | 529 | Category Noindex | 활성 | **정상 작동 확인됨** (2026-07-26 view-source). 모니터 오탐이었다 |
 | 494 | Category→Page 301 | 활성 | |
 | 359 | non-www / https 정규화 | 활성 | |
@@ -58,12 +59,14 @@ data.js (기관 데이터)          ─┤
 WP REST (글 목록, monitor API) ─┘
 ```
 
+- `data.js` 의 항만 배열은 **13개**다 (광양·여수 분리). 「12개 무역항」은 어느 기준으로도 틀린 수 — 국가관리 14 / 전체 31
 - `data.js` 는 **브라우저 IIFE**다. Node에서 `require()` 하려면 `global.window` shim이 필요하다 (build.js 상단에 있음)
 - `loaderUrl` 의 `@<commit>` 은 빌드 시 **git HEAD로 자동 치환**된다. `config.json` 값은 초기값일 뿐
 - `data.js` 가 커밋 안 됐으면 빌드가 경고한다. **순서: 커밋 → 푸시 → 빌드 → 붙여넣기**
 - `loader.js` 는 자기 `script src` 의 `@<commit>` 을 뽑아 같은 핀으로 `data.js` / `port-atlas*.js` 를 부른다
 
 ### 워드프레스 붙여넣기 규칙
+- **`pages/*.html` 은 모델이 손으로 편집하지 않는다.** 전체가 한 줄이라 재작성 과정에서 누락·중복이 난다. 반드시 문자열 치환 스크립트로
 - 반드시 `<!-- wp:html -->` … `<!-- /wp:html -->` 로 감싼다. **비주얼 편집기는 `<svg>` 를 지운다**
 - 붙여넣기를 잊어도 사이트는 멀쩡해 보인다 → `checkBuildStamp` 가 이걸 잡는다
 
