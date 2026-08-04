@@ -77,11 +77,13 @@
 - 카테고리에 **항만 가이드(47)** 미지정
 - 막대그래프를 SVG → div로 바꾼 상태. **육안 확인 안 됨.** 목포항 기존 SVG가 여전히 렌더되는지 같이 볼 것
 
-### 콘텐츠 측 미해결 (docs/adsense-approval 에만 있고 여기 없던 것들)
-- **발행글 61편 전부 요약(excerpt) 비어 있음** → meta description이 본문 자동 생성. 발행 체크리스트 위반 61건 누적
-- **fairwayeta 영문 원문 대비 본문 비율 80% 미만 8편** (ECA 0.42, port-guide 0.20, tanker-sizes 0.58 등). fairwayeta는 승인·faircast는 거절 — 재탕으로 보일 여지
-- **내부 중복 3쌍**, `/hello-korea-page/` ↔ `/category/insights/hello-korea/` Jaccard 1.00. 494 301로 가렸을 뿐
-- **E-E-A-T 4점 미만 80/80편.** 저자 표기 없음 (홈 라이브 확인)
+### 콘텐츠 측
+- ~~발행글 61편 요약 공란~~ → **2026-08-04 전량 입력 완료.** 155자 이내, 영문 글은 영문 요약
+- ~~E-E-A-T 80/80편 미달·저자 표기 없음~~ → **오진.** 바이라인·바이오 박스·발행일·수정일·출처 전부 있다
+- ~~fairwayeta 대비 중복 8편~~ → **과장.** 언어가 달라 구글 중복 대상 아님. 8쌍 직접 대조로 확인
+- ⚠️ **내부 중복 3편 — 900/570 프레임.** `vlcc-fleet-900-effective-570` / `shadow-fleet-1300-tankers` / `vlcc-fleet-korea-crude-oil-supply`. 같은 언어·같은 숫자·같은 결론이고 셋 다 「크롤링됨-색인 안 됨」에 있다. **본문 정리 필요**
+- ⚠️ `maritime-labour-abandonment-foc-2025` — 영문판과 오프닝 일화가 문장 단위로 동일. 도입부 교체 필요
+- 페이지 중복: `/hello-korea-page/` ↔ `/category/insights/hello-korea/` Jaccard 1.00. 494 301로 가렸을 뿐
 - 정책 위반 키워드 「테러」 1건 (marine-insurance)
 - 푸터에 저작권·AI 고지 없음 (fairwayeta에는 있음)
 - 홈 카드 3개가 전부 301 목적지 (`/category/...`)
