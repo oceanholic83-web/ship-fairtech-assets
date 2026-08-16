@@ -1,6 +1,6 @@
 # SITE_REFERENCE — faircast.kr 인프라 사실관계
 
-**최종 갱신: 2026-08-04**
+**최종 갱신: 2026-08-14**
 「지금 뭐가 어디에 붙어 있나」의 정본. 값이 바뀌면 **즉시 이 줄을 고친다.**
 
 ---
@@ -14,7 +14,7 @@
 | Featured Image | **FIFU** 플러그인 (Cloudinary URL 직접 지정) |
 | 이미지 호스팅 | Cloudinary 계정 `dzatgu3y7` |
 | 스니펫 관리 | **WPCode** |
-| 보안 | **Wordfence** — 활성. 단 `web_fetch` 는 막지 않는다 (2026-08-04 실측 정정) |
+| 보안 | **Wordfence** — 활성. 단 `web_fetch` 는 막지 않는다 (2026-08-14 실측 정정) |
 | 정적 자산 | GitHub `oceanholic83-web/ship-fairtech-assets` → **jsDelivr** CDN |
 | 분석 | GA4 `G-ETQ9ZF78CF` ⚠️ `G-3L86TW7BFJ` 중복 존재 |
 | 지도 | Mapbox |
@@ -27,8 +27,8 @@
 |---|---|---|---|
 | 573 | Author Bio | 활성 | 문구에 **선박엔지니어만 지칭 금지.** 독자는 갑판부·기관부·영업부 전부 |
 | 378 | Meta Description | 활성 | **`chr(60)` / `'scr' . 'ipt'` 분할을 합치지 말 것** (Wordfence WAF 회피). 페이지 ID 269/522/488/490 하드코딩 |
-| 406 | World Cup **410 Gone** | 활성 | 2026-08-04 301→410 교체. 홈 301은 soft 404 취급이라 색인에서 안 빠졌다 |
-| ? | Feed & Paged Archive Noindex | 활성 | 2026-08-04 신설. `X-Robots-Tag` 헤더. 경로 정규식 `#/page/[0-9]+/?$#` |
+| 406 | World Cup **410 Gone** | 활성 | 2026-08-14 301→410 교체. 홈 301은 soft 404 취급이라 색인에서 안 빠졌다 |
+| ? | Feed & Paged Archive Noindex | 활성 | 2026-08-14 신설. `X-Robots-Tag` 헤더. 경로 정규식 `#/page/[0-9]+/?$#` |
 | 529 | Category Noindex | 활성 | **정상 작동 확인됨** (2026-07-26 view-source). 모니터 오탐이었다 |
 | 494 | Category→Page 301 | 활성 | |
 | 359 | non-www / https 정규화 | 활성 | |
