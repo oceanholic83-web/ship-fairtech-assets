@@ -107,7 +107,15 @@ B·C는 산수를 링크로 A에 넘긴다.
 
 `maritime-labour-abandonment-foc-2025` 는 fairwayeta 영문판과 **오프닝 일화가 문장 단위로 같다.** 도입부 교체 대상.
 
-**내부 링크 전수 점검 필요.** C의 관련 글이 죽은 슬러그(`ulsan-port-energy-gateway-korea-guide`)를 가리키고 있었다. SC 404 18건의 일부일 가능성.
+~~**내부 링크 전수 점검 필요.**~~ → **2026-08-22 해소.** 내부 링크 225개 중 깨진 참조 42건을 14쌍 치환으로 4건까지 줄였다. 잔여는 아래.
+
+| 잔여 | 건 | 처리 |
+|---|---|---|
+| `/fueleu-maritime-first-cycle-complete-korea-2026/` | 1 | **대응 글 없음.** post 599 관련 글 박스. 삭제 또는 교체 — 대표 판단 |
+| `/category/insights/hello-korea/` | 2 | 홈 카드 + insights-landing. 301 목적지 `/hello-korea-page/` |
+| `/category/insights/hello-world/` | 1 | 위와 같음. 목적지 `/hello-world-page/` |
+
+`/category/` 3건은 `pages/homepage/template.html` 이 원본이라 레포 수정 후 `node build.js` → 붙여넣기가 필요하다. DB만 고치면 다음 빌드에 되돌아온다.
 
 **개별 글의 「12개 무역항」 미점검.** B 본문에서 잔존 발견. 나머지 58편 미확인.
 
