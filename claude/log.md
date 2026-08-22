@@ -225,3 +225,101 @@ post 599의 죽은 링크 `fueleu-maritime-first-cycle-complete-korea-2026` 를 
 죽은 링크 17개 중 상당수가 오타가 아니라 **발행 예정 슬러그를 미리 박아둔 것**이었다.
 울산 건(지난 창)도 슬러그를 정해놓고 발행 때 바꾼 경우.
 → 발행 체크리스트에 추가: **관련 글 링크는 실제 발행된 슬러그만.** 발행 후 REST로 존재 확인.
+
+## [2026-08-22] 측정 | Cloudinary 규모 확정 — faircast 참조 고유 237개
+
+`scripts/audit-cloudinary.ps1` 신설. 본문은 REST content, 대표 이미지(FIFU)는 postmeta라 REST에 없어 **라이브 `og:image` 를 긁어** 합산.
+
+| | |
+|---|---|
+| 본문 참조 | 231건 |
+| 대표(FIFU) | 51건 |
+| **고유 자산** | **237개** (본문 전용 186 + 겸용 26 + 대표 전용 25) |
+| 죽은 자산 | **0** — fairwayeta에 있던 깨진 URL 같은 건 없다 |
+| 포맷 | PNG 231 / JPG 6. **WebP 0** |
+| 대표 이미지 없음 | 글 10편 (페이지 8개는 원래 불필요) |
+| 퍼센트 인코딩 파일명 | 2개 (`흐름도`, `부두`) — 인수인계서는 1개로 적었다 |
+
+인수인계서의 「본문 195 + 페이지 27 + FIFU 51 = 최대 273」은 중복 계산이었다. 실제 고유는 237.
+계정 전체 381 - faircast 237 = 144가 fairwayeta 전용이거나 미사용.
+
+## [2026-08-22] 작업 | Cloudinary 자산 237개 로컬 확보 — 418.6 MB
+
+`scripts/download-cloudinary.ps1` 신설. **API 키 불필요** — 전부 공개 배포 URL이다.
+`q_auto/f_auto` 등 변환 파라미터를 벗기고 원본을 받는다. 한글 파일명은 퍼센트 디코딩해서 저장.
+결과: **237/237 성공, 실패 0, 418.6 MB.** → `cloudinary-export-faircast/` (gitignore)
+
+PNG 231개가 용량의 정체다. fairwayeta는 같은 작업에서 356MB → 21.4MB(94%↓)를 만들었다.
+
+⚠️ **이건 faircast 참조분만이다.** 계정 전체 완본은 여전히 미니PC의 `cloudinary-export/`(381개).
+
+## [2026-08-22] 결정 | 미니PC 부팅 이유는 이미지가 아니라 config.local.json
+
+이미지가 로컬에 확보돼 `cloudinary-export/` 이관의 시급성은 사라졌다.
+남은 진짜 블로커는 **`config.local.json` 4개**(monitor · hello-korea · hello-world · port-guide).
+없으면 항만 가이드·Hello Korea/World 페이지를 다시 빌드할 수 없다. homepage 빌더는 마침 불필요해 오늘 넘어갔다.
+→ 미니PC 1회 부팅, USB로 4개 파일만 이관. 토큰이므로 대화창·레포·오더에 붙여넣지 않는다.
+
+⚠️ **Cloudinary 플랜은 아직 해지하지 않는다.** 자산 확보 ≠ 해지 안전.
+faircast 본문·대표가 여전히 Cloudinary URL 237개를 직접 가리킨다. 지금 무료로 내리면 8/13처럼 전부 401이 된다.
+해지 조건: URL 교체 완료 + **라이브 렌더링 확인**.
+
+## [2026-08-22] 작업 | Cloudinary → jsDelivr 마이그레이션 완료
+
+237장을 WebP로 변환해 이미지 전용 레포로 옮기고, 워드프레스 DB의 URL을 전량 치환했다.
+
+| 단계 | 결과 |
+|---|---|
+| 변환 (`scripts/convert-webp.js`, sharp) | 418.6 MB → **27.9 MB (93% 감소)**. 장변 1600px / q82. 실패 0 |
+| 레포 | **`oceanholic83-web/faircast-images`** 신설. `img/` 237장, 태그 `v1` |
+| DB 치환 | WPCode 1회용 PHP 스니펫(정규식). 본문 **431행** + postmeta **106행** |
+| 레포 치환 | `homepage/template.html` 2, `port-guide/config.json` 1, `config.json` fallback 2 |
+| 검증 | 사이트 Cloudinary 참조 **0** (본문·og:image·히어로 CSS 전수) |
+
+**서빙 URL 규칙**
+
+```
+https://cdn.jsdelivr.net/gh/oceanholic83-web/faircast-images@v1/img/<name>.webp
+```
+
+- 파일명은 Cloudinary 6자 접미사 기준. **덮어쓰지 않는다**
+- 배치를 추가하면 **새 태그**(v2, v3…)를 판다. 불변 태그라 jsDelivr가 영구 캐싱하고, 기존 URL은 계속 산다
+- `docs/jsdelivr-cache-bypass.md` 의 commit-hash 핀은 *덮어쓰는 파일*(loader.js 등)용이다. 이미지에는 불필요
+
+**성능** — 변환 파라미터가 없던 42개는 원본 PNG(장당 1.5~3 MB)를 그대로 내보내고 있었다.
+사진 4장 글 기준 이미지 무게가 **최대 8~10 MB → 약 0.4 MB**. 색인 87건 문제와 무관하지 않다.
+
+## [2026-08-22] 정정 | 리비전을 빼면 치환이 끝나지 않는다
+
+첫 스니펫은 `post_type IN ('post','page')` 로 걸렀는데, DRY RUN 에서 `posts=67` / `left=538` 이 나왔다.
+차이의 정체는 **리비전**이었다. 필터를 빼자 `posts=431` 로 맞아떨어졌다.
+리비전을 남기면 나중에 글을 되돌릴 때 죽은 URL이 되살아난다. → **DB 치환은 리비전까지 포함한다.**
+
+## [2026-08-22] 발견 | 잔여 1건 = fallbackImage. 정규식이 못 잡는 형태였다
+
+```
+res.cloudinary.com/dzatgu3y7/image/upload/q_auto/f_auto/v1/ship-fairtech/placeholder.jpg
+```
+
+버전이 `v1` 뿐이고 경로에 폴더가 끼어 있어 `v\d+/파일명` 패턴에서 벗어난다.
+렌더링에는 안 나온다(본문·og:image 전수 0). → **해지에 지장 없음.**
+`config.json` 의 `fallbackImage` 는 당장 `hello_y92wk9.webp` 로 대체. 전용 placeholder 는 추후.
+
+## [2026-08-22] 결정 | 이미지는 코드 레포에서 분리한다
+
+`ship-fairtech-assets` 에 이미지를 넣으면 코드 레포가 매년 무거워지고 새 기기 클론이 느려진다.
+오늘 631 MB 이관 문제로 반나절 쓴 게 그 증상이었다.
+
+| 레포 | 용도 |
+|---|---|
+| `ship-fairtech-assets` | 코드·문서. 가볍게 유지 |
+| `faircast-images` | 이미지 전용 |
+
+**원본 PNG 418 MB 는 레포에 넣지 않는다.** 로컬 `cloudinary-export-faircast/` (gitignore) + 외장 백업.
+
+추정 증가분: 주 1편 × 사진 3~4장 = **연 200장 / 약 21 MB.** 5년 누적 130 MB로 GitHub 권장 1 GB의 13%.
+
+## [2026-08-22] 발견 | cloudinary-export/ 380개가 노트북에 이미 있었다
+
+`ship-eta-calculator\cloudinary-export\` (fairwayeta 레포). 미니PC 부팅 이유에서 이미지가 빠진다.
+남은 이유는 **`config.local.json` 4개** 뿐 — 특히 `port-guide` 의 Mapbox 토큰. 없으면 항만 가이드를 빌드할 수 없다.

@@ -11,8 +11,10 @@
 | 워드프레스 DB | 가비아 호스팅 | 가비아 자동 백업 | **주기 미확인** | ⚠️ 확인 필요 |
 | 발행글 본문 | 워드프레스 DB | — | — | ⚠️ 미구축 |
 | WPCode 스니펫 | DB에만 존재 | `docs/wpcode-snippets-*.md` | 스니펫 변경 시 | 260725판이 최신 |
-| Cloudinary 자산 | `dzatgu3y7` | `cloudinary-export/` (gitignore, 631.5 MB) | 자산 추가 시 | 381개 export 보유 |
-| 레포 | GitHub | `oceanholic83-web/ship-fairtech-assets` | 커밋 시 | 정상 |
+| Cloudinary 자산 (계정 전체) | `dzatgu3y7` | `cloudinary-export/` (gitignore, 631.5 MB) | 자산 추가 시 | 381개. **미니PC에만 있음** |
+| Cloudinary 자산 (faircast 참조분) | `dzatgu3y7` | `cloudinary-export-faircast/` (gitignore, 418.6 MB) | 발행 시 | **237개 전량 확보 (2026-08-22)** |
+| 레포 (코드) | GitHub | `oceanholic83-web/ship-fairtech-assets` | 커밋 시 | 정상 |
+| 레포 (이미지) | GitHub | `oceanholic83-web/faircast-images` | 배치 추가 시 | **237장 WebP, 태그 v1 (2026-08-22)** |
 | `config.local.json` 4개 | 로컬만 (gitignore) | **없음** | — | ⚠️ 기기 교체 시 유실 |
 
 ## 절차
@@ -40,10 +42,23 @@ DB에만 있고 API 쓰기는 Wordfence WAF 403으로 막힌다. **손으로 복
 
 ### Cloudinary
 
-`cloudinary-export/` 는 gitignore(631.5 MB). **기기 교체 시 수동으로 옮긴다.**
-`_manifest.json` 이 자산 목록의 정본이다.
+두 벌이 있다.
 
-⚠️ **플랜 해지 금지.** faircast 참조가 0이 되고, DB 조회가 아니라 **실제 렌더링**으로 확인한 뒤에만 안전하다. 지금 faircast.kr 이미지가 보이는 건 월 $99 결제 덕이다.
+- `cloudinary-export/` — 계정 전체 381개, 631.5 MB. **미니PC에만 있다.** 기기 교체 시 수동 이관
+- `cloudinary-export-faircast/` — faircast 참조 237개, 418.6 MB. **스크립트로 언제든 재생성 가능**
+
+```powershell
+powershell -ExecutionPolicy Bypass -File scripts\audit-cloudinary.ps1     # 목록 갱신
+powershell -ExecutionPolicy Bypass -File scripts\download-cloudinary.ps1  # 받기 (이미 있는 건 건너뜀)
+```
+
+API 키가 필요 없다. 전부 공개 배포 URL이라 참조 목록만 있으면 복구된다.
+**새 글 발행 후에는 두 스크립트를 돌려 신규 이미지를 백업에 편입한다.**
+
+**2026-08-22: 마이그레이션 완료.** faircast.kr 은 더 이상 Cloudinary 를 참조하지 않는다(본문·og:image·히어로 CSS 전수 0).
+이미지는 `faircast-images` 레포 + jsDelivr 로 서빙한다. Cloudinary Plus(월 $99) 는 다운그레이드 가능.
+
+⚠️ 다만 **해지 전 육안 확인**은 남는다. DB·REST 조회가 아니라 시크릿 창에서 실제 페이지를 연다. 8/13 사고의 교훈.
 
 ### config.local.json
 

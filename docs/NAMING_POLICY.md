@@ -28,6 +28,17 @@
 | 계속검사 | **계속검사** (CSM) | 「계속기관검사」 아님 |
 | 검사 갈음 | **검사 갈음** (credit) | 「검사 크레딧」 아님 |
 
+## 이미지 파일명
+
+| 항목 | 규칙 |
+|---|---|
+| 저장소 | `oceanholic83-web/faircast-images` 의 `img/` |
+| 파일명 | Cloudinary 6자 접미사 유지 (`26070701_x9gydi.webp`). 한글 이름은 접미사만 |
+| 덮어쓰기 | **금지.** git 히스토리는 영구적이다. 새 이미지는 새 이름 |
+| 태그 | 배치마다 새로 판다 (v1, v2…). 불변 태그라 CDN 캐시 문제가 없다 |
+| 서빙 | `https://cdn.jsdelivr.net/gh/oceanholic83-web/faircast-images@v1/img/<name>.webp` |
+| 변환 | 장변 1600px / WebP q82 (`scripts/convert-webp.js`) |
+
 ## 판단 기준
 
 새 용어를 정할 때는 이 순서로 확인한다.

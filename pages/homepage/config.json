@@ -25,6 +25,6 @@
     "234": "Korea Industry",
     "235": "Explainer"
   },
-  "fallbackImage": "https://res.cloudinary.com/dzatgu3y7/image/upload/q_auto/f_auto/v1/ship-fairtech/placeholder.jpg",
+  "fallbackImage": "https://cdn.jsdelivr.net/gh/oceanholic83-web/faircast-images@v1/img/hello_y92wk9.webp",
   "excerptMaxLen": 90
 }

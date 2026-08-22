@@ -3,3 +3,5 @@ config.local.json
 **/config.local.json
 
 audit/
+
+cloudinary-export-faircast/

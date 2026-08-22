@@ -8,9 +8,9 @@
   "wpPostId": 522,
   "categoryId": 47,
   "excludeCategoryIds": [1, 8, 47, 192, 228, 229, 230, 231, 232, 233, 234, 235],
-  "fallbackImage": "https://res.cloudinary.com/dzatgu3y7/image/upload/q_auto/f_auto/v1/ship-fairtech/placeholder.jpg",
+  "fallbackImage": "https://cdn.jsdelivr.net/gh/oceanholic83-web/faircast-images@v1/img/hello_y92wk9.webp",
   "excerptMaxLen": 100,
-  "heroImage": "https://res.cloudinary.com/dzatgu3y7/image/upload/v1782288417/ports_guide_j6zrsl.png",
+  "heroImage": "https://cdn.jsdelivr.net/gh/oceanholic83-web/faircast-images@v1/img/ports_guide_j6zrsl.webp",
   "mapboxToken": "",
   "loaderUrl": "https://cdn.jsdelivr.net/gh/oceanholic83-web/ship-fairtech-assets@b28d9de/loader.js"
 }
