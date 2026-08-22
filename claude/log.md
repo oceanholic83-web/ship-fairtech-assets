@@ -155,3 +155,22 @@ grep "^## \[" claude/log.md | tail -5
 - **규칙: 붙여넣기 전 URL의 `post=` 번호를 확인한다.** A=465, B=401, C=283
 - 깨진 내부 링크 발견: C의 관련 글 박스가 `/ulsan-port-energy-gateway-korea-guide/` 를 가리키고 있었다. 실제 슬러그는 `ulsan-port-petroleum-hub-future-clean-fuel-korea-guide`. **SC의 404 18건 중 하나.** 내부 링크 전수 점검 필요
 - B 본문에 「한국 12개 무역항」이 남아 있었다. 오전에 About·홈·378을 고쳤지만 **개별 글 본문은 훑지 않았다**
+
+## [2026-08-22] 작업 | 날짜 오기 일괄 정정 (8-04 → 8-14)
+
+8/14 세션이 날짜를 10일 어긋나게 계산해 작업 12건이 `[2026-08-04]` 로 기록돼 있었다.
+`log.md` 헤딩 12건 + `STATUS.md` 6곳 + `CONTENT_LEDGER.md` 5곳 + `SITE_REFERENCE.md` 4곳 정정.
+7/16~8/03 항목은 실제 날짜가 맞아 손대지 않았다.
+
+## [2026-08-22] 작업 | faircall 문서 체계 이식 — archive 배너 + 정책 문서 3종
+
+`docs/adsense-approval/` → `docs/archive/` 이동(`YYYY-MM-DD_` 접두), md 9개에 ARCHIVED 배너 삽입.
+`content-audit` 과 `bot-audit` 배너에는 **알려진 오진**을 명시했다. 8/14 사고가 이 배너 부재에서 났다.
+신설: `docs/NAMING_POLICY.md` (update ALL of 체크리스트) · `docs/README.md` (문서 지도 + 라이브 HTTP 검증 런북) · `docs/BACKUP.md` (Cloudinary 8/13 정지 사고 대응).
+`CONTENT_LEDGER.md` 에 4.6 시리즈 숫자 정본 + 출처 Tier 1~5, `SITE_REFERENCE.md` 에 축구 URL v1~v3 이력 추가.
+
+## [2026-08-22] 정정 | 노트북 창에는 device_bash 가 없다
+
+미니PC 창에서 되던 셸 실행이 이 기기에서는 안 된다. Claude는 파일 읽기·쓰기만 가능하다.
+`git` · `node build.js` · `curl` 검증은 전부 대표가 터미널에서 직접 돌린다. 오더는 복붙 명령어 형태로 낸다.
+파일 **삭제·이동도 불가.** archive 이동을 대표가 `git mv` 로 실행한 이유다.
