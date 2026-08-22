@@ -5,3 +5,5 @@ config.local.json
 audit/
 
 cloudinary-export-faircast/
+
+node_modules/

@@ -323,3 +323,34 @@ res.cloudinary.com/dzatgu3y7/image/upload/q_auto/f_auto/v1/ship-fairtech/placeho
 
 `ship-eta-calculator\cloudinary-export\` (fairwayeta 레포). 미니PC 부팅 이유에서 이미지가 빠진다.
 남은 이유는 **`config.local.json` 4개** 뿐 — 특히 `port-guide` 의 Mapbox 토큰. 없으면 항만 가이드를 빌드할 수 없다.
+
+## [2026-08-22] 작업 | 월드컵 Vercel 프로젝트 삭제 완료
+
+처분 확정 상태로 넘어와 있던 건. 대표가 실행. 미승인 사이트에 게시자 광고 코드가 돌던 상태가 해소됐다.
+
+## [2026-08-22] 정정 | faircall.kr 인증서 경고는 고장이 아니다
+
+`ERR_CERT_COMMON_NAME_INVALID`. DNS 실측:
+
+| 도메인 | A 레코드 | 실체 |
+|---|---|---|
+| faircast.kr | 211.47.74.75 | 가비아 (워드프레스) |
+| **faircall.kr** | **121.254.178.253** | **가비아 기본 — 미배포** |
+| fairtech.kr | 216.198.79.1 | Vercel |
+| fairwayeta.com | 76.76.21.21 | Vercel |
+
+faircall.kr 은 **가비아에서 도메인만 구매한 상태**(비공개 작업 중). 어디에도 배포돼 있지 않아 가비아 기본 서버로 떨어지고, 그 서버 인증서에 해당 이름이 없어 경고가 뜬다. **정상 동작이며 조치 불필요.**
+
+배포 시: 가비아 DNS 의 A 레코드를 지우고 Vercel 값으로 교체 → 인증서 자동 발급.
+
+## [2026-08-22] 발견 | node_modules 가 레포에 추적되고 있다
+
+`npm i sharp` 한 번에 `node_modules/.package-lock.json` 이 커밋에 섞였다.
+지금은 5개짜리라 티가 안 나지만 패키지를 늘릴수록 커밋이 오염된다.
+
+```powershell
+Add-Content .gitignore "`nnode_modules/"
+git rm -r --cached node_modules
+```
+
+⚠️ 빌더가 node_modules 를 참조하는 구조인지 먼저 확인할 것. 급하지 않다.
