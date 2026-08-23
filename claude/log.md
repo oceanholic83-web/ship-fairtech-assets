@@ -343,17 +343,22 @@ faircall.kr 은 **가비아에서 도메인만 구매한 상태**(비공개 작�
 
 배포 시: 가비아 DNS 의 A 레코드를 지우고 Vercel 값으로 교체 → 인증서 자동 발급.
 
-## [2026-08-22] 발견 | node_modules 가 레포에 추적되고 있다
+## [2026-08-22] ~~발견~~ | node_modules 추적 — **오진. 2026-08-23 철회**
 
-`npm i sharp` 한 번에 `node_modules/.package-lock.json` 이 커밋에 섞였다.
-지금은 5개짜리라 티가 안 나지만 패키지를 늘릴수록 커밋이 오염된다.
+당시 기록: 「`npm i sharp` 한 번에 `node_modules/.package-lock.json` 이 커밋에 섞였다. node_modules 가 레포에 추적되고 있다.」
 
-```powershell
-Add-Content .gitignore "`nnode_modules/"
-git rm -r --cached node_modules
+**2026-08-23 실측 결과 틀렸다.**
+
+```
+git ls-files node_modules  →  0
+git rm -r --cached node_modules  →  fatal: pathspec did not match any files
 ```
 
-⚠️ 빌더가 node_modules 를 참조하는 구조인지 먼저 확인할 것. 급하지 않다.
+`node_modules/` 는 처음부터 `.gitignore` 에 있었고(중복으로 두 번), 추적된 적이 없다.
+`git status` 출력의 `M node_modules/.package-lock.json` **한 줄을 보고 폴더 전체가 추적된다고 단정**한 것이 오류다.
+
+**교훈: 한 줄을 보고 규모를 추정하지 않는다.** `git ls-files <경로>` 로 세고 나서 말한다.
+7/16 content-audit 이 낸 오진(E-E-A-T 80/80편, 중복 8편)과 같은 성격이다 — 지표 하나로 전체를 단정.
 
 ## [2026-08-22] 정정 | 정규식이 맞아도 차례가 안 오면 안 돈다 — 406 훅 우선순위
 
@@ -457,3 +462,44 @@ Claude 창과 대표 창이 각각 다른 changeset(auto-draft)을 들고 있었
 `switch_browser` 로 양쪽에 확인 화면을 띄우고 노트북1에서 Connect → 「노트북1」로 고정.
 
 **기기별로 작업할 때는 세션 시작 시 대상 브라우저를 먼저 고정한다.**
+
+## [2026-08-23] 작업 | gitignore 정리
+
+중복 항목(`node_modules/` 2회) 제거, 각 항목에 목적 주석 추가.
+`cloudinary-export-faircast/` 에는 재생성 명령을 주석으로 남겼다 — 지워도 스크립트 두 개면 복구된다는 걸 다음 창이 알아야 한다.
+
+## [2026-08-23] 정정 | 「테러」 키워드는 정책 위반이 아니다 — 종결
+
+`marine-insurance-pi-hull-war-risk-shipping-korea-2026`(post 472) 실측: **1회, 담보 항목 나열 문장.**
+
+```
+전쟁, 내전, 테러, 해적, 파업, 기뢰 — 지정학적 사건에 의한 손실이 대상입니다.
+```
+
+전쟁위험보험 약관에 실제로 들어가는 용어다. 옹호·조장·묘사 맥락 아님.
+AdSense 가 막는 것은 테러 조직 **옹호·모집·찬양**이지 보험 담보 범위 설명이 아니다.
+고치면 업계 문서로서 부정확해진다. 같은 줄의 「기뢰」·「해적」을 안 지우는 것과 같은 이유.
+
+→ **키워드 매칭만으로 잡은 오탐.** STATUS 잔여 목록에서 제거.
+
+## [2026-08-23] 작업 | 「12개 무역항」 전수 점검 완료 — 잔존 1건 해소
+
+REST 전수 검색(`?search=무역항`) 결과 61편 중 해당 표현이 있는 글은 2편뿐이었고, 그중 1건이 위반이었다.
+
+| post | 슬러그 | 결과 |
+|---|---|---|
+| **587** | `mokpo-port-shipbuilding-cluster-offshore-wind-hub-korea-guide-2026` | **「한국 12개 무역항의」 → 「한국 주요 무역항의」** |
+| 419 | `hormuz-oil-operating-system-energy-ship-korea-2026` | 무관 (일반 문맥의 「무역항」 1회) |
+
+NAMING_POLICY 근거: 국가관리 14 / 전체 31 / `data.js` 수록 13 — **어느 기준으로도 「12」는 틀린다.**
+
+→ 「나머지 58편 미확인」 항목 종결. 7/26 로그의 「전 파일 제거」가 실제로는 미완이었던 건이 이걸로 끝났다.
+
+## [2026-08-23] 작업 | 색인 생성 요청 10건 제출
+
+어제 조치(내부 링크 42→0, 홈 카드 301 제거, 이미지 20배 경량화)가 라이브에 반영된 상태에서 제출.
+
+허브 4개(`/`, `/hello-korea-page/`, `/hello-world-page/`, `/port-guide/`) + 링크 수정분 6편.
+허브를 먼저 넣은 이유: 색인된 허브가 홈 하나뿐이라 거기가 뚫려야 나머지 글로 크롤러가 내려간다.
+
+⚠️ 하루 10건 한도. 효과는 재크롤 후 확인 — **9/5 전후 점검**(`docs/adsense-review-260822.md` 7장).
