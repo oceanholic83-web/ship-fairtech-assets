@@ -111,8 +111,8 @@ AdSense 공식 자격 요건은 `high-quality, original, and attract an audience
 
 | # | 항목 | 근거 |
 |---|---|---|
-| 1 | **`/insights` 맨 경로를 410으로** | 유일하게 남은 홈 301. soft 404 |
-| 2 | **푸터에 저작권 + AI 고지 추가** | fairwayeta에는 있고 faircast에는 없다. 현재 푸터는 「이용약관 / 개인정보 처리방침 / Contact」뿐 |
+| 1 | ~~**`/insights` 맨 경로를 410으로**~~ | ✅ **완료.** 원인은 정규식이 아니라 훅 우선순위. 406에 `}, 1);` 지정 |
+| 2 | ~~**푸터에 저작권 + AI 고지 추가**~~ | ✅ **완료.** Kadence 푸터 빌더 Bottom Row. 12px/회색 2줄 |
 | 3 | **「테러」 키워드 1건 검토** (`marine-insurance-pi-hull-war-risk-shipping-korea-2026`) | 정책 위반 소지 |
 | 4 | **색인 생성 요청 수동 제출** | 하루 10건 한도. 오늘 고친 글부터 |
 

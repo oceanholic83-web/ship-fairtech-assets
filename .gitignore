@@ -1,9 +1,16 @@
+# 의존성 — npm install 로 재생성
 node_modules/
+
+# 토큰·키 (절대 커밋 금지)
 config.local.json
 **/config.local.json
 
+# 스크립트 산출물 — 언제든 재생성 가능
 audit/
 
+# 이미지 원본 — 로컬 + 외장 백업에만 둔다 (418.6 MB)
+# 재생성: scripts\audit-cloudinary.ps1 → scripts\download-cloudinary.ps1
 cloudinary-export-faircast/
 
-node_modules/
+# WebP 변환 출력 (이미지 전용 레포 faircast-images 로 옮긴다)
+webp-out/
