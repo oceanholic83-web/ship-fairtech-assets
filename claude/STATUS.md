@@ -91,7 +91,7 @@
 - ~~홈 카드 3개가 전부 301 목적지~~ → **2026-08-22 해소.** `/hello-korea-page/` · `/hello-world-page/` · `/port-guide/` 직결. 템플릿·DB 양쪽 반영
 - ~~Cloudinary 월 $99~~ → **2026-08-22 마이그레이션 완료.** 237장 WebP(93% 감소)를 `faircast-images` 레포 + jsDelivr 로 이전. 사이트 참조 **0**. 다운그레이드 가능
 - ~~월드컵 Vercel 프로젝트~~ → **2026-08-22 삭제 완료**
-- ⚠️ **`config.local.json` 4개 없음** (미니PC에만). 항만 가이드·Hello Korea/World 재빌드 불가. 홈페이지 빌더는 불필요
+- ~~**`config.local.json` 4개 없음**~~ → **2026-08-23 해소.** 미니PC에서 이관, `port-guide` 빌드로 검증 완료. 기기 교체 시 재유실 주의
 - ~~`node_modules` 추적~~ → **오진이었다(2026-08-23 철회).** 처음부터 gitignore에 있었고 추적된 적 없음
 - ⚠️ `placeholder` 전용 이미지 없음. 현재 `hello_y92wk9.webp` 로 대체 중
 

@@ -15,7 +15,7 @@
 | Cloudinary 자산 (faircast 참조분) | `dzatgu3y7` | `cloudinary-export-faircast/` (gitignore, 418.6 MB) | 발행 시 | **237개 전량 확보 (2026-08-22)** |
 | 레포 (코드) | GitHub | `oceanholic83-web/ship-fairtech-assets` | 커밋 시 | 정상 |
 | 레포 (이미지) | GitHub | `oceanholic83-web/faircast-images` | 배치 추가 시 | **237장 WebP, 태그 v1 (2026-08-22)** |
-| `config.local.json` 4개 | 로컬만 (gitignore) | **없음** | — | ⚠️ 기기 교체 시 유실 |
+| `config.local.json` 4개 | 로컬만 (gitignore) | **USB 수동** | 기기 교체 시 | 2026-08-23 노트북1 이관 완료. **git 에 없으므로 별도 보관 필수** |
 
 ## 절차
 

@@ -503,3 +503,23 @@ NAMING_POLICY 근거: 국가관리 14 / 전체 31 / `data.js` 수록 13 — **�
 허브를 먼저 넣은 이유: 색인된 허브가 홈 하나뿐이라 거기가 뚫려야 나머지 글로 크롤러가 내려간다.
 
 ⚠️ 하루 10건 한도. 효과는 재크롤 후 확인 — **9/5 전후 점검**(`docs/adsense-review-260822.md` 7장).
+
+## [2026-08-23] 작업 | config.local.json 4개 확보 — 빌드 블로커 해소
+
+미니PC에서 USB로 이관. 존재·크기만 확인하고 **내용은 열지 않았다**(토큰 파일).
+
+| 파일 | 크기 | 견본 |
+|---|---|---|
+| `monitor/config.local.json` | 121 B | 110 B |
+| `pages/port-guide/config.local.json` | **164 B** | 91 B — Mapbox 토큰 포함 |
+| `pages/hello-korea/config.local.json` | 54 B | 42 B |
+| `pages/hello-world/config.local.json` | 54 B | 42 B |
+
+전부 견본보다 크다 = 자리표시자가 아니라 실제 값.
+
+**검증**: `pages/port-guide` 에서 `node build.js` 정상 완료 (기사 카드 10 / 기관 99 / loaderUrl `d7fea74` 핀 / data.js rev `31c177d5`).
+Mapbox 토큰을 쓰는 유일한 빌더라 여기가 통과하면 나머지 셋도 안전하다.
+
+`git status` 빈 출력 — **gitignore 가 4개를 제대로 걸러낸다.** 공개 저장소에 토큰이 샐 위험 없음.
+
+⚠️ **기기 교체 시 다시 유실된다.** git 에 없으므로 USB 등 별도 보관이 필요하다. `docs/BACKUP.md` 참조.
