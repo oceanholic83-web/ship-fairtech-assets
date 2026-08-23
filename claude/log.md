@@ -795,3 +795,35 @@ AUTHORS 는 H-DRØN 을 지정하지만, 실측 결과 11편이 티얼 5 / 앰�
 
 ⚠️ **FIFU 잔재.** 대표 이미지를 메타로 바꿔도 `<link rel=preload>` 에 옛 URL 이 남는다.
 FIFU 가 가상 첨부에 캐시한다. **`featured_media` 를 0 으로 함께 비울 것.**
+
+## [2026-08-23] 사고 | 이미지 7장 404 — 8/22 마이그레이션의 범위 불일치
+
+사이트 둘러보다 두 글에서 이미지 깨짐 발견 (post 625 MV·MT·MS, post 362 군산항).
+
+**원인.** 8/22 Cloudinary 마이그레이션에서 **자산 수집은 발행글만, DB URL 치환은 전체 글**을 돌았다.
+당시 두 글은 비공개였다. URL 은 jsDelivr 로 바뀌었는데 **파일은 업로드된 적이 없었다.**
+8/23 공개되면서 드러났다.
+
+**전수 조사.** 글 64편 + 페이지 8개에서 jsDelivr URL **247개**를 뽑아 전부 상태 확인.
+→ **깨진 것은 정확히 그 7장뿐.** 나머지는 정상.
+
+**복구.** 원본이 Cloudinary 에 살아 있었다 (버전 번호 없이 `image/upload/<stem>.webp` 로 접근 가능).
+`@v1` 은 불변이라 파일만 올려서는 안 되므로, 새 파일명 규칙으로 받아 **태그 v4** 를 파고
+두 글의 본문 URL·FIFU 를 교체했다. `featured_media` 도 0 으로 비웠다.
+
+| 옛 이름 | 새 이름 |
+|---|---|
+| 26072101_sfpfrs | 260721-ship-prefix-hull-marking |
+| 26072102_mxbdjp | 260721-ship-prefix-documents |
+| 26072103_bkhrfg | 260721-ship-prefix-engine-panel |
+| 260613m_ivivce | 260613-gunsan-hero |
+| 26061311_s2lvk3 | 260613-gunsan-grain-silo |
+| 26061322_oe0tlc | 260613-gunsan-inner-harbor |
+| 26061333_qpjwwi | 260613-gunsan-saemangeum-newport |
+
+**⭐ 교훈: 자산 수집과 URL 치환의 대상 범위는 반드시 같아야 한다.**
+어느 한쪽이 `post_status` 로 필터링하면 다른 쪽도 같은 필터를 쓴다.
+→ `docs/BACKUP.md` 에 사고 기록 + 「깨진 이미지 전수 점검」 런북 추가.
+
+부수 수정: 백업 명령의 페이지 루프에 종료 조건이 없어 오류 객체가 집계에 섞였다 (64 → 67).
+→ `docs/AUTOMATION_POLICY.md` v1.1.

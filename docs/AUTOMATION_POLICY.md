@@ -153,12 +153,28 @@ curl.exe -s -o NUL -w "%{http_code}`n" "https://cdn.jsdelivr.net/gh/oceanholic83
 
 ```powershell
 [Console]::OutputEncoding = [Text.Encoding]::UTF8
+cd C:\Users\bab5s\Desktop\project\ship-fairtech-assets
+New-Item -ItemType Directory -Force -Path backup | Out-Null
+
 $all = @()
-1..4 | ForEach-Object {
-  $all += curl.exe -s "https://faircast.kr/wp-json/wp/v2/posts?per_page=100&page=$_&_fields=id,slug,title,excerpt,date,modified" | ConvertFrom-Json
+$page = 1
+while ($true) {
+  $raw = curl.exe -s "https://faircast.kr/wp-json/wp/v2/posts?per_page=100&page=$page&_fields=id,slug,title,excerpt,date,modified"
+  if ($raw -match 'rest_post_invalid_page_number') { break }
+  $j = $raw | ConvertFrom-Json
+  if ($null -eq $j -or $j.Count -eq 0) { break }
+  $all += $j
+  if ($j.Count -lt 100) { break }
+  $page++
 }
 $all | ConvertTo-Json -Depth 5 | Out-File "backup/posts-$(Get-Date -f yyyyMMdd).json" -Encoding utf8
+$all.Count
 ```
+
+⚠️ **`1..4 | ForEach-Object` 로 도는 옛 명령은 쓰지 않는다.**
+발행글이 100편 미만이면 2페이지부터 `rest_post_invalid_page_number` 오류 **객체**가 돌아오고,
+그게 배열에 그대로 붙어 개수가 부풀려진다 (2026-08-23 실제로 64 → 67 로 나왔다).
+페이지 루프에는 항상 종료 조건을 건다.
 
 WPCode 스니펫은 DB 에만 있다. 고칠 때마다 `docs/wpcode/` 사본을 갱신한다.
 
@@ -169,3 +185,4 @@ WPCode 스니펫은 DB 에만 있다. 고칠 때마다 `docs/wpcode/` 사본을 
 | v | 날짜 | 변경 |
 |---|---|---|
 | v1 | 2026-08-23 | 문서 신설. 랜딩 동적화 적용 · 발행 속도 상한 신설 · 구글 정책 위험 등록부 작성 |
+| v1.1 | 2026-08-23 | 백업 명령 수정 — 페이지 루프 종료 조건 누락으로 오류 객체가 집계에 섞이던 문제 |
