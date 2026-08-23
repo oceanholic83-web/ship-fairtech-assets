@@ -11,7 +11,13 @@
 | `claude/CONTENT_LEDGER.md` | 원장 | 발행글·색인·중복·시리즈 숫자 정본 |
 | `claude/SITE_REFERENCE.md` | 원장 | 워드프레스·WPCode·호스팅 구성 |
 | `claude/FACT_SOURCES.md` | 원장 | 수치 출처 |
+| `claude/PORT_MAP.tsv` | 원장 | fairwayeta -> faircast 이식 현황 (DONE/WAIT/SKIP/HOLD) |
 | `docs/NAMING_POLICY.md` | 정책 | 표기 통일 + update ALL of 체크리스트 |
+| `docs/PORTING_POLICY.md` | 정책 | 영문 -> 한글 이식 규칙. **단순 번역 금지** |
+| `docs/AUTOMATION_POLICY.md` | 정책 | 자동화 범위 · 구글 정책 위험 · **발행 속도 상한** |
+| `docs/IMAGE_PROMPTS.md` | 정책 | 생성 이미지 규칙 · 해역별 조건 · 검수 체크리스트 |
+| `data/ports/*.json` | 자료 | 항만별 1차 자료(지방청) + `-field.json`(현장·쟁점·용어) |
+| `docs/wpcode/fc-posts.php` | 참조 | 랜딩 페이지 숏코드 원본 (WPCode 741) |
 | `docs/BACKUP.md` | 정책 | 백업 대상·주기·복구 절차 |
 | `docs/wpcode-snippets-*.md` | 참조 | WPCode 스니펫 전문 사본 |
 | `docs/jsdelivr-cache-bypass.md` | 참조 | CDN 캐시 우회 |
@@ -59,9 +65,13 @@ PowerShell 5.1은 `&&`를 지원하지 않는다. 한 줄씩 실행하거나 Git
 
 ## 작업 규칙
 
+- **랜딩 3개 페이지는 숏코드로 동적화됐다.** 발행하면 홈·Hello Korea·Hello World 에 자동 반영된다. `build.js` 복붙 루틴은 폐기 → `docs/AUTOMATION_POLICY.md`
+- **발행은 주 2편 · 하루 1편을 넘기지 않는다.** 자동화로 생긴 위험이다
+- **글은 항상 비공개 초안으로 먼저 등록한다.** 공개 전환은 대표 지시로만
 - **워드프레스 글 본문은 `core/freeform`(클래식) 블록 하나다.** 블록 편집기 API(`resetEditorBlocks` · `updateBlockAttributes`)로 내용을 주입하면 **`<p>` 태그가 전부 사라진다.** 코드 편집기 `textarea.editor-post-text-editor` 로만 치환한다. 블록 유형은 `getBlocks()[0].name` 으로 먼저 확인
 - **코드 편집기 모드에서는 「업데이트」가 안 먹는다.** 시각 편집기(`Ctrl+Shift+Alt+M`)로 되돌린 뒤 저장하고, **저장 여부는 REST 로 확인**한다
 - `pages/*.html`은 **손편집 금지.** 한 줄짜리 초장문이라 모델이 재작성하면 깨진다. 문자열 치환 스크립트(`fs.split().join()`)만
 - 붙여넣기 전 `post=` 번호 확인. VLCC 시리즈 A=465 / B=401 / C=283 (A에는 「장금마리타임」 섹션이 있다)
 - 레포에 키·토큰 커밋 금지. 공개 저장소다
+- **영문 글 이식은 번역이 아니다.** 구조·데이터·thesis만 가져오고 문장은 자체 작성한다. 현업 용어 조사 + 한국 anchor + 최신 데이터 재조회를 마쳐야 발행한다 → `docs/PORTING_POLICY.md`
 - 원장 수정 후 대표가 `git diff`로 확인하고 커밋

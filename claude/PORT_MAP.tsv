@@ -1,0 +1,68 @@
+fw_slug	fw_date	status	fc_slug	hint	note
+scnt-pcums-canal-tonnage-explained-2026	2026-08-02	WAIT			[사이즈 구멍 2] 운하 톤수
+draft-survey-how-ships-weigh-cargo-explained	2026-08-17	WAIT			[사이즈 구멍 3] 흘수검사
+eu-ets-shipping-explained-100-percent-phase-in-2026		WAIT			[상시] EU ETS 제도
+fueleu-maritime-first-year-compliance-reality-2026	2026-07-09	WAIT			[상시] FuelEU 제도
+what-is-imo-international-maritime-organization-explained-2026		WAIT			[상시] IMO 기초
+mepc-84-outcome-net-zero-framework-2026		WAIT			[상시] NZF 제도
+arctic-shipping-2026-northern-sea-route-economics		WAIT			[상시] 북극항로. 빙급 글 cross-link
+occs-onboard-carbon-capture-technology-works-infrastructure-doesnt		WAIT			[상시] 선상 탄소포집. 후순위
+suez-vs-cape-route-comparison-2026		WAIT			[상시] 수에즈 vs 희망봉
+global-chokepoints-2026-shipping-risk-map		WAIT			[상시] 요충지 지도
+brent-crude-explainer-not-really-brent-may-2026		HOLD		0.75	brent-wti-dubai 한글판에 흡수됐는지 확인
+war-risk-insurance-2026-hidden-cost-shipping		HOLD		0.60	marine-insurance 한글판에 흡수됐는지 확인
+vlsfo-compatibility-2026-hidden-bunker-risk		HOLD		0.50	vlsfo 한글판 1편에 합쳤는지 확인. 아니면 WAIT
+bunker-fuel-prices-2026-volatility		HOLD		0.50	위와 동일 판정 대상
+bdi-explainer-what-the-baltic-dry-index-tells-you-may-2026		HOLD	shipping-freight-index-bdi-scfi-ws-guide	0.50	한글판이 BDI+SCFI+WS 통합본. 별도 이식 불필요한지 판정
+biomass-power-shipping-carbon-accounting-2026		DONE	biomass-wood-pellets-shipping-carbon-eu-uk-ets-korea-2026	0.50	
+brent-wti-dubai-three-oil-prices-explainer-may-2026		DONE	brent-wti-dubai-crude-oil-korea-guide	0.80	
+charterparty-terms-shex-shinc-fio-laytime-abbreviations-explained-2026		DONE	charterparty-terms-shex-shinc-fio-laytime-abbreviations-korea-2026	1.00	
+classification-societies-explained-iacs-members-2026		DONE	classification-society-iacs-12-korean-register-kr-guide	0.50	
+container-ships-explained-feedermax-panamax-ulcs-megamax		DONE	container-ship-sizes-feedermax-to-megamax-korea-guide	0.75	
+demurrage-laytime-cost-of-waiting-shipping-explained-2026		DONE	demurrage-laytime-cost-of-waiting-shipping-explained-2026	1.00	
+eca-expansion-2025-2028-north-atlantic-bunker-map		DONE	eca-expansion-2025-2028-korea-shipping-bunker-market	0.80	
+energy-the-ship-carries-hormuz-oil-operating-system-2026		DONE	hormuz-oil-operating-system-energy-ship-korea-2026	1.00	
+geography-of-ship-repair-2026	2026-07-13	DONE	ship-repair-geography-korea-dry-dock-2026	1.00	
+half-standardized-ship-what-global-shipbuilding-unified-and-what-it-didnt	2026-07-15	DONE	ship-standardization-half-unified-korea-2026	0.67	
+hormuz-reopening-tanker-rate-floor-supply-constraint-2026		DONE	hormuz-reopening-tanker-rate-floor-supply-constraint-korea-2026	1.00	
+houston-problem-bunker-fuel-five-years-imo-2020		DONE	houston-bunker-fuel-problem-korea-vlsfo-engineer-perspective	0.57	
+ice-class-explained-polar-class-1a-super-arctic-ships		DONE	ice-class-explained-1a-super-pc6-arc7-korea-guide	0.80	
+marine-insurance-pi-hull-war-risk-how-shipping-insurance-works-2026		DONE	marine-insurance-pi-hull-war-risk-shipping-korea-2026	1.20	
+shadow-fleet-1300-tankers-outside-the-rules-2026		DONE	shadow-fleet-1300-tankers-supply-removal-freight-floor-korea-2026	0.67	
+ship-planned-maintenance-pms-predictive-ai-2026		DONE	ship-planned-maintenance-pms-ai-predictive-korea-2026	1.00	
+ship-tonnage-explained-gt-nt-dwt-displacement		DONE	ship-tonnage-gt-nt-dwt-displacement-korea-guide	1.00	
+ship-vetting-sire-cdi-rightship-inspection-explained-2026		DONE	ship-vetting-sire-cdi-rightship-inspection-korea-explained-2026	1.00	
+tanker-sizes-explained-aframax-suezmax-vlcc-ulcc		DONE	tanker-sizes-aframax-suezmax-vlcc-korea-guide	1.00	
+ten-shipping-routes-that-dont-make-sense-until-you-do-the-math-2026		DONE	ten-shipping-routes-korea-perspective-2026	0.67	
+two-maps-maritime-labour-abandonment-flags-convenience-2026		DONE	maritime-labour-abandonment-foc-2025-korea-perspective	0.60	
+uk-ets-first-week-market-reaction-july-2026	2026-07-05	DONE	uk-ets-first-week-market-silence-korea-2026	0.80	
+uk-ets-shipping-maritime-carbon-cost-july-2026		DONE	uk-ets-shipping-maritime-carbon-cost-korea-2026	1.00	
+vlcc-fleet-deep-dive-age-orderbook-supply-2026		DONE	vlcc-fleet-900-effective-570-supply-gap-korea-2026	0.60	
+vlsfo-explained-very-low-sulphur-fuel-oil-price-volatility-2026		DONE	vlsfo-explained-bunker-fuel-price-korea-2026	0.75	
+what-are-ffas-forward-freight-agreements-shipping-derivatives-explained-2026		DONE	what-are-ffas-forward-freight-agreements-shipping-explained-korea-2026	1.00	
+what-are-pi-clubs-mutual-insurance-shipping-explained-2026		DONE	pi-clubs-mutual-insurance-korea-shipping-explained	1.00	
+what-is-bill-of-lading-shipping-document-explained-2026		DONE	bill-of-lading-bl-korea-trade-explained	0.67	
+what-is-charter-party-voyage-time-bareboat-explained-2026		DONE	hanjin-shipping-charter-party-korea-2026	0.67	
+what-is-tce-time-charter-equivalent-explained-2026		DONE	tce-time-charter-equivalent-tanker-daily-earnings-explained-2026	1.00	
+what-is-worldscale-tanker-freight-rate-explained-2026		DONE	what-is-worldscale-tanker-freight-rate-explained-2026	1.00	
+why-ships-arrive-strange-hours-port-arrival-timing-2026		DONE	port-arrival-timing-jit-busan-anchor-waiting-time	0.50	
+bulk-carrier-sizes-explained-capesize-panamax-supramax		DONE	bulk-carrier-sizes-capesize-panamax-supramax-korea-guide		2026-08-23 발행 (post 739)
+commercial-ship-prefixes-mv-mt-ms-explained-2026	2026-07-21	DONE	ship-prefix-mv-mt-ms-explained-korea-2026		2026-08-23 발행. slug 확인 완료
+friction-redistribution-hormuz-bypass-corridors-may-2026		SKIP			단발
+hormuz-crisis-2026-shipping-routes		SKIP			단발
+hmm-namu-engineers-verdict-may-2026-fire-was-strike		SKIP			단발 사고 분석. 시의성
+hmm-namu-strait-of-hormuz-may-2026-korea		SKIP			단발 사고 분석. 시의성
+uae-quits-opec-2026-shipping-impact		SKIP			단발 이벤트
+section-301-suspension-paused-not-removed-may-2026		SKIP			미국 무역이슈
+ustr-fees-iphone-pricing-may-2026		SKIP			미국 무역이슈. 한국 독자 무관
+ceasefire-that-isnt-may-2026-hormuz-pause		SKIP			시의성 소멸
+iran-pgsa-permit-toll-may-2026-three-clocks		SKIP			시의성 소멸
+iron-not-oil-capesize-spike-may-2026		SKIP			시의성 소멸
+locked-cycle-newbuild-demolition-hormuz-may-2026		SKIP			시의성 소멸
+td3c-index-doesnt-exist-may-2026		SKIP			시의성 소멸
+two-clocks-shipping-fbx-bdi-divergence-may-2026		SKIP			시의성 소멸
+quiet-retreat-alternative-marine-fuels-2025-pullback-may-2026		SKIP			시황 스냅샷
+shipping-cycle-2026-diagnostic-where-are-we		SKIP			시황 스냅샷
+yard-capacity-binding-constraint-2026-newbuild-burst		SKIP			시황성 강함
+ship-eta-calculation-guide		SKIP			자사 계산기 홍보. 한글 사이트에 대응 도구 없음
+after-mepc-84-five-nation-coalition-shipping-climate		SKIP			회의 후속 정치. 시의성
