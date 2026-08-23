@@ -33,7 +33,7 @@
 | 494 | Category→Page 301 | 활성 | |
 | 359 | non-www / https 정규화 | 활성 | |
 | 358 | Tag Noindex | 활성 | |
-| 259 | GA4 | 활성 | |
+| 259 | GA4 (`G-3L86TW7BFJ`) | **비활성 (2026-08-23)** — 측정 ID 중복. 정본은 WPCode 헤더/푸터의 `G-ETQ9ZF78CF` | |
 | 220 | 도식 CSS | 활성 | |
 | 68 | Port Atlas Map | 활성 | |
 | 617 | robots.txt World Cup 차단 | **비활성 — 재활성화 금지** | 크롤 차단은 색인 제거가 아니다. STATUS 4장 |
