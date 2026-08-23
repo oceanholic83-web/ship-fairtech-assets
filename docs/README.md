@@ -59,6 +59,8 @@ PowerShell 5.1은 `&&`를 지원하지 않는다. 한 줄씩 실행하거나 Git
 
 ## 작업 규칙
 
+- **워드프레스 글 본문은 `core/freeform`(클래식) 블록 하나다.** 블록 편집기 API(`resetEditorBlocks` · `updateBlockAttributes`)로 내용을 주입하면 **`<p>` 태그가 전부 사라진다.** 코드 편집기 `textarea.editor-post-text-editor` 로만 치환한다. 블록 유형은 `getBlocks()[0].name` 으로 먼저 확인
+- **코드 편집기 모드에서는 「업데이트」가 안 먹는다.** 시각 편집기(`Ctrl+Shift+Alt+M`)로 되돌린 뒤 저장하고, **저장 여부는 REST 로 확인**한다
 - `pages/*.html`은 **손편집 금지.** 한 줄짜리 초장문이라 모델이 재작성하면 깨진다. 문자열 치환 스크립트(`fs.split().join()`)만
 - 붙여넣기 전 `post=` 번호 확인. VLCC 시리즈 A=465 / B=401 / C=283 (A에는 「장금마리타임」 섹션이 있다)
 - 레포에 키·토큰 커밋 금지. 공개 저장소다
