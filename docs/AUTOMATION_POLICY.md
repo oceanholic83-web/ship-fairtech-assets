@@ -22,6 +22,7 @@
 | 도식 이식 | 영문판 CSS 차트 → 지침 [8] 다크박스로 재작성 / 인라인 SVG는 라벨만 한글화 |
 | 발행 후 검증 | 라이브 HTTP 로 og:image · 메타 설명 · 이미지 URL · 상태 코드 |
 | 랜딩 페이지 반영 | **자동.** 숏코드가 실시간 조회하므로 별도 작업 없음 |
+| OG · 트위터 메타 | **자동.** 스니펫이 제목·URL·FIFU URL 에서 파생 (5장) |
 | 시리즈 상호 링크 | 같은 시리즈 글 본문에 관련 글 박스 추가 |
 | 원장 갱신 | `PORT_MAP.tsv` DONE + fc_slug 기록 |
 
@@ -180,9 +181,79 @@ WPCode 스니펫은 DB 에만 있다. 고칠 때마다 `docs/wpcode/` 사본을 
 
 ---
 
+## 7. OG · 트위터 메타 — 스니펫으로 파생시킨다 (2026-08-24)
+
+### 무엇이 문제였나
+
+전 페이지에 `og:description` 하나뿐이고 **`og:title` · `og:url` · `og:type` · `og:site_name` · `og:locale` 이 전부 없었다.**
+글에는 FIFU 가 `og:image` 를 붙이지만 홈·항만 가이드·Hello 랜딩 **4개 페이지는 이미지도 없었다.**
+
+링크를 공유하면 제목 없는 회색 박스로 뜬다. 항만 가이드는 유입 경로로 쓸 자산인데 공유가 안 되는 상태였다.
+
+### 왜 SEO 플러그인을 안 썼나
+
+Yoast·Rank Math 는 **글마다 사람이 채우는 칸을 만든다.** 자동화 방향과 반대다.
+게다가 지금까지 손으로 관리해 온 메타와 충돌하고, 가비아 1GB 에 플러그인을 더 얹는다.
+
+제목·URL·요약·FIFU URL 은 **이미 워드프레스 안에 있다.** 거기서 파생시키면 입력칸이 필요 없다.
+
+### 스니펫 823 `fc-og`
+
+원본: `docs/wpcode/fc-og.php` · PHP · 어디서나 실행 · `wp_head` 우선순위 4
+
+| 출력 | 규칙 |
+|---|---|
+| `og:type` | 글 = `article` · 페이지/대문/아카이브 = `website` |
+| `og:title` | 사이트명 꼬리표를 뗀 순수 제목 |
+| `og:url` | **canonical 과 같은 값.** 아카이브는 뒤 슬래시를 붙여 맞춘다 |
+| `og:site_name` · `og:locale` | 고정 |
+| `og:image` | FIFU URL → 첨부 대표이미지 → 기본 이미지 순 |
+
+**중복을 만들지 않는다.** `og:description`(Kadence) 과 글의 `og:image`·`twitter:*`(FIFU) 는 건드리지 않는다.
+FIFU 가 낼 수 없는 화면에서만 대신 낸다.
+
+### 함정 두 개 — 실측으로 드러난 것
+
+**① FIFU 메타는 page 에 REST 로 안 써진다.**
+FIFU 는 `fifu_image_url` / `fifu_image_alt` 를 **post 타입에만** REST 등록한다.
+페이지에 쓰면 **200 이 돌아오는데 값은 조용히 버려진다.** 응답의 `meta` 를 보면 키 자체가 없다.
+→ 스니펫에서 `register_post_meta( 'page', ... )` 로 등록했다. 이제 페이지도 글과 같은 방식으로 자동 설정된다.
+
+**② 정적 대문에서는 FIFU 가 출력하지 않는다.**
+메타가 있어도 프론트 페이지에서는 `og:image` 를 내지 않는다.
+→ `is_front_page()` 일 때는 스니펫이 직접 낸다.
+
+⚠️ **REST 로 메타를 쓰면 응답의 `meta` 를 반드시 확인한다.** 200 은 저장의 증거가 아니다.
+
+### 랜딩 4개 페이지 대표 이미지
+
+| 페이지 | ID | 이미지 |
+|---|---|---|
+| 홈 | 269 | `hello_y92wk9.webp` |
+| Hello, Korea | 488 | `hello_korea_qbe8qc.webp` |
+| Hello, World | 490 | `hello_world_wm9lmh.webp` |
+| 항만 가이드 | 522 | `ports_guide_j6zrsl.webp` |
+
+### 검증
+
+```powershell
+curl.exe -s https://faircast.kr/port-guide/ | Select-String 'og:(title|url|type|image|site_name)'
+```
+
+홈 · 랜딩 3 · About · 글 2 · 카테고리 아카이브 · 404 · 검색 = 9개 화면 실측 완료.
+**중복 태그 0건, `og:url` = canonical 전부 일치, PHP 오류 없음.**
+
+### 남은 것
+
+카테고리 아카이브에는 **canonical 자체가 없다.** 워드프레스 코어는 단일 글에만 canonical 을 낸다.
+`og:url` 은 채워 넣었지만 canonical 은 비어 있다. 별건으로 다룬다.
+
+---
+
 ## 버전 이력
 
 | v | 날짜 | 변경 |
 |---|---|---|
 | v1 | 2026-08-23 | 문서 신설. 랜딩 동적화 적용 · 발행 속도 상한 신설 · 구글 정책 위험 등록부 작성 |
 | v1.1 | 2026-08-23 | 백업 명령 수정 — 페이지 루프 종료 조건 누락으로 오류 객체가 집계에 섞이던 문제 |
+| v1.2 | 2026-08-24 | 7장 신설 — OG·트위터 메타 스니펫(823). FIFU 의 page REST 미등록 · 대문 미출력 함정 기록 |
